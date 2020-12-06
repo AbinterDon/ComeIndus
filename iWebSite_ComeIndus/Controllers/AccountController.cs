@@ -20,6 +20,7 @@ namespace iWebSite_ComeIndus.Controllers
         /// 登入頁面View
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         public ActionResult Login()
         {
             return View();
@@ -29,12 +30,17 @@ namespace iWebSite_ComeIndus.Controllers
         /// 登入驗證
         /// </summary>
         /// <returns></returns>
-        public ActionResult LoginCheck()
+        [HttpPost]
+        public ActionResult Login(AccountModels Model)
         {
+            //DB Connection
+            DBC.CheckDBConnection();
 
-            
+            //return null;
 
-            return View();
+            return View(Model);
+
+            //return Redirect("/Account/Login");
         }
     }
 }

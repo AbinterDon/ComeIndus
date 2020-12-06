@@ -27,26 +27,7 @@ namespace iWebSite_ComeIndus.Controllers
         public _BaseController()
         {
             //DB共用類別 實體化
-            DBClass DBC = new DBClass();
-
-            //讀取AppSetting
-            var builder = new ConfigurationBuilder()
-                  .SetBasePath(Directory.GetCurrentDirectory())
-                  .AddJsonFile("appsettings.json");
-
-            //Build
-            Config = builder.Build();
-        }
-
-        /// <summary>
-        /// 取得AppSetting參數
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
-        public string GetConfig(string parameter)
-        {
-            //Return
-            return Config.GetValue<string>(parameter);
+            DBC = new DBClass();
         }
     }
 }
