@@ -1,0 +1,22 @@
+﻿@using iWebSite_ComeIndus.Areas.FeedBack.Models
+ 
+<h3>意見回饋</h3>
+<form action="NewFeedBack" method="post">
+    <label>類型：</label>
+    <select name="FeedbackTypeNo">
+        @{
+            List<FeedBackTypeModel> types = (List<FeedBackTypeModel>)ViewData["FDTypes"];
+            foreach (var feedback in types)
+            {
+                <option value=@feedback.FeedbackTypeNo>@feedback.FeedbackTypeName</option>
+            }
+        }
+    </select><br><br>
+    <label>標題：</label>
+    <input type="text" name="Title"><br>
+    <label>意見內容：</label><br>
+    <textarea id="Content" name="Content" rows="5" cols="40"></textarea><br><br>
+    <input type="submit" value="送出">
+</form>
+
+<span style="font-size:30px">@ViewData["result"]</span>
