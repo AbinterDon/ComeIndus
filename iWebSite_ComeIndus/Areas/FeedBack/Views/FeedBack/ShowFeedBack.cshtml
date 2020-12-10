@@ -1,0 +1,34 @@
+﻿@using System.Data
+@model DataTable
+
+<style>
+    th,td{
+       padding:20px;     
+    }
+</style>
+
+<body>
+<h3>查看意見回饋</h3>
+<table>
+    <tr>
+        <th></th>
+        <th>類型</th>
+        <th>標題</th>
+        <th>內容</th>
+        <th>回饋者</th>
+        <th>回饋時間</th>
+    </tr>
+@foreach (DataRow row in Model.Rows)
+{
+    <!--先全部顯示，之後再調整要顯示的欄位-->
+<tr>
+    <td>@row["FeedbackNo"]</td>
+    <td>@row["TypeName"]</td>
+    <td>@row["FeedbackTitle"]</td>
+    <td>@row["FeedbackContent"]</td>
+    <td>@row["FeedbackUser"]</td>
+    <td>@row["CreateTime"]</td>
+</tr>
+}
+</table>
+</body>

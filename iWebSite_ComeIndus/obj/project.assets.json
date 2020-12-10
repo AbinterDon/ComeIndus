@@ -454,19 +454,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "C:\\Users\\Abinter\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Project\\iWebSite_ComeIndus\\iWebSite_ComeIndus\\iWebSite_ComeIndus.csproj",
+      "projectUniqueName": "G:\\Project\\iWebSite_ComeIndus\\iWebSite_ComeIndus.csproj",
       "projectName": "iWebSite_ComeIndus",
-      "projectPath": "F:\\Project\\iWebSite_ComeIndus\\iWebSite_ComeIndus\\iWebSite_ComeIndus.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "F:\\Project\\iWebSite_ComeIndus\\iWebSite_ComeIndus\\obj\\",
+      "projectPath": "G:\\Project\\iWebSite_ComeIndus\\iWebSite_ComeIndus.csproj",
+      "packagesPath": "C:\\Users\\Abinter\\.nuget\\packages\\",
+      "outputPath": "G:\\Project\\iWebSite_ComeIndus\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Abinter\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

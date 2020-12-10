@@ -8,19 +8,22 @@ namespace iWebSite_ComeIndus.Models
     /// <summary>
     /// 帳號MODEL
     /// </summary>
-    public class AccountModels : Memeber
+    public class AccountModels
     {
         //帳號
         public string Account { get; set; }
 
         //密碼
         public string Password { get; set; }
+
+        //再次確認密碼
+        public string PasswordCheck { get; set; }
     }
 
     /// <summary>
     /// 會員MODEL
     /// </summary>
-    public class Memeber
+    public class Member : AccountModels
     {
         //使用者名稱
         public string Username { get; set; }
