@@ -62,7 +62,6 @@ F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\bin\Debug\net5.0\runtimes\win-x
 F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\bin\Debug\net5.0\runtimes\win-x86\native\sni.dll
 F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
-F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.csprojAssemblyReference.cache
 F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.GeneratedMSBuildEditorConfig.editorconfig
 F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.AssemblyInfoInputs.cache
 F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.AssemblyInfo.cs
@@ -140,3 +139,7 @@ G:\Project\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.dll
 G:\Project\iWebSite_ComeIndus\obj\Debug\net5.0\ref\iWebSite_ComeIndus.dll
 G:\Project\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.pdb
 G:\Project\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.genruntimeconfig.cache
+F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\Razor\Areas\FeedBack\Views\FeedBack\NewFeedBack.cshtml.g.cs
+F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\Razor\Areas\FeedBack\Views\FeedBack\ShowFeedBack.cshtml.g.cs
+F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\Razor\Areas\FeedBack\Views\_ViewStart.cshtml.g.cs
+F:\Project\iWebSite_ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
