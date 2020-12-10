@@ -1,0 +1,28 @@
+﻿@model AccountModels
+@{
+    <html>
+        <head></head>
+        <body>
+            <form action="/Account/Login" method="POST">
+                <label>Account:</label><br>
+                <!--Model是否為空，如果是第一次進入Login頁面可能會沒有model，因為Controller是走Get的Method-->
+                @if (Model != null)
+                {
+                    <!--自動帶入帳號-->
+                    <input type="email" id="Account" name="Account" value="@Model.Account">
+                }
+                else
+                {
+                    <input type="email" id="Account" name="Account">
+                }
+                <br><br><label>Password:</label><br>
+                <input type="Password" id="Password" name="Password"><br><br>
+                <input type="submit" value="Login">
+            </form>
+            <br>
+            <a href="/Account/Register">註冊會員</a>
+        </body>
+    </html>
+    //value = "@if (Model.Account != null) { Model.Account; }else{ null; }"
+}
+
