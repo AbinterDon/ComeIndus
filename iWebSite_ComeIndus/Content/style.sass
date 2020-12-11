@@ -1,0 +1,339 @@
+//顏色定義
+$color_blue: #1D3255
+$color_brown: #E6AF2E
+$color_yellow: #E6AF2E
+$color_white: #ffffff
+$color_green:#3BB0A2
+$color_grey:#BDC1C6
+
+
+//-------------------------------------
+//改變預設字型
+*
+  font-family: 'Oswald', 微軟正黑體
+  //border: solid 1px !important
+
+//-------------------------------------
+//一些常用的mixin
+@mixin ab_center
+  position: absolute
+  left: 50%
+  top: 50%
+  transform: translate(-50%,-50%)
+
+@mixin size($w,$h)
+  width: $w
+  height: $h
+  
+//-------------------------------------
+html,body
+  overflow-x: hidden
+  font-size: 16px
+  
+//首頁
+header
+  position: relative
+  background-color: $color_blue
+  text-align: center
+  .icon
+    width: 80%
+    max-width: 450px
+    padding: 120px 0px
+  //圓圈
+  .circle
+    +size(300px,300px)
+    border: none
+    border-radius: 50%
+    position: absolute
+    background-color: $color_yellow
+  //黃色半圓圈一
+  .circle1
+    left: -150px
+    top: 45px
+  .circle2
+    +size(280px,270px)
+    background-color: $color_blue
+    left: -150px
+    top: 60px
+  //灰色實心半圓
+  .circle3
+    +size(250px,200px)
+    background-color: $color_grey
+    right: -140px
+    bottom: 200px
+   
+  //底部邊界
+  .marginbottom
+    position: absolute
+    width: 95%
+    bottom: 0px
+    right: 0px
+    z-index: 3
+    animation: upin 2s both
+    
+  @keyframes upin
+    0%
+      bottom: -100px
+    100%
+      bottom: 0px
+    
+  .explore
+    +ab_center
+    font-size: 16px
+    color: $color_yellow
+    top: 85%
+    opacity: 0
+    transition: 0.5s
+    &:after
+      display: block
+      content: "v"
+      transform: scaleX(1.2) scaleY(0.5)
+    &.at_top
+      opacity: 1
+//-------------------------------------
+//導覽列
+nav.navbar
+  transition: 0.5s
+  a
+    transition: 0.5s
+//--導覽列在上方時透明
+nav.navbar.at_top
+  background-color: transparent
+  a, a:visited
+    color: white
+//-------------------------------------
+//區域的共同設定
+section
+  padding: 60px
+  position: relative
+//-------------------------------------
+//Section 簡介
+section#section_about
+  background-color: $color_yellow
+  //旋轉的grid
+  .container
+    transform: rotate(15deg) scale(0.9)
+    
+  .row
+    height: 150px
+    color: color_bluee
+    .r1text
+      font-size: 80px
+      transition: 0.1s 
+    .r2text
+      font-size: 35px
+      transition: 0.2s
+    .r3text
+      font-size: 50px
+      transition: 0.3s
+      text-align: right
+  .cat
+    width: 30%
+    max-width: 300px
+    position: absolute
+    bottom: -2px
+    right: 25px
+  
+  //底部邊界
+  .marginbottom
+    position: absolute
+    width: 60%
+    top: calc(100% - 2px)
+    z-index: 3
+    
+  .btn-area
+    height: 150px
+  a
+    +ab_center
+    transform: translate(-50%,-50%) rotate(10deg)
+    
+    
+  //滑鼠的叉叉
+  #cross
+    position: absolute
+    z-index: 5
+    
+    //讓滑鼠點擊會穿過
+    pointer-events: none
+    
+    &:before,&:after
+      content: ""
+      display: block
+    
+      +size(80px,15px)
+      background-color: #fff
+      +ab_center
+      transform: translate(-50%,-50%) rotate(45deg)
+    
+    &:after
+      transform: translate(-50%,-50%) rotate(136deg)
+    
+  //三角形碎塊
+  .tri
+    transform: rotate(-15deg)
+  .tri1
+    width: 350px
+  .tri2
+    width: 20px
+    margin-left: 20px
+  .tri3
+    width: 150px
+    margin-left: 70%
+  .tri4
+    width: 70px
+    margin-left: 100%
+  .tri5
+    width: 80px
+    margin-left: 100%
+    
+    
+//Section 最新消息
+section#section_new
+  background-color: $color_white
+  padding: 10px 0px
+  .addbtn
+    position: absolute
+    right: 0px
+  .newbox
+    background-color: $color_white
+    max-width: 100%
+    height: 400px
+    //ul的樣式拿掉和排列方式
+    .newstyle
+      display: inline
+      list-style: none
+      font-size: 18px
+      .style
+        padding-left: 20px
+        margin-top: 20px
+      .textnew
+        text-decoration: none
+        color: $color_blue
+        &:hover
+          color: $color_green
+        &:visited 
+          color: $color_grey
+    .textmore
+      position: absolute
+      color: $color_blue
+      right: 90px
+      bottom: 30px
+      font-size: 20px
+    
+      
+    
+      
+    
+    
+  h1
+    background-color: $color_blue
+    color: $color_white
+    font-size: 24px
+    padding: 5px 20px
+    display: inline-block
+    font-weight: normal
+      
+  .marginbottom
+    position: absolute
+    width: 90%
+    right: 0px
+    top: calc(100% - 2px)
+    z-index: 3
+    max-width: 900px
+  
+
+//-------------------------------------
+//Section 國家
+section#section_country
+  background-color: $color_white
+  padding: 80px 0px
+  
+  .col-sm-4
+    text-align: center
+    
+  h1
+    background-color: $color_blue
+    color: $color_white
+    font-size: 24px
+    padding: 5px 20px
+    display: inline-block
+    font-weight: normal
+    
+  h3 
+    color: $color_brown
+    
+  .icon_country
+    width: 60%
+  .scale:hover
+    transition-duration: 1.25s
+    transform: scale(1.15,1.15)
+      
+    
+//-------------------------------------
+//Section 意見回饋
+section#section_feedback
+  background-color: $color_blue
+  color: white
+  overflow: hidden  
+
+  //信件
+  .mails
+    max-width: 500px
+    
+
+  form
+    background-color: $color_white
+    color: $color_blue
+    
+    padding: 20px
+    padding-left: 40px
+
+    transform: translateX(-30px) 
+    
+    label
+      margin-top: 10px
+    
+    input,textarea,select
+      display: block
+      background-color: transparent
+      
+      border: none
+      border: solid 3px $color_blue
+      
+      padding: 1px 2px
+      
+    textarea
+      height: 140px
+      width: 100%
+    .btn
+      margin-top: 10px
+      padding: 0px 10px
+      
+  //信封
+  .mailcover
+    +ab_center
+    top: 70%
+    transform: rotate(5deg) scale(2) translate(-50%,-50%)
+    img
+      width: 120%
+      
+  .cat
+    width: 250px
+    position: absolute
+    bottom: 0px
+    transition: 0.3s
+  #cat_grey
+    right: 240px
+    z-index: 3
+  #cat_yellow
+    right: 0px
+  #cat_pink
+    right: 120px
+//-------------------------------------
+//footer 底部
+footer#footer
+  background-color: $color_green
+  text-align: center
+  .text
+    padding: 25px 0px
+    

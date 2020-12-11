@@ -2,9 +2,125 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>This System Version is @Model.SystemVersion.</p>
-</div>
+<!--首頁-->
+<header id="header_index">
+    <div class="container">
+        <img class="icon" src="https://i.postimg.cc/tRtHNc0k/comeindus.png" /><img class="marginbottom mountain" src="https://awiclass.monoame.com/img/margin/m_index.svg" />
+        <!--圓圈-->
+        <div class="circle circle1"></div>
+        <div class="circle circle2"></div>
+        <div class="circle circle3"></div>
+        <!--流星-->
+    </div>
+    <div class="explore at_top">EXPLORE</div>
+</header>
+<!--關於-->
+<section id="section_about">
+    <div class="container">
+        <!--第一行-標題-->
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-4">
+                <img class="tri1" src="https://awiclass.monoame.com/img/webpic/w_tri1.svg" />
+                <h2 class="r1text">WE CAN HELP</h2>
+            </div>
+        </div>
+        <!--第二行-標題跟兩個三角形-->
+        <div class="row">
+            <div class="col-sm-4"><img class="tri2" src="https://awiclass.monoame.com/img/webpic/w_tri2.svg" /></div>
+            <div class="col-sm-8">
+                <img class="tri3" src="https://awiclass.monoame.com/img/webpic/w_tri3.svg" />
+                <h3 class="r2text">想知道什麼國家科系最夯?</h3>
+                <h3 class="r2text">想知道什麼國家預算最多?</h3>
+            </div>
+        </div>
+        <!--第三行-標題-->
+        <div class="row">
+            <div class="col-sm-8">
+                <h2 class="r3text">台灣 新加坡 中國</h2>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <!--第三行-按鈕跟兩個三角形-->
+        <div class="row">
+            <div class="col-sm-4 btn-area"><a class="btn btn-lg btn-default" href="#section_works">點我查詢</a><img class="tri4" src="https://awiclass.monoame.com/img/webpic/w_tri4.svg" /></div>
+            <div class="col-sm-4"><img class="tri5" src="https://awiclass.monoame.com/img/webpic/w_tri5.svg" /></div>
+        </div>
+    </div>
+    <div id="cross"></div><img class="cat" id="cat" src="https://awiclass.monoame.com/catpic/cat_left.png" /><img class="marginbottom" src="https://awiclass.monoame.com/img/margin/m_about.svg" />
+</section>
+<!--國家-->
+<section id="section_country">
+    <div class="container"`>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Country</h1>
+            </div>
+            <div class="col-sm-4">
+                <img class="icon_country scale" src="https://i.postimg.cc/W11NTfSS/taiwan.png" />
+                <h3>Taiwan</h3>
+            </div>
+            <div class="col-sm-4">
+                <img class="icon_country scale" src="https://i.postimg.cc/NjpmwqNp/singapore.png" />
+                <h3>Singapore</h3>
+            </div>
+            <div class="col-sm-4">
+                <img class="icon_country scale" src="https://i.postimg.cc/5jc4xx7C/china.png" />
+                <h3>China</h3>
+            </div>
+        </div>
+    </div>
+</section>
+<!--最新消息-->
+<section id="section_new">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>New</h1><a class="btn btn-lg btn-default addbtn" href="">+ 新增</a>
+            </div>
+            <div class="newbox">
+                <ul class="newstyle">
+                    <li class="style"><a class="textnew" herf="">2020-12-01   版本更新 最新版本為2.0</a></li>
+                    <li class="style"><a class="textnew" herf="">2020-12-02   數據新增 新加玻國家預算2020新增</a></li>
+                    <li class="style"><a class="textnew" herf="">2020-12-03 數據新增 新加玻國家預算2020新增</a></li>
+                    <li class="style"><a class="textnew" herf="">2020-12-04 數據新增 新加玻國家預算2020新增</a></li>
+                    <li class="style"><a class="textnew" herf="">2020-12-04 數據新增 新加玻國家預算2020新增</a></li>
+                </ul><a class="textmore" herf="">more</a>
+            </div>
+        </div><img class="marginbottom mountain" src="https://awiclass.monoame.com/img/margin/m_works.svg" />
+    </div>
+</section>
+<!--意見回饋-->
+<section id="section_feedback">
+    <!--三站貓--><img class="cat" id="cat_grey" src="https://i.postimg.cc/Wb8X6GzK/cat-blue-cat.png" /><img class="cat" id="cat_yellow" src="https://i.postimg.cc/Hs31c7gW/cat-gery-cat.png" /><img class="cat" id="cat_pink" src="https://i.postimg.cc/0y33DYHv/cat-yellow-cat.png" />
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <!--信件容器 限制最大寬度-->
+                <div class="mails">
+                    <!--信封-->
+                    <div class="mailcover"><img src="https://awiclass.monoame.com/img/webpic/w_mail_cover.svg" /></div>
+                    <!--信紙-->
+                    <form action="/FeedBack/FeedBack/NewFeedBack" method="post">
+                        <h5>Dear ComeIndus.</h5>
+                        <label>Type</label>
+                        <select name="FeedbackTypeNo">
+                            <option value="FD1">System Bug</option>
+                            <option value="FD2">User FeedBack</option>
+                        </select>
+                        <label>Title</label>
+                        <input type="text" name="Title" placeholder="請輸入標題" />
+                        <label>Feedback</label>
+                        <textarea id="Content" name="Content" placeholder="使用心得" rows="8"></textarea>
+                        <input class="btn" type="submit" value="送出" />
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <h2>FEEDBACK</h2><br />
+                <p>If you have any question about us,<br>Don`t hestitate to contact us !</p>
+            </div>
+            <div class="feedback"></div>
+            <div class="col-sm-4 btn-area"></div>
+        </div>
+    </div>
+</section>
