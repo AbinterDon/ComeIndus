@@ -120,10 +120,10 @@ section#section_about .container {
   -webkit-transform: rotate(15deg) scale(0.9);
           transform: rotate(15deg) scale(0.9);
 }
-section#section_about .row {
-  height: 150px;
-  color: color_blue;
-}
+    section#section_about .row {
+        height: 150px;
+        color: #1D3255;
+    }
 section#section_about .row .r1text {
   font-size: 80px;
   -webkit-transition: 0.1s;

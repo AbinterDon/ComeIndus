@@ -160,6 +160,7 @@ C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\bin\Debug\net5.0
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\bin\Debug\net5.0\runtimes\win-x86\native\sni.dll
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.csprojAssemblyReference.cache
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.AssemblyInfoInputs.cache
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.AssemblyInfo.cs
@@ -193,4 +194,3 @@ C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\ref\iWebSite_ComeIndus.dll
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.pdb
 C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.genruntimeconfig.cache
-C:\Users\MEI-HUEI\Documents\GitHub\ComeIndus\iWebSite_ComeIndus\obj\Debug\net5.0\iWebSite_ComeIndus.csprojAssemblyReference.cache
