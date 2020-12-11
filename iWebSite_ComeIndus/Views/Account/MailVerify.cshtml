@@ -1,0 +1,67 @@
+﻿@model Verify
+<html>
+<head>
+</head>
+<body>
+    @* 是否顯示驗證成功訊息 *@
+    @if (Model != null && Model.Verified == true)
+    {
+        <p>@Model.ResultMessage</p>
+        <a href="/">回首頁</a>
+    }
+    else
+    {
+        //驗證表單
+        <form id="SendForm" action="/Account/MailVerify" method="POST">
+            <p>Account</p>
+            <p>@Model.Account</p>
+            <input type="hidden" id="Account" name="Account" value="@Model.Account">
+            <input type="hidden" id="Username" name="Username" value="@Model.Username">
+            <br><label>Verification Code:</label><br>
+            <input type="text" id="VerificationCode" name="VerificationCode"><br><br>
+            <input type="submit" value="驗證信箱">
+        </form>
+        <br>
+        <button onclick="Resend();">再寄送一次</button>
+    }
+    <br>
+    @* 是否要顯示錯誤訊息 *@
+    @if (Model != null && Model.ok == false)
+    {
+        <br><p>@Model.ResultMessage</p>
+    }
+</body>
+</html>
+
+<script>
+    //再寄送一次驗證碼
+    function Resend() {
+        // 取得 ID 屬性為 Send 的表單
+        var form = document.forms['SendForm'];
+
+        // 取得 elements 集合中 name 屬性為 Account 的值
+        var Account = form.elements.Account.value;
+
+        // 取得 elements 集合中 name 屬性為 UserName 的值
+        var Username = form.elements.Username.value;
+
+        //Ajax
+        $.ajax({
+            url: '/Account/RegisterMailVerify',
+            data: { "Account": Account, "Username": Username },
+            method: "POST",
+            async: true,
+            success: function (response) {
+                toastr.clear();
+                if (response) {
+                    toastr.success("驗證碼寄送成功");
+                } else {
+                    toastr.error("驗證碼寄送失敗");
+                }
+            },
+            error: function (xhr, status, error) {
+                toastr.clear();
+            }
+        });
+    }
+</script>

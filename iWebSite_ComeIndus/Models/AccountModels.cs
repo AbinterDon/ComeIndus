@@ -8,7 +8,7 @@ namespace iWebSite_ComeIndus.Models
     /// <summary>
     /// 帳號MODEL
     /// </summary>
-    public class AccountModels
+    public class AccountModels : SetResult
     {
         //帳號
         public string Account { get; set; }
@@ -27,6 +27,9 @@ namespace iWebSite_ComeIndus.Models
     {
         //使用者名稱
         public string Username { get; set; }
+
+        //使用者真實姓名
+        public string Nickname { get; set; }
 
         //性別
         public string Gender { get; set; }
@@ -51,5 +54,44 @@ namespace iWebSite_ComeIndus.Models
 
         //系統權限
         public string Authority { get; set; }
+    }
+
+    /// <summary>
+    /// 信箱驗證碼 MODEL
+    /// </summary>
+    public class Verify : SetResult
+    {
+        public Verify()
+        {
+            //預設 尚未驗證完畢
+            Verified = false;
+        }
+
+        public string Account { get; set; }
+
+        public string Username { get; set; }
+
+        public string VerificationCode { get; set; }
+
+        public bool Verified { get; set; }
+    }
+
+    /// <summary>
+    /// 執行成功與否 檢測用Model
+    /// </summary>
+    public class SetResult
+    {
+        public SetResult()
+        {
+            //預設
+            ok = true;
+            ResultMessage = "";
+        }
+
+        //是否成功
+        public bool ok { get; set; }
+
+        //結果訊息
+        public string ResultMessage { get; set; }
     }
 }

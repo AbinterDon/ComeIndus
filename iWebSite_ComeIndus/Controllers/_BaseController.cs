@@ -193,7 +193,7 @@ namespace iWebSite_ComeIndus.Controllers
             {
                 //LogInfo("_DB_Execute", e + ":" + strSql);
                 throw e;
-                //return 0; (再做參數控制出庫/DEV環境)
+                //return 0; //(再做參數控制出庫/DEV環境)
             }
         }
 

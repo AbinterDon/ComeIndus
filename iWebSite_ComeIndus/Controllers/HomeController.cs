@@ -1,4 +1,5 @@
-﻿using iWebSite_ComeIndus.Models;
+﻿using iWebSite_ComeIndus.Extension;
+using iWebSite_ComeIndus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -26,7 +27,7 @@ namespace iWebSite_ComeIndus.Controllers
 
             //版本編號
             model.SystemVersion = Helper.ConfigHelper.AppSettings.SystemVersion;
-
+            
             return View(model);
         }
 
