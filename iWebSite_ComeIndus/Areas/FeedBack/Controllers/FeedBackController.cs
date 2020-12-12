@@ -14,7 +14,7 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
     [Area(areaName: "FeedBack")]
     public class FeedBackController : _BaseController
     {
-        public static List<FeedBackTypeModel> FDTypes = new List<FeedBackTypeModel> {};
+        public static List<FeedBackTypeModel> FDTypes = new List<FeedBackTypeModel> { };
         public IActionResult Index()
         {
             return View("NewFeedBack");
@@ -43,40 +43,52 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
         [HttpPost]
         public ActionResult NewFeedBack(FeedBackModel Model)
         {
-            //SQL Insert
-            var sqlStr = string.Format(
-                @"INSERT INTO [dbo].[FeedBack](" +
-                    "[FeedbackTypeNo]," +
-                    "[FeedbackUser]," +
-                    "[FeedbackTitle]," +
-                    "[FeedbackContent]," +
-                    "[CreateTime]" +
-                ")VALUES(" +
-                    "{0}," +
-                    "{1}," +
-                    "{2}," +
-                    "{3}," +
-                    "{4}",
-                    SqlVal2(Model.FeedbackTypeNo),
-                    SqlVal2("sda@ff.ovm"),
-                    SqlVal2(Model.Title),
-                    SqlVal2(Model.Content),
-                    "getDate()" + ")"
-                );
-
-            var check = _DB_Execute(sqlStr);
-
-            //新增是否成功
-            if (check == 1)
+            string resMsg = "";
+            // 長度限制
+            if (Model.Content.Length > 200 || Model.Title.Length > 50)
             {
-                ViewData["result"] = "success";
-                //return View("NewFeedBack", "Success!!");
+                resMsg = "標題或內容超出長度限制!!";
             }
             else
-            {
-                ViewData["result"] = "fail";
+            { 
+                //SQL Insert
+                var sqlStr = string.Format(
+                    @"INSERT INTO [dbo].[FeedBack](" +
+                        "[FeedbackTypeNo]," +
+                        "[FeedbackUser]," +
+                        "[FeedbackTitle]," +
+                        "[FeedbackContent]," +
+                        "[CreateTime]" +
+                    ")VALUES(" +
+                        "{0}," +
+                        "{1}," +
+                        "{2}," +
+                        "{3}," +
+                        "{4}",
+                        SqlVal2(Model.FeedbackTypeNo),
+                        SqlVal2(Request.Cookies["account"]),
+                        SqlVal2(Model.Title),
+                        SqlVal2(Model.Content),
+                        "getDate()" + ")"
+                    );
+
+                var check = _DB_Execute(sqlStr);
+
+                //新增是否成功
+                if (check == 1)
+                {
+                    resMsg = "success";
+                    //return View("NewFeedBack", "Success!!");
+                }
+                else
+                {
+                    resMsg = "fail";
+                }
             }
+
+
             //return View("NewFeedBack", "Fail :(");
+            ViewData["result"] = resMsg;
             ViewData["FDTypes"] = FDTypes;
             return View();
         }
