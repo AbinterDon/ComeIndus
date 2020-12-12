@@ -95,15 +95,24 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
 
         public ActionResult ShowFeedBack()
         {
-            var sqlStr = string.Format(
-                "select FeedbackNo, TypeName, FeedbackTitle, FeedbackContent, FeedbackUser, [dbo].[Feedback].CreateTime " +
-                "from [dbo].[Feedback] " +
-                "inner join [dbo].[FeedbackType] " +
-                "on [dbo].[Feedback].FeedbackTypeNo = [dbo].[FeedbackType].FeedbackTypeNo");
+            if (getUserAuthority() == "1" || getUserAuthority() == "0" || getUserAuthority() == null)
+            //if (getUserAuthority() == "1")
+            {
+                var sqlStr = string.Format(
+               "select FeedbackNo, TypeName, FeedbackTitle, FeedbackContent, FeedbackUser, [dbo].[Feedback].CreateTime " +
+               "from [dbo].[Feedback] " +
+               "inner join [dbo].[FeedbackType] " +
+               "on [dbo].[Feedback].FeedbackTypeNo = [dbo].[FeedbackType].FeedbackTypeNo");
 
-            var data = _DB_GetData(sqlStr);
-
-            return View(data);
+                var data = _DB_GetData(sqlStr);
+                return View(data);
+            }
+            else
+            {
+                //先暫時導到此頁面，之後改到其他頁面
+                return View("~/Views/Home/Index.cshtml");
+                //return StatusCode(403);
+            }
         }
         /*
         [HttpGet]

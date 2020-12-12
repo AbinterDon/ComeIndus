@@ -252,5 +252,23 @@ namespace iWebSite_ComeIndus.Controllers
                 return false;
             }
         }
+
+        public string getUserAuthority() 
+        {
+            // 使用此函數時為防止錯誤Cookie，須明確檢查值為0或1
+            var sqlStr = string.Format("select Authority from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
+            var data = _DB_GetData(sqlStr);
+
+            
+            if (data.Rows.Count == 1)
+            {
+                return data.Rows[0].ItemArray.GetValue(0).ToString();
+            }
+            else
+            {
+                return null;
+            }
+                
+        }
     }
 }
