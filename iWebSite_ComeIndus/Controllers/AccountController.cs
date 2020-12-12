@@ -60,6 +60,10 @@ namespace iWebSite_ComeIndus.Controllers
                     }
                     else
                     {
+                        // 加入cookie，預設使用者關閉瀏覽器時清除
+                        Response.Cookies.Append("userName", data.Rows[0].ItemArray.GetValue(1).ToString());
+                        Response.Cookies.Append("account", data.Rows[0].ItemArray.GetValue(0).ToString());
+
                         //登入成功，已驗證信箱
                         return Redirect("/home/index");
                     }
