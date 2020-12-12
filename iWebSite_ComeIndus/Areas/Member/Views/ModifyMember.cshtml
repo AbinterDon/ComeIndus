@@ -1,0 +1,42 @@
+﻿@model iWebSite_ComeIndus.Models.Member
+<html>
+    <head>
+    </head>
+    <body>
+        <form id="sign" action="/Account/Register" method="POST">
+            <!--onsubmit="register()"-->
+            <label>會員帳號:</label>
+            <input type="email" id="Account" name="Account">
+            <br><br>
+            <label>會員密碼:</label>
+            <input type="Password" id="Password" name="Password">
+            <br><br>
+            <label>確認密碼:</label>
+            <input type="Password" id="PasswordCheck" name="PasswordCheck">
+            <br><br>
+            <label>會員暱稱:</label>
+            <input type="text" id="Username" name="Username">
+            <br><br>
+            <label>真實姓名:</label>
+            <input type="text" id="Nickname" name="Nickname">
+            <br><br>
+            <label>會員性別:</label>
+            <select name="Gender">
+                <option value="0" selected>請選擇您的性別</option>
+                <option value="1">男</option>
+                <option value="2">女</option>
+                <option value="3">不願透漏</option>
+            </select>
+            <br><br>
+            <label>會員生日:</label>
+            <input type="date" id="Birthday" name="Birthday">
+            <br><br>
+            <input type="submit" value="註冊">
+        </form>
+        <br>
+        @if (Model != null && Model.ok == false)
+        {
+            <p>@Model.ResultMessage</p>
+        }
+    </body>
+</html>

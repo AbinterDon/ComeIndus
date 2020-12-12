@@ -12,11 +12,6 @@ namespace iWebSite_ComeIndus.Controllers
 {
     public class AccountController : _BaseController
     {
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
         /// <summary>
         /// 登入頁面View
         /// </summary>
@@ -24,7 +19,7 @@ namespace iWebSite_ComeIndus.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            return View();
+            return View();//PartialView 暫時不套用Layout
         }
 
         /// <summary>
@@ -35,7 +30,7 @@ namespace iWebSite_ComeIndus.Controllers
         public ActionResult Login(AccountModels Model)
         {
             //SQL Insert Member
-            var sqlStr = string.Format("select Account,Username,Password,MailCheck from [dbo].[Member] where Account = {0}",SqlVal2(Model.Account));
+            var sqlStr = string.Format("select Account,Username,Password,MailCheck,PwdChangeCheck from [dbo].[Member] where Account = {0}", SqlVal2(Model.Account));
 
             //SQL Check
             var data = _DB_GetData(sqlStr);
@@ -54,6 +49,13 @@ namespace iWebSite_ComeIndus.Controllers
                         return RedirectToAction("MailVerify", "Account", new Verify() { 
                             Account = Model.Account,
                             Username = data.Rows[0].ItemArray.GetValue(1).ToString()
+                        });
+                    }else if (data.Rows[0].ItemArray.GetValue(4).ToString() == "1")//帳號的密碼是否需要修改
+                    {
+                        //前往修改密碼畫面
+                        return RedirectToAction("ChangePassword", "Account", new AccountModels()
+                        {
+                            Account = Model.Account
                         });
                     }
                     else
@@ -274,6 +276,127 @@ namespace iWebSite_ComeIndus.Controllers
 
             //Return
             return View(Model);
+        }
+
+        /// <summary>
+        /// 忘記密碼 GET
+        /// </summary>
+        /// <param name="Account"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult ForgetPassword(string Account)
+        {
+            return View(new Verify() { Account = Account});//PartialView
+        }
+
+        /// <summary>
+        /// 忘記密碼信箱寄信 產生亂數密碼
+        /// </summary>
+        /// <param name="Account"></param>
+        /// <param name="Username"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public bool PasswordMailVerify(Member Model)
+        {
+            //SQL Insert Member
+            var sqlStr = string.Format("select Account,Username from [dbo].[Member] where Account = {0}", SqlVal2(Model.Account));
+
+            //SQL Check
+            var data = _DB_GetData(sqlStr);
+
+            //資料庫內是否有此帳號
+            if (data.Rows.Count > 0)
+            {
+                //AutoMail實體化
+                AutoMailClass mail = new AutoMailClass();
+
+                #region 亂數密碼
+                string ranpwd = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
+
+                //密碼長度
+                int passwordLength = 8;
+
+                //密碼 char
+                char[] chars = new char[passwordLength];
+
+                //Random 亂數實體化
+                Random rnd = new Random();
+
+                //開始亂數
+                for (int i = 0; i < passwordLength; i++)
+                {
+                    chars[i] = ranpwd[rnd.Next(0, ranpwd.Length)];
+                }
+
+                //New Password
+                string pwd = new string(chars);
+                #endregion
+
+                //發送新密碼
+                if (mail.ForgetPasswordSend(Model.Account, data.Rows[0].ItemArray.GetValue(1).ToString(), pwd))
+                {
+                    //把新密碼寫進資料庫
+                    //sql where
+                    var sqlWhere = string.Format("Account = {0}", SqlVal2(Model.Account));
+
+                    //sql str
+                    sqlStr = string.Format("UPDATE Member SET Password = {0}, PwdChangeCheck = {1}, ModifyTime = getdate() where {2} and 1=1",
+                        SqlVal2(SHA256_Encryption(pwd)), SqlVal2("1"), sqlWhere);
+
+                    //SQL Check Update成功(True)或失敗(False)
+                    return _DB_Execute(sqlStr) == 1 ? true : false;
+                }
+                else
+                {
+                    //信件發送失敗
+                    return false;
+                }
+            }
+            else
+            {
+                //寄送失敗 找不到此帳號
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 忘記密碼 GET
+        /// </summary>
+        /// <param name="Account"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult ChangePassword(string Account)
+        {
+            return View(new AccountModels() { Account = Account });//PartialView
+        }
+
+        /// <summary>
+        /// 忘記密碼 Post
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ChangePassword(AccountModels Model)
+        {
+            //把驗證碼寫進資料庫
+            //sql where
+            var sqlWhere = string.Format("Account = {0}", SqlVal2(Model.Account));
+
+            //sql str
+            var sqlStr = string.Format("UPDATE Member SET Password = {0}, PwdChangeCheck = {1}, ModifyTime = getdate() where {2} and 1=1",
+                SqlVal2(SHA256_Encryption(Model.Password)), SqlVal2("0"), sqlWhere);
+
+            //SQL Check Update成功(True)或失敗(False)
+            if (_DB_Execute(sqlStr) == 1)
+            {
+                //修改成功，直接登入
+                return Redirect("/home/index");
+            }
+            else
+            {
+                //修改失敗，回傳
+                return View(new AccountModels() { ok = false, ResultMessage = "修改失敗" });
+            }
         }
     }
 }
