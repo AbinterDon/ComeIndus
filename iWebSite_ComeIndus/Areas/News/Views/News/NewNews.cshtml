@@ -1,0 +1,66 @@
+﻿@using iWebSite_ComeIndus.Areas.News.Models
+<head>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+</head>
+
+<h3>最新消息</h3>
+<form action="NewNews" method="post">
+    <label>類型：</label>
+    <select name="NewsTypeNo">
+        @{ List<NewsTypeModel> types = (List<NewsTypeModel>)ViewData["NewsTypes"];
+            foreach (var news in types)
+            {
+                <option value=@news.NewsTypeNo>@news.NewsTypeName</option> 
+            } 
+        }
+    </select><br><br>
+    <label>標題：</label>
+    <input type="text" name="NewsTitle"><br>
+    <label>內容：</label><br>
+    <textarea name="NewsContent" rows="5" cols="40"></textarea><br><br>
+    <label>開始日期：</label>
+    <div class="row">
+        <div class="form-group col-md-2">
+            <div class="input-group date" id="startDate">
+                <input type="text" class="form-control" name="NewsStart" />
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <label>結束日期：</label>
+    <div class="row">
+        <div class="form-group col-md-2">
+            <div class="input-group date" id="endDate">
+                <input type="text" class="form-control" name="NewsEnd" />
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <input type="submit" value="送出">
+</form>
+
+<span style="font-size:30px">@ViewData["result"]</span>
+
+<script type="text/javascript">
+    $('#startDate').datetimepicker({
+        format: 'YYYY/MM/DD',
+        locale: moment.locale('zh-cn'),
+        minDate: new Date()
+    });
+
+    $('#endDate').datetimepicker({
+        format: 'YYYY/MM/DD',
+        locale: moment.locale('zh-cn')
+    });
+</script>

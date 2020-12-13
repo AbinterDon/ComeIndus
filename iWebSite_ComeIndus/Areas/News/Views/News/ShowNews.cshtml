@@ -1,0 +1,157 @@
+﻿@using iWebSite_ComeIndus.Areas.News.Models
+@using System.Data
+@model DataTable
+
+<style>
+    * {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: white;
+        padding: 50px 0px 20px 0px;
+    }
+
+    th, td {
+        padding: 20px;
+    }
+    /*Table Styles*/
+
+    .table-wrapper {
+        margin: 10px 70px 70px;
+        box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+    }
+
+    .fl-table {
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        border: none;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        background-color: white;
+        margin-bottom: 30px;
+    }
+
+        .fl-table td, .fl-table th {
+            text-align: center;
+            padding: 8px;
+        }
+
+        .fl-table td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 12px;
+        }
+
+        .fl-table thead th {
+            color: #ffffff;
+            background: #3BB0A2;
+        }
+
+            .fl-table thead th:nth-child(odd) {
+                color: #ffffff;
+                background: #324960;
+            }
+
+        .fl-table tr:nth-child(even) {
+            background: #F8F8F8;
+        }
+</style>
+
+<head>
+    <script src="https://use.fontawesome.com/c8a92b1d75.js"></script>
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+</head>
+
+<header>
+    <div class="container" id="NewsInfo">
+        <h2>查看最新消息</h2>
+        <table class="fl-table">
+            <thead>
+                <tr>
+                    <th class="th-buttons" width="10%"></th>
+                    <th>公告時間</th>
+                    <th>類型</th>
+                    <th>標題</th>
+                    <th>內容</th>
+                    <th>點閱次數</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.Rows)
+                {
+                    <!-- ko ifnot: IsEdit -->
+                    <tr id="isNotEdit">
+                        <td>
+                            <button class="btn" type="button" onclick="editNews()">修改</button>
+                        </td>
+                        <td>@row["NewsStart"]</td>
+                        <td>@row["TypeName"]</td>
+                        <td>@row["NewsTitle"]</td>
+                        <td>@row["NewsContent"]</td>
+                        <td>@row["NewsHits"]</td>
+                    </tr>
+                    <!-- /ko -->
+
+                    <!-- ko if: IsEdit -->
+                    <tr id="isEdit">
+                        <td>
+                            <button class="btn" type="button" onclick="saveNews()">儲存</button>
+                            <button class="btn" type="button" onclick="deleteNews()">刪除</button>
+                            <button class="btn" type="button" onclick="cancel()">取消</button>
+                        </td>
+                        <td>@row["NewsStart"]</td>
+                        <td>
+                            <select name="NewsTypeNo">
+                                @{ List<NewsTypeModel> types = (List<NewsTypeModel>)ViewData["NewsTypes"];
+                                    foreach (var news in types)
+                                    {
+                                        <option value=@news.NewsTypeNo>@news.NewsTypeName</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td>
+                             <input type="text" name="NewsTitle" value="@row["NewsTitle"]">
+                        </td>
+                        <td>
+                            <textarea name="NewsContent" rows="5" cols="40">@row["NewsContent"]</textarea>
+                        </td>
+                        <td>@row["NewsHits"]</td>
+                    </tr>
+                    <!-- /ko -->
+                }
+            </tbody>
+        </table>
+    </div>
+</header>
+
+<script type="text/javascript">
+    this.IsEdit = ko.observable(false);
+    ko.applyBindings($('#NewsInfo').get(0));
+
+    function editNews() {
+        this.IsEdit(true);
+    }
+
+    function cancel() {
+        this.IsEdit(false);
+    }
+
+    function saveNews() {
+        this.IsEdit(false);
+    }
+
+    function deleteNews() {
+        this.IsEdit(false);
+    }
+</script>
