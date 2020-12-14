@@ -1,4 +1,5 @@
 ﻿@model _BaseModels
+@using iWebSite_ComeIndus.Areas.FeedBack.Models
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -50,7 +51,7 @@
 </section>
 <!--國家-->
 <section id="section_country">
-    <div class="container"`>
+    <div class="container" `>
         <div class="row">
             <div class="col-sm-12">
                 <h1>Country</h1>
@@ -103,16 +104,45 @@
                     <form action="/FeedBack/FeedBack/NewFeedBack" method="post">
                         <h5>Dear ComeIndus.</h5>
                         <label>Type</label>
+                        <select id="FDoption" name="FeedbackTypeNo">
+                        </select>
+                        <script>
+
+                            $.ajax({
+                                type: "GET",
+                                url: "/FeedBack/FeedBack/NewFeedBack",
+                                data: '{}',
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                async: true,
+                                success: function (data) {
+                                    for (i = 0; i < data.length; i++) {
+                                        $("#FDoption").append("<option value='" + data[i].feedbackTypeNo + "'>" + data[i].feedbackTypeName + "</option>");
+                                    }
+                                },
+                                failure: function (errMsg) {
+                                    // error handle;
+                                }
+                            });
+
+                            var anchor = document.getElementById('@ViewData["feedback-anchor"]');
+                            anchor.scrollIntoView(true);
+
+                        </script>
+                        <!--
                         <select name="FeedbackTypeNo">
                             <option value="FD1">System Bug</option>
                             <option value="FD2">User FeedBack</option>
-                        </select>
+                        </select>-->
                         <label>Title</label>
                         <input type="text" name="Title" placeholder="請輸入標題" />
                         <label>Feedback</label>
                         <textarea id="Content" name="Content" placeholder="使用心得" rows="8"></textarea>
                         <input class="btn" type="submit" value="送出" />
+
                     </form>
+                    <span style="font-size:40px">@ViewData["feedback-result"]</span>
+                   
                 </div>
             </div>
             <div class="col-sm-6">
