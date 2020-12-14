@@ -8,7 +8,33 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
 {
     public class MemberController : Controller
     {
-        public IActionResult Index()
+        [Area(areaName: "Member")]
+
+        public ActionResult Index()
+        {
+            return View("ShowMember");
+        }
+
+        [HttpGet]
+        public ActionResult DeleteMember()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult InsertMember()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ModifyMember()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ShowMember()
         {
             return View();
         }
