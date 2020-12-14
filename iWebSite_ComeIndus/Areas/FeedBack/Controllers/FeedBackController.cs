@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using iWebSite_ComeIndus.Controllers;
 using System.Data;
+using System.Text.Json;
 
 namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
 {
@@ -16,13 +17,13 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
     {
         public static List<FeedBackTypeModel> FDTypes = new List<FeedBackTypeModel> { };
         
-        public IActionResult Index()
+        public List<FeedBackTypeModel> Index()
         {
             return NewFeedBack();
         }
         
         [HttpGet]
-        public ActionResult NewFeedBack()
+        public List<FeedBackTypeModel> NewFeedBack()
         {
             //SQL Select all type
             var sqlStr = string.Format("select FeedbackTypeNo, TypeName from [dbo].[FeedbackType]");
@@ -32,21 +33,25 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
             foreach (DataRow row in data.Rows)
             {
                 FeedBackTypeModel model = new FeedBackTypeModel();
+            
                 model.FeedbackTypeNo = row.ItemArray.GetValue(0).ToString();
                 model.FeedbackTypeName = row.ItemArray.GetValue(1).ToString();
                 FDTypes.Add(model);
             }
-
-            ViewData["FDTypes"] = FDTypes;
-            return View("NewFeedBack");
+            
+            return FDTypes;
         }
 
         [HttpPost]
         public ActionResult NewFeedBack(FeedBackModel Model)
         {
             string resMsg = "";
+            if (Model.Content == null || Model.Title == null)
+            {
+                resMsg = "未輸入內容!!";
+            }
             // 長度限制
-            if (Model.Content.Length > 200 || Model.Title.Length > 50)
+            else if (Model.Content.Length > 200 || Model.Title.Length > 50)
             {
                 resMsg = "標題或內容超出長度限制!!";
             }
@@ -74,12 +79,11 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
                     );
 
                 var check = _DB_Execute(sqlStr);
-
+               
                 //新增是否成功
                 if (check == 1)
                 {
                     resMsg = "success";
-                    //return View("NewFeedBack", "Success!!");
                 }
                 else
                 {
@@ -87,11 +91,11 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
                 }
             }
 
-
-            //return View("NewFeedBack", "Fail :(");
-            ViewData["result"] = resMsg;
-            ViewData["FDTypes"] = FDTypes;
-            return View();
+            ViewData["feedback-result"] = resMsg;
+            ViewData["feedback-anchor"] = "section_feedback";
+            
+            return View("~/Views/Home/Index.cshtml");
+            
         }
 
         public ActionResult ShowFeedBack()
@@ -111,7 +115,7 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
             else
             {
                 //先暫時導到此頁面，之後改到其他頁面
-                return View("~/Views/Home/Index.cshtml");
+                return View("~/Views/Home/Index.cshtml/#section_feedback"); 
                 //return StatusCode(403);
             }
         }
