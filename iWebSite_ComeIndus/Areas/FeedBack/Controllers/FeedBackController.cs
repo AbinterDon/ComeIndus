@@ -15,11 +15,12 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
     public class FeedBackController : _BaseController
     {
         public static List<FeedBackTypeModel> FDTypes = new List<FeedBackTypeModel> { };
+        
         public IActionResult Index()
         {
-            return View("NewFeedBack");
+            return NewFeedBack();
         }
-
+        
         [HttpGet]
         public ActionResult NewFeedBack()
         {
@@ -37,7 +38,7 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
             }
 
             ViewData["FDTypes"] = FDTypes;
-            return View();
+            return View("NewFeedBack");
         }
 
         [HttpPost]
