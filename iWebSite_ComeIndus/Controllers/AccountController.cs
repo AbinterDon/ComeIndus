@@ -109,7 +109,7 @@ namespace iWebSite_ComeIndus.Controllers
                     "[Account]," +
                     "[Password]," +
                     "[Username]," +
-                    "[Nickname]," +
+                    "[Actualname]," +
                     "[Gender]," +
                     "[Birthday]," +
                     "[PhotoURL]," +
@@ -134,7 +134,7 @@ namespace iWebSite_ComeIndus.Controllers
                     SqlVal2(Model.Account),
                     SqlVal2(SHA256_Encryption(Model.Password)),
                     SqlVal2(Model.Username),
-                    SqlVal2(Model.Nickname),
+                    SqlVal2(Model.Actualname),
                     SqlVal2(Model.Gender),
                     SqlVal2(Model.Birthday),
                     SqlVal2(Model.PhotoURL),

@@ -29,7 +29,7 @@ namespace iWebSite_ComeIndus.Models
         public string Username { get; set; }
 
         //使用者真實姓名
-        public string Nickname { get; set; }
+        public string Actualname { get; set; }
 
         //性別
         public string Gender { get; set; }
