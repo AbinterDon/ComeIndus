@@ -1,0 +1,33 @@
+﻿@using System.Data
+@model DataTable
+
+<style>
+    td 
+    {
+        padding: 20px;
+    }
+</style>
+
+<h2>科系/學群列表</h2>
+<table>
+    <thead>
+        <tr>
+            <th>編號</th>
+            <th>名稱</th>
+            <th>描述</th>
+            <th>建立時間</th>
+            <th>上次修改時間</th>
+        </tr>
+    </thead>
+    @foreach (DataRow row in Model.Rows)
+    {
+        <!--先全部顯示，之後再調整要顯示的欄位-->
+        <tr>
+            <td>@row["DeptNo"]</td>
+            <td>@row["DeptName"]</td>
+            <td>@row["DeptDescription"]</td>
+            <td>@row["CreateTime"]</td>
+            <td>@row["ModifyTime"]</td>
+        </tr>
+    }
+</table>
