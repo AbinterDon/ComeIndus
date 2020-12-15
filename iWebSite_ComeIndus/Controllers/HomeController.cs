@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace iWebSite_ComeIndus.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : _BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -19,16 +19,31 @@ namespace iWebSite_ComeIndus.Controllers
             _logger = logger;
         }
 
-        //首頁
+        /// <summary>
+        /// 首頁
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
-            //Model
-            _BaseModels model = new _BaseModels();
+            ////是否存在cookies
+            //if (string.IsNullOrEmpty(Request.Cookies["account"]) && string.IsNullOrEmpty(Request.Cookies["userName"]))
+            //{
+            //    //SQL Insert Member
+            //    var sqlStr = string.Format("select Account,Username from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
 
-            //版本編號
-            model.SystemVersion = Helper.ConfigHelper.AppSettings.SystemVersion;
-            
-            return View(model);
+            //    //SQL Check
+            //    var data = _DB_GetData(sqlStr);
+
+            //    //資料庫內是否有此帳號
+            //    if (data.Rows.Count > 0) {
+            //        return View(new SetResult() { ok = true});
+            //    }
+            //    else
+            //    {
+            //        return View(new SetResult() { ok = false });
+            //    }
+            //}
+            return View();
         }
 
         public IActionResult Privacy()

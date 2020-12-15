@@ -402,5 +402,35 @@ namespace iWebSite_ComeIndus.Controllers
                 return View(new AccountModels() { ok = false, ResultMessage = "修改失敗" });
             }
         }
+
+        /// <summary>
+        /// 確認登入狀態
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public bool CheckLoginStatus()
+        {
+            if (string.IsNullOrEmpty(getUserAuthority()))
+            {
+                return false;
+            }
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult LogOff()
+        {
+            // 刪除cookie，預設使用者關閉瀏覽器時清除
+            Response.Cookies.Delete("userName");
+            Response.Cookies.Delete("account");
+
+            //登出後返回首頁
+            return View("~/Views/Home/Index.cshtml");
+        }
     }
 }

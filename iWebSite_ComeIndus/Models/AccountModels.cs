@@ -13,6 +13,9 @@ namespace iWebSite_ComeIndus.Models
         //帳號
         public string Account { get; set; }
 
+        //使用者名稱
+        public string Username { get; set; }
+
         //密碼
         public string Password { get; set; }
 
@@ -25,9 +28,6 @@ namespace iWebSite_ComeIndus.Models
     /// </summary>
     public class Member : AccountModels
     {
-        //使用者名稱
-        public string Username { get; set; }
-
         //使用者真實姓名
         public string Actualname { get; set; }
 
