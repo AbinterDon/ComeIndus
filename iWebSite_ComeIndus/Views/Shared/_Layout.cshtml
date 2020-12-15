@@ -67,20 +67,22 @@
 </body>
 </html>
 
+@* 最後才跑JS *@
 <script defer="defer">
-    //Ajax
+    //Ajax 需同步化 取得登入狀態
     $.ajax({
         url: '/Account/CheckLoginStatus',
-        async: true,
+        async: false,
         success: function (response) {
             if (response) {
+                //抓Object
                 var Log = document.getElementById("Log");
-                Log.href = '/Account/LogOff';
-                Log.innerText = "會員登出";
 
-                console.log("OK");
-            } else {
-                console.log("NULL");
+                //修改路徑
+                Log.href = '/Account/LogOff';
+
+                //超連結變更為會員登出
+                Log.innerText = "會員登出";
             }
         },
         error: function (xhr, status, error) {
