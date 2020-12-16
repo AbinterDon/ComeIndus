@@ -158,7 +158,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1>New</h1><a class="btn btn-lg btn-default addbtn" href="">+ 新增</a>
+                <h1>New</h1><a class="btn btn-lg btn-default addbtn" href="News/News/NewNews">+ 新增</a>
             </div>
             <div class="newbox">
                 <ul class="newstyle">
@@ -167,7 +167,7 @@
                     <li class="style"><a class="textnew" herf="">2020-12-03 數據新增 新加玻國家預算2020新增</a></li>
                     <li class="style"><a class="textnew" herf="">2020-12-04 數據新增 新加玻國家預算2020新增</a></li>
                     <li class="style"><a class="textnew" herf="">2020-12-04 數據新增 新加玻國家預算2020新增</a></li>
-                </ul><a class="textmore" herf="">more</a>
+                </ul><a class="textmore" herf="/News/News/ShowNews">more</a>
             </div>
         </div><img class="marginbottom mountain" src="https://awiclass.monoame.com/img/margin/m_works.svg" />
     </div>
@@ -212,10 +212,10 @@
 
                         </script>
                         <!--
-                        <select name="FeedbackTypeNo">
-                            <option value="FD1">System Bug</option>
-                            <option value="FD2">User FeedBack</option>
-                        </select>-->
+                <select name="FeedbackTypeNo">
+                    <option value="FD1">System Bug</option>
+                    <option value="FD2">User FeedBack</option>
+                </select>-->
                         <label>Title</label>
                         <input type="text" name="Title" placeholder="請輸入標題" />
                         <label>Feedback</label>
@@ -224,7 +224,8 @@
 
                     </form>
                     <span style="font-size:40px">@ViewData["feedback-result"]</span>
-                   
+
+
                 </div>
             </div>
             <div class="col-sm-6">
@@ -232,7 +233,8 @@
                 <p>If you have any question about us,<br>Don`t hestitate to contact us !</p>
             </div>
             <div class="feedback"></div>
-            <div class="col-sm-4 btn-area"></div>
+            <div class="col-sm-4 btn-area"><a class="btn btn-lg btn-default" href="/FeedBack/FeedBack/ShowFeedBack">查看意見回饋</a></div>
+        </div>
         </div>
     </div>
 </section>

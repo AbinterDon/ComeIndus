@@ -6,49 +6,102 @@
     <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        * {
+            //border: solid 2px white;
+        }
+        body {
+            background-color: #1D3255;
+        }
+
+        .box{
+            width:100%;
+            height:700px;
+            position:relative;
+            top:30px
+        }
+        .formstyle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+            padding: 50px 0px 20px 0px;
+            text-align: center;
+        }
+        form {
+            background-color: #ffffff;
+            color: #1D3255;
+            padding: 20px;
+            width: 500px;
+            height: 480px;
+            border-radius: 10px;
+            border: 2px solid #3BB0A2;
+        }
+        input, select, textarea{
+            display: block;
+            background-color: transparent;
+            border: none;
+            border: solid 3px #1D3255;
+            padding: 1px 2px;
+        }
+        label{
+            padding:1px 0px 1px 0px
+        }
+    </style>
 </head>
 
-<h3>最新消息</h3>
-<form action="NewNews" method="post">
-    <label>類型：</label>
-    <select name="NewsTypeNo">
-        @{ List<NewsTypeModel> types = (List<NewsTypeModel>)ViewData["NewsTypes"];
-            foreach (var news in types)
-            {
-                <option value=@news.NewsTypeNo>@news.NewsTypeName</option> 
-            } 
-        }
-    </select><br><br>
-    <label>標題：</label>
-    <input type="text" name="NewsTitle"><br>
-    <label>內容：</label><br>
-    <textarea name="NewsContent" rows="5" cols="40"></textarea><br><br>
-    <label>開始日期：</label>
-    <div class="row">
-        <div class="form-group col-md-2">
-            <div class="input-group date" id="startDate">
-                <input type="text" class="form-control" name="NewsStart" />
-                <span class="input-group-addon">
-                    <i class="glyphicon glyphicon-calendar"></i>
-                </span>
+
+<div class="box">
+    <h2>最新消息</h2>
+    <div class="formstyle">
+        <form action="NewNews" method="post">
+            <label>類型：</label>
+            <select name="NewsTypeNo">
+                @{ List<NewsTypeModel> types = (List<NewsTypeModel>)ViewData["NewsTypes"];
+                    foreach (var news in types)
+                    {
+                        <option value=@news.NewsTypeNo>@news.NewsTypeName</option>
+                    } }
+            </select>
+            <label>標題：</label>
+            <input type="text" name="NewsTitle">
+            <label>內容：</label>
+            <textarea name="NewsContent" rows="5" cols="40"></textarea>
+            <label>開始日期：</label>
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <div class="input-group date" id="startDate">
+                        <input type="text" class="form-control" name="NewsStart" />
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <br>
-    <label>結束日期：</label>
-    <div class="row">
-        <div class="form-group col-md-2">
-            <div class="input-group date" id="endDate">
-                <input type="text" class="form-control" name="NewsEnd" />
-                <span class="input-group-addon">
-                    <i class="glyphicon glyphicon-calendar"></i>
-                </span>
+            <label>結束日期：</label>
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <div class="input-group date" id="endDate">
+                        <input type="text" class="form-control" name="NewsEnd" />
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
+            <input type="submit" value="送出">
+        </form>
     </div>
-    <br>
-    <input type="submit" value="送出">
-</form>
+
+</div>
+
 
 <span style="font-size:30px">@ViewData["result"]</span>
 
