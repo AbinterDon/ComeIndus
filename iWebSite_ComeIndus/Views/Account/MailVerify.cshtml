@@ -1,6 +1,44 @@
 ﻿@model Verify
 <html>
 <head>
+    <link href="~/css/register_and_login.css" rel="stylesheet" />
+    
+
+    <script type="text/javascript">
+
+        function timeout() {
+            var time = 60;//定義60秒的倒計時
+
+            //設定一個定時，一秒執行一次
+            var mytime = setInterval(function () {
+                subs();
+            }, 1000)
+
+
+            function subs() {
+                if (time > 0) {
+                    time--;
+                    $('#emialcore').attr("value", "請" + time + "秒後再試");
+                    $('#emialcore').attr("disabled", true);//按鍵不可用
+                }
+               else if (time == 0) {
+                    clearInterval(mytime);
+                    $('#emialcore').attr("value", "Sent again");
+                    $('#emialcore').attr("disabled", false);//按鍵可用
+                } else {
+                    $('#emialcore').attr("disabled", true);//按鍵不可用
+                }
+            }
+        }
+
+            $(document).ready(function () {
+               timeout();
+            })
+        
+
+
+
+    </script>
 </head>
 <body>
     @* 是否顯示驗證成功訊息 *@
@@ -8,28 +46,45 @@
     {
         <p>@Model.ResultMessage</p>
         <a href="/">回首頁</a>
+
     }
     else
     {
         //驗證表單
-        <form id="SendForm" action="/Account/MailVerify" method="POST">
-            <p>Account</p>
-            <p>@Model.Account</p>
-            <input type="hidden" id="Account" name="Account" value="@Model.Account">
-            <input type="hidden" id="Username" name="Username" value="@Model.Username">
-            <br><label>Verification Code:</label><br>
-            <input type="text" id="VerificationCode" name="VerificationCode"><br><br>
-            <input type="submit" value="驗證信箱">
-        </form>
-        <br>
-        <button onclick="Resend();">再寄送一次</button>
+        <br><br><br>
+        <div class="form">
+            <form id="SendForm" action="/Account/MailVerify" method="POST">
+                <p class='update'>Please check your email</p>
+                <label>Your Account:@Model.Account</label>
+                <input type="hidden" id="Account" name="Account" value="@Model.Account">
+                <input type="hidden" id="Username" name="Username" value="@Model.Username">
+
+                <div class="formcell">
+                    <div>
+                        <input type="button" onclick="Resend(); timeout();" class="btn btn-danger" id="emialcore" value="Sent">
+             
+                    </div>
+                    <div>
+                        <input type="text" class='required' id="VerificationCode" name="VerificationCode" placeholder="Verification Code...">
+                    </div>
+                </div>
+            </form>
+
+            <br/>
+            <button type="submit" class="next">Verify</button>
+
+
+        </div>
+
     }
     <br>
+
     @* 是否要顯示錯誤訊息 *@
     @if (Model != null && Model.ok == false)
     {
         <br><p>@Model.ResultMessage</p>
-    }
+
+    } 
 </body>
 </html>
 

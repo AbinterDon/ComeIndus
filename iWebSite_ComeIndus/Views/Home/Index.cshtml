@@ -2,6 +2,8 @@
 @using iWebSite_ComeIndus.Areas.FeedBack.Models
 @{
     ViewData["Title"] = "ComeIndus";
+
+    // ViewData["admin"] = "hidden";  // 一開始先預設這個值是false
 }
 <head>
     <script>
@@ -158,6 +160,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
+                @*<h1>New</h1><a style='visibility:@ViewData["admin"]' class="btn btn-lg btn-default addbtn" href="News/News/NewNews">+ 新增</a>*@
                 <h1>New</h1><a class="btn btn-lg btn-default addbtn" href="News/News/NewNews">+ 新增</a>
             </div>
             <div class="newbox">
@@ -212,10 +215,10 @@
 
                         </script>
                         <!--
-                <select name="FeedbackTypeNo">
-                    <option value="FD1">System Bug</option>
-                    <option value="FD2">User FeedBack</option>
-                </select>-->
+                        <select name="FeedbackTypeNo">
+                            <option value="FD1">System Bug</option>
+                            <option value="FD2">User FeedBack</option>
+                        </select>-->
                         <label>Title</label>
                         <input type="text" name="Title" placeholder="請輸入標題" />
                         <label>Feedback</label>
@@ -233,8 +236,10 @@
                 <p>If you have any question about us,<br>Don`t hestitate to contact us !</p>
             </div>
             <div class="feedback"></div>
-            <div class="col-sm-4 btn-area"><a class="btn btn-lg btn-default" href="/FeedBack/FeedBack/ShowFeedBack">查看意見回饋</a></div>
+            <div class="col-sm-4 btn-area">
+                <a class="btn btn-lg btn-default" href="/FeedBack/FeedBack/ShowFeedBack">查看意見回饋</a>
+            </div>
         </div>
-        </div>
+    </div>
     </div>
 </section>

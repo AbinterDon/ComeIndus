@@ -24,6 +24,7 @@ namespace iWebSite_ComeIndus.Controllers
 
         /// <summary>
         /// 登入驗證
+        /// 可以在這邊驗證完如果判斷是admin，則把ViewData["admin"] = visible;
         /// </summary>
         /// <returns></returns>
         [HttpPost]

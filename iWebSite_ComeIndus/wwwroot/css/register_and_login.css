@@ -1,0 +1,330 @@
+
+:root {
+    --body-bg: #c1bdba;
+    --form-bg: #13232f;
+    --white: #ffffff;
+    
+
+    --main-color: #3F9086;
+    --main-light: lighten(main,5%);
+    --main-dark: darken(#658b87,5%);
+
+    --gray-light: #a0b3b0;
+    --gray: #ddd;
+    
+    --thin: 300;
+    --normal: 400;
+    --bold: 600;
+    --br: 4px;
+
+  }
+
+
+  
+
+  *, *:before, *:after {
+    box-sizing: border-box;
+  }
+
+  
+html {
+  overflow-y: scroll; 
+
+  
+}
+
+body {
+ 
+  background:#ffffff;
+  font-family: 'Titillium Web', sans-serif;
+  background-image:url( https://i.ibb.co/wKxfHPT/Artboard-6.png );
+  background-repeat:no-repeat;
+  /*background-position: left;*/
+
+}
+
+
+
+a {
+  text-decoration:none;
+  color: var(--main-color);
+  transition:.5s ease;
+  
+}
+a:hover
+{ 
+background-color:var(lighten(main,5%));
+}
+
+
+
+
+.form {
+    margin: 0 50px;
+    padding: 70px 50px;
+    /*   position:absolute; height:500px; top:50%; margin-top:-300px;*/
+    /*position: left;*/
+    /* background: rgba(var(--form-bg,9));*/
+    /*  padding: 40px;*/
+    max-width: 500px;
+    /* border-radius: br;
+    box-shadow: 0 4px 10px 4px rgba(var(--form-bg),.3);*/
+    height:570px;
+}
+
+
+
+.forms {
+    margin: 0 50px;
+    padding: 70px 50px;
+    /*   position:absolute; height:500px; top:50%; margin-top:-300px;*/
+    /*position: left;*/
+    /* background: rgba(var(--form-bg,9));*/
+    /*  padding: 40px;*/
+    max-width: 500px;
+    /* border-radius: br;
+    box-shadow: 0 4px 10px 4px rgba(var(--form-bg),.3);*/
+    height:700px;
+}
+  
+  .tab-group {
+    list-style:none;
+    padding:0;
+    margin:0 0 40px 0;}
+
+   .tab-group:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+   div.forms li a {
+      display:block;
+      text-decoration:none;
+      padding:15px;
+      /*background:rgba(var(--gray-light,.25));*/
+      color:#707070;
+      font-size:20px;
+      float:left;
+      width:50%;
+      text-align:center;
+      cursor:pointer;
+      transition:.5s ease;}
+
+      div.forms  li a:hover {
+        /*background:var(--main-dark);*/
+        color:#6FCCC1;
+      }
+    
+    .active a {
+    /*  background:var(--main);*/
+      color:#6FCCC1;
+    
+      border-bottom:2px solid #6FCCC1;
+      
+    }
+  
+
+
+
+    .tab-content > div:last-child {
+        display:none;
+      }
+      
+    
+    label{
+
+        color:#707070;
+        font-size:17px;
+      }
+
+
+
+      .fogroup input,textarea{
+        font-size:15px;
+        display:block;
+        width:100%;
+        height:100%;
+        padding:5px 10px;
+        background:none;
+        background-image:none;
+        border:1px solid #6FCCC1;
+        color:#8D8D8D;
+        border-radius:0;
+        transition:border-color .25s ease, box-shadow .25s ease;
+}
+
+
+
+/*
+.date input{
+    color:#8D8D8D;
+
+    width:100%;
+    height:100%;
+    
+
+}
+*/
+
+
+.fogroup input:focus, textarea:focus {
+              outline:0;
+              border-color:var(--main);
+        }
+      
+      
+      textarea {
+        border:2px solid var(--gray-light);
+        resize: vertical;
+      }
+
+     
+
+      .formcell div{
+        float: left;
+        display:block;
+        width:50%;
+        height:100%;
+        background:none;
+        background-image:none;
+
+    } 
+    .formcell input:focus, textarea:focus {
+        outline:0;
+        border-color:var(--main);
+  }
+
+
+
+
+      .formcell input{
+          float: left;
+        font-size:15px;
+        display:block;
+        width:98%;
+        height:100%;
+        padding:5px 10px;
+        background:none;
+        background-image:none;
+        border:1px solid #6FCCC1;
+        color:#8D8D8D;
+        border-radius:0;
+        transition:border-color .25s ease, box-shadow .25s ease;
+    
+    } 
+
+
+
+div.sex{
+
+  width:100%;
+}
+
+div.sex select{
+
+  font-size:15px;
+  display:block;
+  width:100%;
+  height:100%;
+  padding:5px 10px;
+  background:none;
+  background-image:none;
+  border:1px solid #6FCCC1;
+  color:#8D8D8D;
+  border-radius:0;
+  transition:border-color .25s ease, box-shadow .25s ease;
+}
+
+
+      .button {
+        
+        border:0;
+        outline:none;
+        border-radius:0;
+        padding:15px 0;
+        font-size:2rem;
+        font-weight:var(--bold);
+        text-transform:uppercase;
+        letter-spacing:.1em;
+        background:#6FCCC1;
+        color:var(--white);
+        transition:all.5s ease;
+        -webkit-appearance: none;}
+
+       .button:hover, .button:focus {
+          background:#3AA99C;
+        }
+      
+      
+      .button-block {
+        display:block;
+        width:100%;
+      }
+      
+      .forgot {
+        margin-top:30px;
+        text-align:right;
+      }
+
+      /*forgot*/
+
+      div.form p.update{
+        margin-bottom:40px ;
+        font-weight: bold;
+        font-size: 30px;
+        text-align: left;
+        color:#777777;
+
+
+      }
+
+
+      div.form p.check{
+       
+        font-size: 13px;
+        text-align: left;
+        color:#6FCCC1;
+
+
+      }
+
+div.nextbutton{
+max-width: 100%;
+
+}
+
+      button.next {
+       float:right;
+       margin-top: 50px;
+        display: block;
+        width: 90px;
+        height: 30px;
+        border-radius: 18px;
+        background-color:#6FCCC1;
+        border: solid 1px transparent;
+        color: #fff;
+        font-size: 18px;
+        
+        font-weight: 300;
+        cursor: pointer;
+        transition: all .1s ease-in-out;
+        
+      }
+
+      button.next :hover {
+        background-color: transparent;
+        border-color: #fff;
+        transition: all .1s ease-in-out;
+      }
+
+      button.next:hover,  button.next:focus {
+        background:#3AA99C;
+      }
+
+
+
+
+
+    
+ 

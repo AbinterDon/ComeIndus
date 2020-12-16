@@ -1,42 +1,111 @@
 ﻿@model Member
 <html>
-    <head>
-    </head>
+<head>
+    <link href="~/css/register_and_login.css" rel="stylesheet" />
+    <script src="~/js/register_and_login.js"></script>
+</head>
     <body>
-        <form id="sign" action="/Account/Register" method="POST">
-            <!--onsubmit="register()"-->
-            <label>會員帳號:</label>
-            <input type="email" id="Account" name="Account">
-            <br><br>
-            <label>會員密碼:</label>
-            <input type="Password" id="Password" name="Password">
-            <br><br>
-            <label>確認密碼:</label>
-            <input type="Password" id="PasswordCheck" name="PasswordCheck">
-            <br><br>
-            <label>會員暱稱:</label>
-            <input type="text" id="Username" name="Username">
-            <br><br>
-            <label>真實姓名:</label>
-            <input type="text" id="Actualname" name="Actualname">
-            <br><br>
-            <label>會員性別:</label>
-            <select name="Gender">
-                <option value="0" selected>請選擇您的性別</option>
-                <option value="1">男</option>
-                <option value="2">女</option>
-                <option value="3">不願透漏</option>
-            </select>
-            <br><br>
-            <label>會員生日:</label>
-            <input type="date" id="Birthday" name="Birthday">
-            <br><br>
-            <input type="submit" value="註冊">
-        </form>
-        <br>
-        @if (Model != null && Model.ok == false)
-        {
-            <p>@Model.ResultMessage</p>
-        }
-    </body>
+        <div class="forms" id='form'>
+
+            <ul class="tab-group">
+                <li class="tab active"><a href="#signup">Sign Up</a></li>
+                <li class="tab "><a href="#login">Sign In</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="signup">
+                    <form id="sign" action="/Account/Register" method="POST" name="signupform" id='signupform' >
+                        <!--onsubmit="register()"-->
+                        <div class='fogroup'>
+                            <input type='text' class='required' id='Actualname' name='Actualname' placeholder="Actualname">
+                        </div>
+                        <br>
+                        <div class='fogroup'>
+                            <input type='text' class='required' id='Username' name='Username' placeholder="Username*">
+                        </div>
+                        <br>
+                        <div class="fogroup">
+                            <input type='email' class='required' id='Account' name='Account' placeholder='Email Address*' onkeyup="verifyUser()">
+                        </div>
+                        <br>
+                        <div class="formcell">
+                            <div>
+                                <input type="password" class='required'
+                                       id="Password" name="Password" placeholder="Password*">
+                            </div>
+                            <div>
+                                <input type="password" class='required'
+                                       id="PasswordCheck" name="PasswordCheck" placeholder="Repeat Password*">
+                            </div>
+                            <br>
+                        </div>
+
+                        <br><br>
+
+                        <div class="sex">
+                            <select id=gender class='required' name="Gender">
+                                <option value="0" selected>Gender*</option>
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                                <option value="3">不願透漏</option>
+                            </select>
+                        </div>
+
+                        <br>
+                        <div class="fogroup">
+                            <label for="birthday">Enter your birthday*</label>
+
+                            <input type="date" id="bday" name="bday">
+                        </div>
+
+                        <br>
+                        <button type="submit" onclick="return false" class="button button-block " id="getstart" href="/Account/MailVerify"> Get Started</button>
+                    </form>
+
+
+                    @if (Model != null && Model.ok == false)
+                    {
+                        <p>@Model.ResultMessage</p>
+                    }
+                </div>
+
+
+
+
+                <div id="login">
+                    
+                    <form action="/Account/Login" method="POST" name='loginform' onclick="return false">
+                        <!--  <label>Account:</label><br> -->
+      <!--Model是否為空，如果是第一次進入Login頁面可能會沒有model，因為Controller是走Get的Method-->
+                        <div class="fogroup">
+                            @if (Model != null)
+                            {
+                                <!--自動帶入帳號-->
+                                <input type="email" class='required' id="Account2" name="Account2" value="@Model.Account" placeholder="Email Address*" onkeyup="verifyUser2()">
+                            }
+                            else
+                            {
+                                <input type="email" class='required' id="Account2" name="Account2" placeholder="Email Address*" onkeyup="verifyUser2()">
+                            }
+                        </div>
+                        <br>
+                        <div class="fogroup">
+                            <input type="password" class='required' id="Password2" name="Password2" placeholder="Password*">
+                        </div>
+                        <br>
+                        <button type="submit" class="button button-block" id="loginbtn" value="Login">Sign In</button>
+                    </form>
+                    <p class="forgot"><a href="/Account/ForgetPassword">Forgot Password?</a></p>
+                    
+                </div>
+
+
+
+
+                </div>
+                <br>
+
+
+
+            </div>
+</body>
 </html>
