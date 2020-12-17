@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using iWebSite_ComeIndus.Areas.Content.Models;
-using Newtonsoft.Json;
 using System.Data;
 
 namespace iWebSite_ComeIndus.Areas.Content.Controllers
@@ -18,10 +17,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             return View("ShowUnivGraduation");
         }
 
-        public ActionResult ShowUnivGraduation(UnivGraduationModel Model)
+        [HttpGet()]
+        //public List<UnivGraduationModel> ShowUnivGraduation(UnivGraduationModel Model)
+        public List<UnivGraduationModel> ShowUnivGraduation(string country)
         {
             // 假DB
-            Dictionary<string, string> country = new Dictionary<string, string>()
+            Dictionary<string, string> countrys = new Dictionary<string, string>()
             {
                 {"台灣", "TW"},
                 {"中國", "CN"}
@@ -32,8 +33,8 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
             //------------------------------------------------------------
 
-            var countryID = country[Model.Country];
-            
+            var countryID = countrys[country];
+
             var sqlStr = string.Format(
                 "select GraduationNumber, DeptName " +
                 "from [dbo].[Graduation] " +
@@ -51,12 +52,15 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
                 model.GraduationNumber = row.ItemArray.GetValue(0).ToString();
                 model.Department = row.ItemArray.GetValue(1).ToString();
+                model.color = "#abc";
                 graduationData.Add(model);
             }
 
-            string jsondata = JsonConvert.SerializeObject(graduationData);
-
-            return View("ShowUnivGraduation", jsondata);
+            //string jsondata = JsonConvert.SerializeObject(graduationData);
+            //return View("ShowUnivGraduation", jsondata);
+            return graduationData;
         }
+
+       
     }
 }
