@@ -101,13 +101,6 @@ nav.navbar a {
   transition: 0.5s;
 }
 
-nav.navbar.at_top {
-  background-color: transparent;
-}
-nav.navbar.at_top a, nav.navbar.at_top a:visited {
-  color: white;
-}
-
 section {
   padding: 60px;
   position: relative;
