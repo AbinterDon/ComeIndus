@@ -20,5 +20,5 @@ namespace iWebSite_ComeIndus.Areas.Content.Models
         public List<string> DeptName { get; set; }
         public List<int> GraduationNumber { get; set; }
     }
-}
+} 
 
