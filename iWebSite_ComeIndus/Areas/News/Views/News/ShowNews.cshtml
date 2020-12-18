@@ -66,7 +66,6 @@
 </style>
 
 <head>
-    <script src="https://use.fontawesome.com/c8a92b1d75.js"></script>
     <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 </head>
@@ -77,58 +76,60 @@
         <table class="fl-table">
             <thead>
                 <tr>
-                    <th class="th-buttons" width="10%"></th>
                     <th>公告時間</th>
                     <th>類型</th>
                     <th>標題</th>
                     <th>內容</th>
                     <th>點閱次數</th>
+                    <th width="15%"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (DataRow row in Model.Rows)
                 {
-                    <!-- ko ifnot: IsEdit -->
-                    <tr id="isNotEdit">
-                        <td>
-                            <button class="btn" type="button" onclick="editNews()">修改</button>
-                        </td>
+                    <tr>
+                        <!-- ko ifnot: IsEdit() && Item() == @row["NewsNo"] -->
                         <td>@row["NewsStart"]</td>
-                        <td>@row["TypeName"]</td>
+                        <td>@row["TypeDescription"]</td>
                         <td>@row["NewsTitle"]</td>
                         <td>@row["NewsContent"]</td>
                         <td>@row["NewsHits"]</td>
-                    </tr>
-                    <!-- /ko -->
-
-                    <!-- ko if: IsEdit -->
-                    <tr id="isEdit">
                         <td>
-                            <button class="btn" type="button" onclick="saveNews()">儲存</button>
-                            <button class="btn" type="button" onclick="deleteNews()">刪除</button>
-                            <button class="btn" type="button" onclick="cancel()">取消</button>
+                            <button class="btn" type="button" onclick="editNews(@row["NewsNo"])">修改</button>
+                            <span>&nbsp;&nbsp;</span>
+                            <button class="btn" type="button" onclick="deleteNews(@row["NewsNo"])">刪除</button>
                         </td>
+                        <!-- /ko -->
+                    </tr>
+                    <tr>
+                        <!-- ko if: IsEdit() && Item() == @row["NewsNo"] -->
                         <td>@row["NewsStart"]</td>
                         <td>
-                            <select name="NewsTypeNo">
+                            <select name="NewsTypeNo" id="TypeDescription">
                                 @{ List<NewsTypeModel> types = (List<NewsTypeModel>)ViewData["NewsTypes"];
+                                    <option value=@row["NewsTypeNo"] style="display:none">@row["TypeDescription"]</option>
                                     foreach (var news in types)
                                     {
-                                        <option value=@news.NewsTypeNo>@news.NewsTypeName</option>
+                                        <option value=@news.NewsTypeNo>@news.TypeDescription</option>
                                     }
                                 }
                             </select>
                         </td>
                         <td>
-                             <input type="text" name="NewsTitle" value="@row["NewsTitle"]">
+                            <input type="text" name="NewsTitle" value="@row["NewsTitle"]" id="NewsTitle">
                         </td>
                         <td>
-                            <textarea name="NewsContent" rows="5" cols="40">@row["NewsContent"]</textarea>
+                            <textarea name="NewsContent" rows="5" cols="40" id="NewsContent">@row["NewsContent"]</textarea>
                         </td>
                         <td>@row["NewsHits"]</td>
+                        <td>
+                            <button class="btn" type="button" onclick="saveNews(@row["NewsNo"], 'TypeDescription', 'NewsTitle', 'NewsContent')">確認</button>
+                            <span>&nbsp;&nbsp;</span>
+                            <button class="btn" type="button" onclick="cancel(@row["NewsNo"])">取消</button>
+                        </td>
+                        <!-- /ko -->
                     </tr>
-                    <!-- /ko -->
-                }
+                 }
             </tbody>
         </table>
     </div>
@@ -136,21 +137,49 @@
 
 <script type="text/javascript">
     this.IsEdit = ko.observable(false);
-    ko.applyBindings($('#NewsInfo').get(0));
+    this.Item = ko.observable(0);
+    ko.applyBindings($("#NewsInfo").get(0));
 
-    function editNews() {
+    function editNews(data) {
         this.IsEdit(true);
+        this.Item(data);
     }
 
-    function cancel() {
+    function cancel(data) {
         this.IsEdit(false);
+        this.Item(data);
     }
 
-    function saveNews() {
+    function saveNews(data, TypeDescription, NewsTitle, NewsContent) {
+        newsTypeNo = document.getElementById(TypeDescription).value;
+        newsTitle = document.getElementById(NewsTitle).value;
+        newsContent = document.getElementById(NewsContent).value;
+
         this.IsEdit(false);
+        this.Item(data);
+
+        let args = {
+            NewsNo: data,
+            NewsTypeNo: newsTypeNo,
+            NewsTitle: newsTitle,
+            NewsContent: newsContent
+        };
+
+        $.post('@Url.Action("UpdateNews")', args, data => {});
+
+        window.location.reload();
     }
 
-    function deleteNews() {
+    function deleteNews(data) {
         this.IsEdit(false);
+        this.Item(data);
+
+        let args = {
+            NewsNo: data
+        };
+
+        $.post('@Url.Action("DeleteNews")', args, data => {});
+
+        window.location.reload();
     }
 </script>
