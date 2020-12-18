@@ -1,0 +1,33 @@
+﻿ <!-- HTML -->
+<div style="margin-top:100px">
+    <select onchange="getData(this)">
+        <option>2019</option>
+        <option>2018</option>
+    </select>
+</div>
+
+
+<!-- Chart code -->
+<script>
+
+    function getData(selectedObj) {
+        $.ajax({
+            type: "GET",
+            url: "/Content/UnivGraduation/GraduationFromDiffCountry",
+            data: { year: selectedObj.value },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            beforeSend: function () {
+                // null
+            },
+            success: function (data) {
+                console.log(data);
+                //drawChart(data);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
+</script>

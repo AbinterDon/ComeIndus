@@ -14,50 +14,54 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
     {
         public IActionResult Index()
         {
-            return View("ShowUnivGraduation");
+            //return View("ShowUnivGraduation");
+            return View("GraduationFromDiffCountry");
         }
 
         [HttpGet()]
         //public List<UnivGraduationModel> ShowUnivGraduation(UnivGraduationModel Model)
-        public List<UnivGraduationModel> ShowUnivGraduation(string country)
+        public Dictionary<string, CountryGradModel> GraduationFromDiffCountry(string year)
         {
-            // 假DB
-            Dictionary<string, string> countrys = new Dictionary<string, string>()
-            {
-                {"台灣", "TW"},
-                {"中國", "CN"}
-            };
-
-            //假年份
-            string year = "2017";
-
-            //------------------------------------------------------------
-
-            var countryID = countrys[country];
-
-            var sqlStr = string.Format(
-                "select GraduationNumber, DeptName " +
-                "from [dbo].[Graduation] " +
-                "inner join [dbo].[Department] " +
-                "on [dbo].[Graduation].DeptNo = [dbo].[Department].DeptNo " +
-                "where GraduationNo like '{0}%'", countryID);
-            
+            var sqlStr = string.Format("select [CountryNo], [CountryName] from Countries");
             var data = _DB_GetData(sqlStr);
 
-            List<UnivGraduationModel> graduationData = new List<UnivGraduationModel>();
+            Dictionary<string, CountryGradModel> graduationData = new Dictionary<string, CountryGradModel>();
 
             foreach (DataRow row in data.Rows)
             {
-                UnivGraduationModel model = new UnivGraduationModel();
+                string countryNo = row.ItemArray.GetValue(0).ToString();
+                string countryName = row.ItemArray.GetValue(1).ToString();
 
-                model.GraduationNumber = row.ItemArray.GetValue(0).ToString();
-                model.Department = row.ItemArray.GetValue(1).ToString();
-                model.color = "#abc";
-                graduationData.Add(model);
+                sqlStr = string.Format(
+                "select [DeptName], [GraduationNumber], [GraduationYear] " +
+                "from[dbo].[Department] as a " +
+                "inner join( " +
+                "select[CountryDeptNo],[CountryNo], [DeptNo] " +
+                "from[dbo].[CountryDepartment] " +
+                "where CountryNo = {0} " +
+                ") as b " +
+                "on b.DeptNo = a.DeptNo " +
+                "inner join( " +
+                "select * " +
+                "from[dbo].[Graduation] " +
+                "where GraduationYear = {1} " +
+                ") as c " +
+                "on b.CountryDeptNo = c.CountryDeptNo", countryNo, year);
+
+                var countryGradData = _DB_GetData(sqlStr);
+                CountryGradModel model = new CountryGradModel();
+                model.DeptName = new List<string>();
+                model.GraduationNumber = new List<int>();
+
+                foreach (DataRow gradRow in countryGradData.Rows)
+                {
+                    model.DeptName.Add(gradRow.ItemArray.GetValue(0).ToString());
+                    model.GraduationNumber.Add((int)gradRow.ItemArray.GetValue(1));
+                }
+
+                graduationData[countryName] = model;
             }
 
-            //string jsondata = JsonConvert.SerializeObject(graduationData);
-            //return View("ShowUnivGraduation", jsondata);
             return graduationData;
         }
 
