@@ -82,5 +82,53 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             var data = _DB_GetData(sqlStr);
             return View("ShowUnivDepartment", data);
         }
+
+        public ActionResult UpdateUnivDepartment(string DeptNo, string DeptName, string DeptDescription)
+        {
+            string resMsg = "";
+            var modifyTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string sqlStr = "UPDATE [dbo].[Department] " +
+                "SET [DeptName] = '" + DeptName + "', " +
+                "[DeptDescription] = '" + DeptDescription + "', " +
+                "[ModifyTime] = '" + modifyTime + "' " +
+                "WHERE [DeptNo] = '" + DeptNo + "'";
+
+            var check = _DB_Execute(sqlStr);
+
+            //修改是否成功
+            if (check == 1)
+            {
+                resMsg = "success";
+            }
+            else
+            {
+                resMsg = "fail";
+            }
+
+            ViewData["result"] = resMsg;
+            return View();
+        }
+
+        public ActionResult DeleteUnivDepartment(string DeptNo)
+        {
+            string resMsg = "";
+            string sqlStr = "DELETE [dbo].[Department] " +
+                "WHERE [DeptNo] = '" + DeptNo + "'";
+
+            var check = _DB_Execute(sqlStr);
+
+            //刪除是否成功
+            if (check == 1)
+            {
+                resMsg = "success";
+            }
+            else
+            {
+                resMsg = "fail";
+            }
+
+            ViewData["result"] = resMsg;
+            return View();
+        }
     }
 }

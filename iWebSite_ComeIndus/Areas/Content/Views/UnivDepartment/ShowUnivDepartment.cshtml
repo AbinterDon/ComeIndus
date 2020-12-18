@@ -2,32 +2,174 @@
 @model DataTable
 
 <style>
-    td 
-    {
+    * {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: white;
+        padding: 50px 0px 20px 0px;
+    }
+
+    th, td {
         padding: 20px;
     }
+    /*Table Styles*/
+
+    .table-wrapper {
+        margin: 10px 70px 70px;
+        box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+    }
+
+    .fl-table {
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        border: none;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        background-color: white;
+        margin-bottom: 30px;
+    }
+
+        .fl-table td, .fl-table th {
+            text-align: center;
+            padding: 8px;
+        }
+
+        .fl-table td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 12px;
+        }
+
+        .fl-table thead th {
+            color: #ffffff;
+            background: #3BB0A2;
+        }
+
+            .fl-table thead th:nth-child(odd) {
+                color: #ffffff;
+                background: #324960;
+            }
+
+        .fl-table tr:nth-child(even) {
+            background: #F8F8F8;
+        }
 </style>
 
-<h2>科系/學群列表</h2>
-<table>
-    <thead>
-        <tr>
-            <th>編號</th>
-            <th>名稱</th>
-            <th>描述</th>
-            <th>建立時間</th>
-            <th>上次修改時間</th>
-        </tr>
-    </thead>
-    @foreach (DataRow row in Model.Rows)
-    {
-        <!--先全部顯示，之後再調整要顯示的欄位-->
-        <tr>
-            <td>@row["DeptNo"]</td>
-            <td>@row["DeptName"]</td>
-            <td>@row["DeptDescription"]</td>
-            <td>@row["CreateTime"]</td>
-            <td>@row["ModifyTime"]</td>
-        </tr>
+<head>
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+</head>
+
+<header>
+    <div class="container" id="DeptInfo">
+        <h2>科系/學群列表</h2>
+        <table class="fl-table">
+            <thead>
+                <tr>
+                    <th>編號</th>
+                    <th>名稱</th>
+                    <th>描述</th>
+                    <th>建立時間</th>
+                    <th>上次修改時間</th>
+                    <th width="15%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.Rows)
+                 {
+                    <!--先全部顯示，之後再調整要顯示的欄位-->
+                    <tr>
+                        <!-- ko ifnot: IsEdit() && Item() == @row["DeptNo"] -->
+                        <td>@row["DeptNo"]</td>
+                        <td>@row["DeptName"]</td>
+                        <td>@row["DeptDescription"]</td>
+                        <td>@row["CreateTime"]</td>
+                        <td>@row["ModifyTime"]</td>
+                        <td>
+                            <button class="btn" type="button" onclick="editDept(@row["DeptNo"])">修改</button>
+                            <span>&nbsp;&nbsp;</span>
+                            <button class="btn" type="button" onclick="deleteDept(@row["DeptNo"])">刪除</button>
+                        </td>
+                        <!-- /ko -->
+                    </tr>
+                    <tr>
+                        <!-- ko if: IsEdit() && Item() == @row["DeptNo"] -->
+                        <td>@row["DeptNo"]</td>
+                        <td>
+                            <input type="text" name="DeptName" value="@row["DeptName"]" id="DeptName">
+                        </td>
+                        <td>
+                            <input type="text" name="DeptDescription" value="@row["DeptDescription"]" id="DeptDescription">
+                        </td>
+                        <td>@row["CreateTime"]</td>
+                        <td>@row["ModifyTime"]</td>
+                        <td>
+                            <button class="btn" type="button" onclick="saveDept(@row["DeptNo"], 'DeptName', 'DeptDescription')">確認</button>
+                            <span>&nbsp;&nbsp;</span>
+                            <button class="btn" type="button" onclick="cancel(@row["DeptNo"])">取消</button>
+                        </td>
+                        <!-- /ko -->
+                    </tr>
+                 }
+            </tbody>
+        </table>
+    </div>
+    <span style="font-size: 30px;">@ViewData["result"]</span>
+</header>
+
+<script type="text/javascript">
+    this.IsEdit = ko.observable(false);
+    this.Item = ko.observable(0);
+    ko.applyBindings($("#DeptInfo").get(0));
+
+    function editDept(data) {
+        this.IsEdit(true);
+        this.Item(data);
     }
-</table>
+
+    function cancel(data) {
+        this.IsEdit(false);
+        this.Item(data);
+    }
+
+    function saveDept(data, DeptName, DeptDescription) {
+        deptName = document.getElementById(DeptName).value;
+        deptDescription = document.getElementById(DeptDescription).value;
+
+        this.IsEdit(false);
+        this.Item(data);
+
+        let args = {
+            DeptNo: data,
+            DeptName: deptName,
+            DeptDescription: deptDescription
+        };
+
+        $.post('@Url.Action("UpdateUnivDepartment")', args, data => {});
+
+        window.location.reload(); 
+    }
+
+    function deleteDept(data) {
+        this.IsEdit(false);
+        this.Item(data);
+
+        let args = {
+            DeptNo: data
+        };
+
+        $.post('@Url.Action("DeleteUnivDepartment")', args, data => {});
+
+        window.location.reload();
+    }
+</script>
