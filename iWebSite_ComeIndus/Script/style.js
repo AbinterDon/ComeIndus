@@ -2,7 +2,7 @@
 //$(window).scroll(function(e){
   //if ($(window).scrollTop()<=0)
     //$(".navbar,.explore").addClass("at_top");
-  else
+  //else
     //$(".navbar,.explore").removeClass("at_top");
 //});
 

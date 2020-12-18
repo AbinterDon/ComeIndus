@@ -4,7 +4,7 @@
     //$(".navbar,.explore").addClass("at_top");
   //else
     //$(".navbar,.explore").removeClass("at_top");
-});
+//});
 
 //緩慢滑動
 $(document).on('click', 'a', function(event){

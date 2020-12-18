@@ -94,13 +94,35 @@
                 </div>
                 <div class="newbox">
                     <ul class="newstyle">
-                        <li class="style"><a class="textnew" herf="">2020-12-01   版本更新 最新版本為2.0</a></li>
-                        <li class="style"><a class="textnew" herf="">2020-12-02   數據新增 新加玻國家預算2020新增</a></li>
-                        <li class="style"><a class="textnew" herf="">2020-12-03 數據新增 新加玻國家預算2020新增</a></li>
-                        <li class="style"><a class="textnew" herf="">2020-12-04 數據新增 新加玻國家預算2020新增</a></li>
-                        <li class="style"><a class="textnew" herf="">2020-12-04 數據新增 新加玻國家預算2020新增</a></li>
-                    </ul><a class="textmore" herf="/News/News/ShowNews">more</a>
+                        <li class="style"><a class="textnew" herf="">{date}&emsp;{type}&emsp;最新版本為2.0</a></li>
+                        <li class="style"><a class="textnew" herf="">{date}&emsp;{type}&emsp;新加玻國家預算2020新增</a></li>
+                        <li class="style"><a class="textnew" herf="">{date}&emsp;{type}&emsp;新加玻國家預算2020新增</a></li>
+                        <li class="style"><a class="textnew" herf="">{date}&emsp;{type}&emsp;新加玻國家預算2020新增</a></li>
+                        <li class="style"><a class="text new" herf="">{date}&emsp;{type}&emsp;新加玻國家預算2020新增</a></li>
+                    </ul><a class="textmore" herf="News/News/ShowNews">more</a>
                 </div>
+                <script>
+                    //最新消息抓json檔 ajax
+                    var item_news = "<li>{{NewsStart}}&emsp;{{NewsTypeName}}&emsp;{{NewsTitle}}</li>";
+                    var data_url = "";
+                    var newsdata;
+
+                    $.ajax({
+                        url: data_url,
+                        success: function (res) {
+                            newsdata = JSON.parse(res);
+                            for (var i = 0; i < newsdata.length; i++) {
+                                var item = newsdata[i];
+
+                                var now_item = item_news
+                                    .replace("{{NewsStart}}", item.date)
+                                    .replace("{{NewsTypeName}}", item.date)
+                                    .replace("{{NewsTitle}}", item.title)
+                            }
+                        }
+                    });
+
+                </script>
             </div><img class="marginbottom mountain" src="https://awiclass.monoame.com/img/margin/m_works.svg" />
         </div>
     </section>
@@ -169,6 +191,5 @@
                     <a class="btn btn-lg btn-default" href="/FeedBack/FeedBack/ShowFeedBack">查看意見回饋</a>
                 </div>
             </div>
-        </div>
         </div>
     </section>
