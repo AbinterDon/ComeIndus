@@ -25,7 +25,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         public ActionResult NewNews()
         {
             //SQL Select all type
-            var sqlStr = string.Format("SELECT NewsTypeNo, TypeName FROM [dbo].[NewsType]");
+            var sqlStr = string.Format("SELECT NewsTypeNo, TypeDescription FROM [dbo].[NewsType]");
             var data = _DB_GetData(sqlStr);
 
             NewsTypes = new List<NewsTypeModel>();
@@ -33,7 +33,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             {
                 NewsTypeModel model = new NewsTypeModel();
                 model.NewsTypeNo = row.ItemArray.GetValue(0).ToString();
-                model.NewsTypeName = row.ItemArray.GetValue(1).ToString();
+                model.TypeDescription = row.ItemArray.GetValue(1).ToString();
                 NewsTypes.Add(model);
             }
 
@@ -106,7 +106,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         public ActionResult ShowNews()
         {
             //SQL Select all type
-            var sqlTypes = string.Format("SELECT NewsTypeNo, TypeName FROM [dbo].[NewsType]");
+            var sqlTypes = string.Format("SELECT NewsTypeNo, TypeDescription FROM [dbo].[NewsType]");
             var dataTypes = _DB_GetData(sqlTypes);
 
             NewsTypes = new List<NewsTypeModel>();
@@ -114,7 +114,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             {
                 NewsTypeModel model = new NewsTypeModel();
                 model.NewsTypeNo = row.ItemArray.GetValue(0).ToString();
-                model.NewsTypeName = row.ItemArray.GetValue(1).ToString();
+                model.TypeDescription = row.ItemArray.GetValue(1).ToString();
                 NewsTypes.Add(model);
             }
 
@@ -125,7 +125,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 var tDate = DateTime.Now.Date;
 
                 var sqlStr = string.Format(
-               "SELECT TypeName, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
+               "SELECT NewsNo, [dbo].[News].NewsTypeNo, TypeDescription, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
                "FROM [dbo].[News] " +
                "INNER JOIN [dbo].[NewsType] " +
                "on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
@@ -140,6 +140,55 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 return View("~/Views/Home/Index.cshtml");
                 //return StatusCode(403);
             }
+        }
+
+        public ActionResult UpdateNews(string NewsNo, string NewsTypeNo, string NewsTitle, string NewsContent)
+        {
+            string resMsg = "";
+            var modifyTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string sqlStr = "UPDATE [dbo].[News] " +
+                "SET [NewsTypeNo] = '" + NewsTypeNo + "', " +
+                "[NewsTitle] = '" + NewsTitle + "', " +
+                "[NewsContent] = '" + NewsContent + "', " +
+                "[ModifyTime] = '" + modifyTime + "' " +
+                "WHERE [NewsNo] = '" + NewsNo + "'";
+
+            var check = _DB_Execute(sqlStr);
+
+            //修改是否成功
+            if (check == 1)
+            {
+                resMsg = "success";
+            }
+            else
+            {
+                resMsg = "fail";
+            }
+
+            ViewData["result"] = resMsg;
+            return View();
+        }
+
+        public ActionResult DeleteNews(string NewsNo)
+        {
+            string resMsg = "";
+            string sqlStr = "DELETE [dbo].[News] " +
+                "WHERE [NewsNo] = '" + NewsNo + "'";
+
+            var check = _DB_Execute(sqlStr);
+
+            //刪除是否成功
+            if (check == 1)
+            {
+                resMsg = "success";
+            }
+            else
+            {
+                resMsg = "fail";
+            }
+
+            ViewData["result"] = resMsg;
+            return View();
         }
     }
 }

@@ -67,7 +67,7 @@
                 @{ List<NewsTypeModel> types = (List<NewsTypeModel>)ViewData["NewsTypes"];
                     foreach (var news in types)
                     {
-                        <option value=@news.NewsTypeNo>@news.NewsTypeName</option>
+                        <option value=@news.NewsTypeNo>@news.TypeDescription</option>
                     } }
             </select>
             <label>標題：</label>
@@ -76,7 +76,7 @@
             <textarea name="NewsContent" rows="5" cols="40"></textarea>
             <label>開始日期：</label>
             <div class="row">
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-5">
                     <div class="input-group date" id="startDate">
                         <input type="text" class="form-control" name="NewsStart" />
                         <span class="input-group-addon">
@@ -87,7 +87,7 @@
             </div>
             <label>結束日期：</label>
             <div class="row">
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-5">
                     <div class="input-group date" id="endDate">
                         <input type="text" class="form-control" name="NewsEnd" />
                         <span class="input-group-addon">
