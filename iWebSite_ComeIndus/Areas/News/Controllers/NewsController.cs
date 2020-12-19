@@ -67,7 +67,6 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             else
             {
                 //SQL Insert
-                var tDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
                 var sqlStr = string.Format(
                 @"INSERT INTO [dbo].[News](" +
                     "[NewsTypeNo]," +
@@ -91,8 +90,8 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                     SqlVal2(Model.NewsTitle),
                     SqlVal2(Model.NewsContent),
                     0,
-                    SqlVal2(tDate),
-                    SqlVal2(tDate),
+                    "getDate()",
+                    "getDate()",
                     SqlVal2(Model.NewsStart),
                     SqlVal2(Model.NewsEnd) + ")"
                 );
@@ -120,8 +119,9 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         /// <summary>
         /// 顯示最新消息
         /// </summary>
+        /// <param name="NewsNo"></param>
         /// <returns></returns>
-        public ActionResult ShowNews()
+        public ActionResult ShowNews(string NewsNo)
         {
             //SQL Select all type
             var sqlTypes = string.Format("SELECT NewsTypeNo, TypeDescription FROM [dbo].[NewsType]");
@@ -140,7 +140,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             if (getUserAuthority() == "1" || getUserAuthority() == "0" || getUserAuthority() == null)
             //if (getUserAuthority() == "1")
             {
-                return View(GetNews());
+                return View(GetNews(NewsNo));
             }
             else
             {
@@ -153,9 +153,10 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         /// <summary>
         /// 撈DB最新消息
         /// </summary>
+        /// <param name="NewsNo"></param>
         /// <param name="GetCount"></param>
         /// <returns></returns>
-        private DataTable GetNews(string GetCount = "")
+        private DataTable GetNews(string NewsNo, string GetCount = "")
         {
             //若取得數量不為空
             if (!string.IsNullOrEmpty(GetCount))
@@ -163,30 +164,65 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 GetCount = string.Format("TOP({0})", GetCount) ;
             }
 
-            //SQL 順便做有效時間塞選
-            var sqlStr = string.Format("" +
-                    "SELECT {0} NewsNo, [dbo].[News].NewsTypeNo, TypeDescription, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
-                    "FROM [dbo].[News] INNER JOIN [dbo].[NewsType] on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
-                    "where NewsEnd >= (SELECT convert(varchar, getdate(), 111)) " +
-                    "ORDER BY NewsStart DESC", GetCount
-                );
+            //若取得數量不為空
+            if (!string.IsNullOrEmpty(NewsNo))
+            {
+                var sqlStr = string.Format("" +
+                        "SELECT NewsNo, [dbo].[News].NewsTypeNo, TypeDescription, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
+                        "FROM [dbo].[News] INNER JOIN [dbo].[NewsType] on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
+                        "where NewsNo = {0}", NewsNo
+                    );
 
-            //Return
-            return _DB_GetData(sqlStr);
+                string resMsg = "";
+                string updateSqlStr = "UPDATE [dbo].[News] " +
+                "SET [NewsHits] = [NewsHits] + 1 " +
+                "WHERE [NewsNo] = '" + NewsNo + "'";
+
+                var check = _DB_Execute(updateSqlStr);
+
+                //修改是否成功
+                if (check == 1)
+                {
+                    resMsg = "success";
+                }
+                else
+                {
+                    resMsg = "fail";
+                }
+
+                ViewData["result"] = resMsg;
+
+                //Return
+                return _DB_GetData(sqlStr);
+            }
+            else
+            {
+                //SQL 順便做有效時間塞選
+                var sqlStr = string.Format("" +
+                        "SELECT {0} NewsNo, [dbo].[News].NewsTypeNo, TypeDescription, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
+                        "FROM [dbo].[News] INNER JOIN [dbo].[NewsType] on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
+                        "where NewsEnd >= (SELECT convert(varchar, getdate(), 111)) " +
+                        "ORDER BY NewsStart DESC", GetCount
+                    );
+
+                //Return
+                return _DB_GetData(sqlStr);
+            }
         }
 
         /// <summary>
         /// 取得最新消息
         /// </summary>
+        /// <param name="NewsNo"></param>
         /// <param name="GetCount"></param>
         /// <returns></returns>
-        public List<NewsModel> ReturnNews(string GetCount = "")
+        public List<NewsModel> ReturnNews(string NewsNo, string GetCount = "")
         {
             //Model
             List<NewsModel> Model = new List<NewsModel>();
 
             //News Data
-            var data = GetNews(GetCount);
+            var data = GetNews(NewsNo, GetCount);
 
             //抓取最新消息
             foreach (DataRow row in data.Rows)
@@ -226,12 +262,11 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         public ActionResult UpdateNews(string NewsNo, string NewsTypeNo, string NewsTitle, string NewsContent)
         {
             string resMsg = "";
-            var modifyTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string sqlStr = "UPDATE [dbo].[News] " +
                 "SET [NewsTypeNo] = '" + NewsTypeNo + "', " +
                 "[NewsTitle] = '" + NewsTitle + "', " +
                 "[NewsContent] = '" + NewsContent + "', " +
-                "[ModifyTime] = '" + modifyTime + "' " +
+                "[ModifyTime] = getDate() " +
                 "WHERE [NewsNo] = '" + NewsNo + "'";
 
             var check = _DB_Execute(sqlStr);
