@@ -34,6 +34,10 @@ namespace iWebSite_ComeIndus.Helper
                 /// 系統版本
                 /// </summary>
                 Core_SystemVersion,
+                /// <summary>
+                /// 首頁最新消息數量
+                /// </summary>
+                IndexNewsCount,
                 #endregion 
 
                 #region 核心 Core
@@ -50,9 +54,16 @@ namespace iWebSite_ComeIndus.Helper
             public static string SystemVersion { get { return ConfigHelperMethods.GetConfig(AppSettingsKey.Core_SystemVersion); } }
 
             /// <summary>
+            /// 首頁最新消息數量
+            /// </summary>
+            public static string IndexNewsCount { get { return ConfigHelperMethods.GetConfig(AppSettingsKey.IndexNewsCount); } }
+
+            /// <summary>
             /// DB 連線字串
             /// </summary>
             public static string ConnectionStrings { get { return ConfigHelperMethods.GetConfig(AppSettingsKey.Core_ConnectionStrings); } }
+
+
         }
     }
 }

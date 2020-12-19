@@ -16,11 +16,20 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
     {
         public static List<NewsTypeModel> NewsTypes = new List<NewsTypeModel> { };
         public static List<NewsModel> newsModel = new List<NewsModel> { };
+
+        /// <summary>
+        /// Index
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View("NewNews");
         }
 
+        /// <summary>
+        /// 消息種類
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult NewNews()
         {
@@ -41,6 +50,11 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 最新消息新增
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult NewNews(NewsModel Model)
         {
@@ -88,12 +102,12 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 //新增是否成功
                 if (check == 1)
                 {
-                    resMsg = "success";
+                    resMsg = "Success";
                     //return View("NewNews", "Success!!");
                 }
                 else
                 {
-                    resMsg = "fail";
+                    resMsg = "Failed";
                 }
             }
 
@@ -103,6 +117,10 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 顯示最新消息
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ShowNews()
         {
             //SQL Select all type
@@ -122,17 +140,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             if (getUserAuthority() == "1" || getUserAuthority() == "0" || getUserAuthority() == null)
             //if (getUserAuthority() == "1")
             {
-                var tDate = DateTime.Now.Date;
-
-                var sqlStr = string.Format(
-               "SELECT NewsNo, [dbo].[News].NewsTypeNo, TypeDescription, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
-               "FROM [dbo].[News] " +
-               "INNER JOIN [dbo].[NewsType] " +
-               "on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
-               "ORDER BY NewsStart DESC");
-
-                var data = _DB_GetData(sqlStr);
-                return View(data);
+                return View(GetNews());
             }
             else
             {
@@ -142,6 +150,79 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             }
         }
 
+        /// <summary>
+        /// 撈DB最新消息
+        /// </summary>
+        /// <param name="GetCount"></param>
+        /// <returns></returns>
+        private DataTable GetNews(string GetCount = "")
+        {
+            //若取得數量不為空
+            if (!string.IsNullOrEmpty(GetCount))
+            {
+                GetCount = string.Format("TOP({0})", GetCount) ;
+            }
+
+            //SQL 順便做有效時間塞選
+            var sqlStr = string.Format("" +
+                    "SELECT {0} NewsNo, [dbo].[News].NewsTypeNo, TypeDescription, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
+                    "FROM [dbo].[News] INNER JOIN [dbo].[NewsType] on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
+                    "where NewsEnd >= (SELECT convert(varchar, getdate(), 111)) " +
+                    "ORDER BY NewsStart DESC", GetCount
+                );
+
+            //Return
+            return _DB_GetData(sqlStr);
+        }
+
+        /// <summary>
+        /// 取得最新消息
+        /// </summary>
+        /// <param name="GetCount"></param>
+        /// <returns></returns>
+        public List<NewsModel> ReturnNews(string GetCount = "")
+        {
+            //Model
+            List<NewsModel> Model = new List<NewsModel>();
+
+            //News Data
+            var data = GetNews(GetCount);
+
+            //抓取最新消息
+            foreach (DataRow row in data.Rows)
+            {
+                //Add model
+                Model.Add(
+                        new NewsModel()
+                        {
+                            NewsNo = row.ItemArray.GetValue(0).ToString(),
+                            NewsTypeNo = row.ItemArray.GetValue(1).ToString(),
+                            TypeDescription = row.ItemArray.GetValue(2).ToString(),
+                            NewsTitle = row.ItemArray.GetValue(3).ToString(),
+                            NewsContent = row.ItemArray.GetValue(4).ToString(),
+                            NewsHits = Convert.ToInt32(row.ItemArray.GetValue(5)),
+                            NewsStart = Convert.ToDateTime(row.ItemArray.GetValue(6)),
+                            NewsEnd = Convert.ToDateTime(row.ItemArray.GetValue(7))
+                            //NewsStart = Convert.ToDateTime(row.ItemArray.GetValue(6).ToString()),
+                            //NewsEnd = Convert.ToDateTime(row.ItemArray.GetValue(6).ToString()),
+                            //NewsStart = Convert.ToDateTime(DateTime.ParseExact(row.ItemArray.GetValue(6).ToString(), "yyyy/MM/dd", null, System.Globalization.DateTimeStyles.AllowWhiteSpaces)),
+                            //NewsEnd = Convert.ToDateTime(DateTime.ParseExact(row.ItemArray.GetValue(7).ToString(), "yyyy/MM/dd", null, System.Globalization.DateTimeStyles.AllowWhiteSpaces)),
+                        }
+                    );
+            }
+
+            //Return
+            return Model;
+        }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="NewsNo"></param>
+        /// <param name="NewsTypeNo"></param>
+        /// <param name="NewsTitle"></param>
+        /// <param name="NewsContent"></param>
+        /// <returns></returns>
         public ActionResult UpdateNews(string NewsNo, string NewsTypeNo, string NewsTitle, string NewsContent)
         {
             string resMsg = "";
@@ -169,6 +250,11 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 刪除
+        /// </summary>
+        /// <param name="NewsNo"></param>
+        /// <returns></returns>
         public ActionResult DeleteNews(string NewsNo)
         {
             string resMsg = "";

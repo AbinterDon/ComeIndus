@@ -1,4 +1,6 @@
-﻿using iWebSite_ComeIndus.Extension;
+﻿using iWebSite_ComeIndus.Areas.News.Controllers;
+using iWebSite_ComeIndus.Areas.News.Models;
+using iWebSite_ComeIndus.Extension;
 using iWebSite_ComeIndus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,25 +27,32 @@ namespace iWebSite_ComeIndus.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            ////是否存在cookies
-            //if (string.IsNullOrEmpty(Request.Cookies["account"]) && string.IsNullOrEmpty(Request.Cookies["userName"]))
-            //{
-            //    //SQL Insert Member
-            //    var sqlStr = string.Format("select Account,Username from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
+            //最新消息
+            NewsController News = new NewsController();
 
-            //    //SQL Check
-            //    var data = _DB_GetData(sqlStr);
+            //最新消息取得 
+            List<NewsModel> NewsData = News.ReturnNews(Helper.ConfigHelper.AppSettings.IndexNewsCount);
 
-            //    //資料庫內是否有此帳號
-            //    if (data.Rows.Count > 0) {
-            //        return View(new SetResult() { ok = true});
-            //    }
-            //    else
-            //    {
-            //        return View(new SetResult() { ok = false });
-            //    }
-            //}
-            return View();
+            //是否存在cookies
+            if (string.IsNullOrEmpty(Request.Cookies["account"]) && string.IsNullOrEmpty(Request.Cookies["userName"]))
+            {
+                //SQL Insert Member
+                var sqlStr = string.Format("select Authority from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
+
+                //SQL Check
+                var data = _DB_GetData(sqlStr);
+
+                //資料庫內是否有此帳號
+                if (data.Rows.Count > 0)
+                {
+                    //取得權限
+                    ViewData["Authority"] = data.Rows[0].ItemArray.GetValue(0).ToString();
+                    //return View(new SetResult() { ok = true });
+                }
+            }
+
+            //Return
+            return View(NewsData);
         }
 
         public IActionResult Privacy()

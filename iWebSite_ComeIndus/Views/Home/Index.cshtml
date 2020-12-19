@@ -1,5 +1,6 @@
-﻿@model SetResult
+﻿@model List<NewsModel>
 @using iWebSite_ComeIndus.Areas.FeedBack.Models
+@using iWebSite_ComeIndus.Areas.News.Models
 @{
     ViewData["Title"] = "ComeIndus";
 
@@ -89,46 +90,36 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    @*<h1>New</h1><a style='visibility:@ViewData["admin"]' class="btn btn-lg btn-default addbtn" href="News/News/NewNews">+ 新增</a>*@
-                    <h1>New</h1><a class="btn btn-lg btn-default addbtn" href="News/News/NewNews">+ 新增</a>
+                    <h1>New</h1>
+                    @if (ViewData["Authority"]!= null && ViewData["Authority"].ToString() == "1")
+                    {
+                        <a style='visibility:@ViewData["admin"]' class="btn btn-lg btn-default addbtn" href="News/News/NewNews">+ 新增</a>
+                    }
                 </div>
                 <div class="newbox">
                     <ul class="newstyle">
-                        <li class="style"><a class="textnew" herf="">{date}&emsp;{type}&emsp;最新版本為2.0</a></li>
-                        <li class="style"><a class="textnew" herf="">{date}&emsp;{type}&emsp;新加玻國家預算2020新增</a></li>
-                        <li class="style"><a class="textnew" herf="">{date}&emsp;{type}&emsp;新加玻國家預算2020新增</a></li>
-                        <li class="style"><a class="textnew" herf="">{date}&emsp;{type}&emsp;新加玻國家預算2020新增</a></li>
-                        <li class="style"><a class="text new" herf="">{date}&emsp;{type}&emsp;新加玻國家預算2020新增</a></li>
+                        @* 取得最新消息 *@
+                        @foreach (var item in Model)
+                        {
+                            <li class="style">
+                                <a class="textnew" herf="">
+                                    @item.NewsStart.ToString("yyyy/MM/dd")&emsp;
+                                    @item.NewsTypeNo&emsp;
+                                    @item.NewsTitle
+                                </a>
+                            </li>
+                        }
                     </ul><a class="textmore" herf="News/News/ShowNews">more</a>
                 </div>
-                <script>
-                    //最新消息抓json檔 ajax
-                    var item_news = "<li>{{NewsStart}}&emsp;{{NewsTypeName}}&emsp;{{NewsTitle}}</li>";
-                    var data_url = "";
-                    var newsdata;
-
-                    $.ajax({
-                        url: data_url,
-                        success: function (res) {
-                            newsdata = JSON.parse(res);
-                            for (var i = 0; i < newsdata.length; i++) {
-                                var item = newsdata[i];
-
-                                var now_item = item_news
-                                    .replace("{{NewsStart}}", item.date)
-                                    .replace("{{NewsTypeName}}", item.date)
-                                    .replace("{{NewsTitle}}", item.title)
-                            }
-                        }
-                    });
-
-                </script>
             </div><img class="marginbottom mountain" src="https://awiclass.monoame.com/img/margin/m_works.svg" />
         </div>
     </section>
     <!--意見回饋-->
     <section id="section_feedback">
-        <!--三站貓--><img class="cat" id="cat_grey" src="https://i.postimg.cc/Wb8X6GzK/cat-blue-cat.png" /><img class="cat" id="cat_yellow" src="https://i.postimg.cc/Hs31c7gW/cat-gery-cat.png" /><img class="cat" id="cat_pink" src="https://i.postimg.cc/0y33DYHv/cat-yellow-cat.png" />
+        <!--三站貓-->
+        <img class="cat" id="cat_grey" src="https://i.postimg.cc/Wb8X6GzK/cat-blue-cat.png" />
+        <img class="cat" id="cat_yellow" src="https://i.postimg.cc/Hs31c7gW/cat-gery-cat.png" />
+        <img class="cat" id="cat_pink" src="https://i.postimg.cc/0y33DYHv/cat-yellow-cat.png" />
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
@@ -166,10 +157,10 @@
 
                             </script>
                             <!--
-                            <select name="FeedbackTypeNo">
-                                <option value="FD1">System Bug</option>
-                                <option value="FD2">User FeedBack</option>
-                            </select>-->
+                <select name="FeedbackTypeNo">
+                    <option value="FD1">System Bug</option>
+                    <option value="FD2">User FeedBack</option>
+                </select>-->
                             <label>Title</label>
                             <input type="text" name="Title" placeholder="請輸入標題" />
                             <label>Feedback</label>
@@ -187,9 +178,12 @@
                     <p>If you have any question about us,<br>Don`t hestitate to contact us !</p>
                 </div>
                 <div class="feedback"></div>
-                <div class="col-sm-4 btn-area">
-                    <a class="btn btn-lg btn-default" href="/FeedBack/FeedBack/ShowFeedBack">查看意見回饋</a>
-                </div>
+                @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+                {
+                    <div class="col-sm-4 btn-area">
+                        <a class="btn btn-lg btn-default" href="/FeedBack/FeedBack/ShowFeedBack">查看意見回饋</a>
+                    </div>
+                }
             </div>
         </div>
     </section>
