@@ -27,6 +27,11 @@
         <a href="/Account/Register">註冊會員</a>
         <br><br>
         <a href="/Account/ForgetPassword">忘記密碼</a>
+
+        @if (Model != null && Model.ok == false)
+        {
+            <p>@Model.ResultMessage</p>
+        }
     </body>
 </html>
 //value = "@if (Model.Account != null) { Model.Account; }else{ null; }"

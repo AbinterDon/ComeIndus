@@ -72,12 +72,16 @@ namespace iWebSite_ComeIndus.Controllers
                 else
                 {
                     //登入失敗 帳號或密碼錯誤
+                    Model.ok = false;
+                    Model.ResultMessage = "登入失敗，帳號或密碼錯誤";
                     return View(Model);
                 }
             }
             else
             {
                 //登入失敗 找不到此帳號
+                Model.ok = false;
+                Model.ResultMessage = "登入失敗，找不到此帳號";
                 return View(Model);
             }
         }
@@ -394,8 +398,8 @@ namespace iWebSite_ComeIndus.Controllers
             //SQL Check Update成功(True)或失敗(False)
             if (_DB_Execute(sqlStr) == 1)
             {
-                //修改成功，直接登入
-                return Redirect("/home/index");
+                //修改成功，重新登入
+                return RedirectToAction("Login","Account",new AccountModels() { Account = Model.Account});
             }
             else
             {
