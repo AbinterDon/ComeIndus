@@ -31,7 +31,7 @@ namespace iWebSite_ComeIndus.Controllers
             NewsController News = new NewsController();
 
             //最新消息取得 
-            List<NewsModel> NewsData = News.ReturnNews(Helper.ConfigHelper.AppSettings.IndexNewsCount);
+            List<NewsModel> NewsData = News.ReturnNews(null, Helper.ConfigHelper.AppSettings.IndexNewsCount);
 
             //是否存在cookies
             if (!string.IsNullOrEmpty(Request.Cookies["account"]) && !string.IsNullOrEmpty(Request.Cookies["userName"]))

@@ -86,11 +86,10 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public ActionResult UpdateUnivDepartment(string DeptNo, string DeptName, string DeptDescription)
         {
             string resMsg = "";
-            var modifyTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string sqlStr = "UPDATE [dbo].[Department] " +
                 "SET [DeptName] = '" + DeptName + "', " +
                 "[DeptDescription] = '" + DeptDescription + "', " +
-                "[ModifyTime] = '" + modifyTime + "' " +
+                "[ModifyTime] = getDate() " +
                 "WHERE [DeptNo] = '" + DeptNo + "'";
 
             var check = _DB_Execute(sqlStr);
