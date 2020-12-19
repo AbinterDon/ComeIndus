@@ -431,7 +431,8 @@ namespace iWebSite_ComeIndus.Controllers
             Response.Cookies.Delete("account");
 
             //登出後返回首頁
-            return View("~/Views/Home/Index.cshtml");
+            //return View("~/Views/Home/Index.cshtml");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

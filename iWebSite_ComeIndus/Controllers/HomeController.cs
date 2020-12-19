@@ -34,7 +34,7 @@ namespace iWebSite_ComeIndus.Controllers
             List<NewsModel> NewsData = News.ReturnNews(Helper.ConfigHelper.AppSettings.IndexNewsCount);
 
             //是否存在cookies
-            if (string.IsNullOrEmpty(Request.Cookies["account"]) && string.IsNullOrEmpty(Request.Cookies["userName"]))
+            if (!string.IsNullOrEmpty(Request.Cookies["account"]) && !string.IsNullOrEmpty(Request.Cookies["userName"]))
             {
                 //SQL Insert Member
                 var sqlStr = string.Format("select Authority from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
