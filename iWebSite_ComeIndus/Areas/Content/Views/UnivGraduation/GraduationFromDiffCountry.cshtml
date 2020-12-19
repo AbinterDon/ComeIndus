@@ -1,11 +1,33 @@
-﻿ <!-- HTML -->
-<div style="margin-top:100px">
-    <select onchange="getData(this)">
-        <option>2019</option>
-        <option>2018</option>
-    </select>
-</div>
+﻿<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<head>
+    <link rel="stylesheet" href="~/css/unisamestyle.css">
+    <script src="~/js/unisamescript.js"></script>
+</head>
 
+<!-- HTML -->
+<header id="tai">
+    <div class="container sty1">
+        <div class="title">
+            <h2 class="tai">Taiwan</h2>
+            <h2 class="sin">Singapore</h2>
+        </div>
+        <div class="years">
+            <select class="taiyears" onchange="getData(this)">
+                <option>2019</option>
+                <option>2018</option>
+                <option>2017</option>
+                <option>2016</option>
+                <option>2015</option>
+            </select>
+        </div>
+        <div class="box">
+            <div class="chartdiv" id="chartdiv1"></div>
+            <div class="chartdiv" id="chartdiv2"></div>
+        </div>
+    </div>
+</header>
 
 <!-- Chart code -->
 <script>
@@ -23,11 +45,12 @@
             },
             success: function (data) {
                 console.log(data);
+                console.log(data["台灣"]);
                 //drawChart(data);
             },
             error: function (e) {
                 console.log(e);
             }
-        }); 
+        });
     }
 </script>

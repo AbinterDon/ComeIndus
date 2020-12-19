@@ -1,0 +1,123 @@
+﻿@charset "UTF-8";
+* {
+  font-family: "Oswald", 微軟正黑體;
+}
+
+html, body {
+  overflow-x: hidden;
+  font-size: 16px;
+}
+
+header {
+  position: relative;
+  background-color: #fff;
+  text-align: center;
+}
+header .container {
+  min-height: 700px;
+  min-width: 1000px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+}
+header .container .years {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+  position: absolute;
+  top: 200px;
+}
+header .container .years .sty {
+  margin-right: 20px;
+}
+header .container .title {
+  display: -webkit-box;
+  display: flex;
+  position: absolute;
+  top: 100px;
+  color: #1D3255;
+}
+header .container .title h2 {
+  font-size: 50px;
+}
+header .container .box {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+  -webkit-box-pack: center;
+          justify-content: center;
+  position: absolute;
+  top: 250px;
+  min-width: 600px;
+}
+header .container .chartdiv {
+  background-color: transparent;
+  border: 1px solid #eee;
+  margin-right: 10px;
+  margin-left: 10px;
+  width: 550px;
+  height: 350px;
+  color: #fff;
+}
+
+section#sin {
+  position: relative;
+  background-color: #fff;
+  text-align: center;
+}
+section#sin .container {
+  min-height: 700px;
+  min-width: 1000px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+}
+section#sin .container .years {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+  position: absolute;
+  top: 200px;
+}
+section#sin .container .years .sty {
+  margin-right: 20px;
+}
+section#sin .container .title {
+  display: -webkit-box;
+  display: flex;
+  position: absolute;
+  top: 100px;
+  color: #3BB0A2;
+}
+section#sin .container .title h2 {
+  font-size: 50px;
+}
+section#sin .container .box {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+  -webkit-box-pack: center;
+          justify-content: center;
+  position: absolute;
+  top: 250px;
+  min-width: 600px;
+}
+section#sin .container .chartdiv {
+  background-color: transparent;
+  border: 1px solid #eee;
+  margin-right: 10px;
+  margin-left: 10px;
+  width: 550px;
+  height: 350px;
+  color: #fff;
+}

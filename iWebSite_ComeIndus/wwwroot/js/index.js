@@ -32,7 +32,7 @@ $(window).mousemove(function (evt) {
     var catplace = $("#cat").offset().left + $("#cat").width() / 2;
     var cattop = $("#cat").offset().top;
 
-    var img_url = "http://awiclass.monoame.com/catpic/";
+    var img_url = "https://awiclass.monoame.com/catpic/";
 
     //左方 / 右方 / 上方
     if (pagex < catplace - 50)
