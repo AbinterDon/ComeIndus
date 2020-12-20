@@ -1,8 +1,27 @@
-﻿<head>
-    <link rel="stylesheet" href="~/css/unisamestyle.css">
-   
+﻿<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<head>
+    <link rel="stylesheet" href="~/css/unstyle.css">
+    <style>
+        .down {
+            position: absolute;
+            right: 20px;
+            bottom: 10px;
+        }
+
+        .top {
+            position: absolute;
+            right: 0px;
+            top: 50px;
+            color: #3BB0A2;
+            font-weight: bold;
+        }
+    </style>
+
 </head>
 <header id="tai">
+    <button class="button btn btn-link btn-lg top" href="/Content/UnivGraduation/DiffCountry">前往不同國比較>></button>
     <div class="container sty1">
         <div class="title">
             <h2>Taiwan</h2>
@@ -11,14 +30,14 @@
 
             <!--select裡的屬性須留著-->
 
-            <select class="sty taiyears" country="台灣" returnTo="chartdiv1" onchange="getData(this)">
+            <select id="select1" class="sty taiyears" country="台灣" returnTo="chartdiv1" onchange="getData(this)">
                 <option value="2019">2019年</option>
                 <option value="2018">2018年</option>
                 <option value="2017">2017年</option>
                 <option value="2016">2016年</option>
                 <option value="2015">2015年</option>
             </select>
-            <select class="taiyears" country="台灣" returnTo="chartdiv2" onchange="getData(this)">
+            <select id="select2" class="taiyears" country="台灣" returnTo="chartdiv2" onchange="getData(this)">
                 <option value="2019">2019年</option>
                 <option value="2018">2018年</option>
                 <option value="2017">2017年</option>
@@ -30,6 +49,7 @@
             <div class="chartdiv" id="chartdiv1"></div>
             <div class="chartdiv" id="chartdiv2"></div>
         </div>
+        <button class="btn btn-light btn-lg down">下載</button>
     </div>
 </header>
 <header id="sin">
@@ -38,14 +58,14 @@
             <h2>Singapore</h2>
         </div>
         <div class="years">
-            <select class="sty sinyears" country="新加坡" returnTo="chartdiv3" onchange="getData(this)">
+            <select id="select3" class="sty sinyears" country="新加坡" returnTo="chartdiv3" onchange="getData(this)">
                 <option value="2019">2019年</option>
                 <option value="2018">2018年</option>
                 <option value="2017">2017年</option>
                 <option value="2016">2016年</option>
                 <option value="2015">2015年</option>
             </select>
-            <select class="sinyears" country="新加坡" returnTo="chartdiv4" onchange="getData(this)">
+            <select id="select4" class="sinyears" country="新加坡" returnTo="chartdiv4" onchange="getData(this)">
                 <option value="2019">2019年</option>
                 <option value="2018">2018年</option>
                 <option value="2017">2017年</option>
@@ -57,6 +77,7 @@
             <div class="chartdiv" id="chartdiv3"></div>
             <div class="chartdiv" id="chartdiv4"></div>
         </div>
+        <button class="btn btn-light btn-lg down">下載</button>
     </div>
 </header>
 
@@ -79,12 +100,57 @@
                 //chartDIV為要顯示圓餅圖的地方
                 chartDiv = document.getElementById(selectedObj.getAttribute("returnTo"));
 
+                var deptName = data.deptName
+                var gradNum = data.graduationNumber
+                var inum = []
+                deptName.forEach((v, i) => inum.push({ "deptName": deptName[i], "studentNum": gradNum[i] }));
+                drawChart(inum, selectedObj.getAttribute("returnTo"))
+
                 // 先直接顯示json測試， 之後刪掉
-                chartDiv.innerHTML = "<span style='color:black'>" + JSON.stringify(data) + "</span>";
+                @*chartDiv.innerHTML = "<span style='color:black'>" + JSON.stringify(data) + "</span>";*@
             },
             error: function (e) {
                 console.log(e);
             }
         });
     }
+
+    function drawChart(data, name) {  // 4. 這時這裡的data就會是inum
+        am4core.ready(function () {
+            var chartIndex = am4core.registry.baseSprites.findIndex((v) => v.htmlContainer.id == name);
+            if (chartIndex != -1) {
+                am4core.registry.baseSprites[chartIndex].data = data;
+            } else {
+                // Themes begin
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+                // Create chart instance
+                var chart = am4core.create(name, am4charts.PieChart);
+                // Add data
+                chart.data = data;
+                // Add and configure Series
+                var pieSeries = chart.series.push(new am4charts.PieSeries());
+                pieSeries.dataFields.value = "studentNum";
+                pieSeries.dataFields.category = "deptName";
+                pieSeries.slices.template.stroke = am4core.color("#fff");
+                pieSeries.slices.template.strokeOpacity = 1;
+
+                // This creates initial animation
+                pieSeries.hiddenState.properties.opacity = 1;
+                pieSeries.hiddenState.properties.endAngle = -90;
+                pieSeries.hiddenState.properties.startAngle = -90;
+
+                chart.hiddenState.properties.radius = am4core.percent(0);
+            }
+
+        }); // end am4core.ready()
+    }
+
+    for (var i = 1; i < 5; i++) {
+        var tempSelect = document.getElementById("select" + i.toString());
+        getData(tempSelect);
+    }
 </script>
+
+
