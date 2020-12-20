@@ -43,17 +43,22 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
         }
 
         [HttpPost]
-        public ActionResult NewFeedBack(FeedBackModel Model)
+        public string NewFeedBack(string TypeNo, string Title, string Content)
         {
+            
             string resMsg = "";
-            if (Model.Content == null || Model.Title == null)
+            if(TypeNo == null)
             {
-                resMsg = "未輸入內容!!";
+                resMsg = "回饋類型不可為空!!";
+            }
+            else if (Title == null || Title.Length > 50)
+            {
+                resMsg = "未輸入標題或長度超出限制!!";
             }
             // 長度限制
-            else if (Model.Content.Length > 200 || Model.Title.Length > 50)
+            else if (Content != null && Content.Length > 200)
             {
-                resMsg = "標題或內容超出長度限制!!";
+                resMsg = "回饋內容超出長度限制!!";
             }
             else
             { 
@@ -71,10 +76,10 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
                         "{2}," +
                         "{3}," +
                         "{4}",
-                        SqlVal2(Model.FeedbackTypeNo),
+                        SqlVal2(TypeNo),
                         SqlVal2(Request.Cookies["account"]),
-                        SqlVal2(Model.Title),
-                        SqlVal2(Model.Content),
+                        SqlVal2(Title),
+                        SqlVal2(Content),
                         "getDate()" + ")"
                     );
 
@@ -90,12 +95,7 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
                     resMsg = "fail";
                 }
             }
-
-            ViewData["feedback-result"] = resMsg;
-            ViewData["feedback-anchor"] = "section_feedback";
-            
-            return View("~/Views/Home/Index.cshtml");
-            
+            return resMsg;
         }
 
         public ActionResult ShowFeedBack()

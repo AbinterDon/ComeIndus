@@ -16,26 +16,20 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             return ShowUnivDepartment();
         }
 
-        [HttpGet]
-        public ActionResult InsertUnivDepartment()
-        {
-            return View("InsertUnivDepartment");
-        }
-
         [HttpPost]
-        public ActionResult InsertUnivDepartment(UnivDepartmentModel Model)
+        public string InsertUnivDepartment(string DeptName, string DeptDescription)
         {
             //尚未加入管理員身分檢查
 
             string resMsg = "";
-            if (Model.DeptName == null || Model.DeptName.Length > 50)
+            if (DeptName == null || DeptName.Length > 50)
             {
-                resMsg = "未輸入內容!!";
+                resMsg = "未輸入科系或長度超過限制!!";
             }
             // 長度限制
-            else if (Model.DeptDescription != null && Model.DeptDescription.Length > 200)
+            else if (DeptDescription != null && DeptDescription.Length > 200)
             {
-                resMsg = "內容超出長度限制!!";
+                resMsg = "敘述超出長度限制!!";
             }
             else
             {
@@ -51,14 +45,14 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                         "{1}," +
                         "{2}," +
                         "{3}",
-                        SqlVal2(Model.DeptName),
-                        SqlVal2(Model.DeptDescription),
+                        SqlVal2(DeptName),
+                        SqlVal2(DeptDescription),
                         "getDate()",
                         "getDate()" + ")"
                     );
 
                 var check = _DB_Execute(sqlStr);
-
+          
                 //新增是否成功
                 if (check == 1)
                 {
@@ -70,9 +64,10 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                 }
             }
 
-            ViewData["UniDept-result"] = resMsg;
-
-            return View();
+     
+            return resMsg;
+           
+            //return ShowUnivDepartment();
         }
 
         public ActionResult ShowUnivDepartment() 
@@ -80,7 +75,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             var sqlStr = string.Format("select * from [dbo].[Department]");
 
             var data = _DB_GetData(sqlStr);
-            return View("ShowUnivDepartment", data);
+            return View("UnivDepartment", data);
         }
 
         public ActionResult UpdateUnivDepartment(string DeptNo, string DeptName, string DeptDescription)

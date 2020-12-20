@@ -71,8 +71,19 @@
 </head>
 
 <header>
+   
     <div class="container" id="DeptInfo">
         <h2>科系/學群列表</h2>
+        <div>
+            <form>
+                <label style="color:white">科系</label>
+                <input size="20" id="insert-DeptName">&nbsp;&nbsp;
+                <label style="color:white">描述</label>
+                <input size="60" id="insert-DeptDescription">&nbsp;&nbsp;
+                <button class="btn" type="button" onclick="insertDept()">新增</button>
+            </form>
+            <span style="font-size: 18px; color:red" id="insert-result"></span>
+        </div>
         <table class="fl-table">
             <thead>
                 <tr>
@@ -86,7 +97,7 @@
             </thead>
             <tbody>
                 @foreach (DataRow row in Model.Rows)
-                 {
+                {
                     <!--先全部顯示，之後再調整要顯示的欄位-->
                     <tr>
                         <!-- ko ifnot: IsEdit() && Item() == @row["DeptNo"] -->
@@ -120,7 +131,7 @@
                         </td>
                         <!-- /ko -->
                     </tr>
-                 }
+                }
             </tbody>
         </table>
     </div>
@@ -171,5 +182,18 @@
         $.post('@Url.Action("DeleteUnivDepartment")', args, data => {});
 
         window.location.reload();
+    }
+
+    function insertDept() {
+        let data = {
+            DeptName: $("#insert-DeptName").val(),
+            DeptDescription: $("#insert-DeptDescription").val()
+        }
+
+        $.post('@Url.Action("InsertUnivDepartment")', data, function (result) {
+            window.location.reload();
+            alert(result);
+           
+        });
     }
 </script>

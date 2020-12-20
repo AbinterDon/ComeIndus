@@ -130,13 +130,21 @@
                     <!--信封-->
                     <div class="mailcover"><img src="https://awiclass.monoame.com/img/webpic/w_mail_cover.svg" /></div>
                     <!--信紙-->
-                    <form action="/FeedBack/FeedBack/NewFeedBack" method="post">
+                    <form>
                         <h5>Dear ComeIndus.</h5>
                         <label>Type</label>
                         <select id="FDoption" name="FeedbackTypeNo">
                         </select>
-                        <script>
+                        <label>Title</label>
+                        <input type="text" id="FBTitle" placeholder="請輸入標題" />
+                        <label>Feedback</label>
+                        <textarea id="FBContent" placeholder="使用心得" rows="8"></textarea>
+                        <input class="btn" type="button" value="送出" onclick="newFeedBack()" />
+                        <span style="font-size:20px" id="FBresult"></span>
+                    </form>
+                    
 
+                    <script>
                             $.ajax({
                                 type: "GET",
                                 url: "/FeedBack/FeedBack/NewFeedBack",
@@ -154,25 +162,35 @@
                                 }
                             });
 
-                            var anchor = document.getElementById('@ViewData["feedback-anchor"]' != '' ? '@ViewData["feedback-anchor"]' : 'section_feedback');
-                            anchor.scrollIntoView(true);
-
-                        </script>
-                        <!--
-                <select name="FeedbackTypeNo">
-                    <option value="FD1">System Bug</option>
-                    <option value="FD2">User FeedBack</option>
-                </select>-->
-                        <label>Title</label>
-                        <input type="text" name="Title" placeholder="請輸入標題" />
-                        <label>Feedback</label>
-                        <textarea id="Content" name="Content" placeholder="使用心得" rows="8"></textarea>
-                        <input class="btn" type="submit" value="送出" />
-
-                    </form>
-                    <span style="font-size:40px">@ViewData["feedback-result"]</span>
-
-
+                        function newFeedBack() {
+                            var D = {
+                                TypeNo: $('#FDoption').find(":selected").val(),
+                                Title: $("#FBTitle").val(),
+                                Content: $('#FBContent').val()
+                            };
+                            console.log(D)
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/FeedBack/FeedBack/NewFeedBack",
+                                    data: {
+                                        TypeNo: $('#FDoption').find(":selected").val(),
+                                        Title: $("#FBTitle").val(),
+                                        Content: $('#FBContent').val()
+                                    },
+                                    //contentType: "application/json; charset=utf-8",
+                                    dataType: "text",
+                                    async: true,
+                                    success: function (result) {
+                                        $("#FBresult").text(result);
+                                        var anchor = document.getElementById('section_feedback');
+                                        anchor.scrollIntoView(true)
+                                    },
+                                    error: function (errMsg) {
+                                        // error handle;
+                                    }
+                                });
+                            }
+                    </script>
                 </div>
             </div>
             <div class="col-sm-6">
