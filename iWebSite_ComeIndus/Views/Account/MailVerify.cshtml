@@ -44,6 +44,7 @@
     @* 是否顯示驗證成功訊息 *@
     @if (Model != null && Model.Verified == true)
     {
+
         <p>@Model.ResultMessage</p>
         <a href="/">回首頁</a>
 
@@ -62,7 +63,7 @@
                 <div class="formcell">
                     <div>
                         <input type="button" onclick="Resend(); timeout();" class="btn btn-danger" id="emialcore" value="Sent">
-             
+
                     </div>
                     <div>
                         <input type="text" class='required' id="VerificationCode" name="VerificationCode" placeholder="Verification Code...">
@@ -70,8 +71,8 @@
                 </div>
             </form>
 
-            <br/>
-            <button type="submit" class="next">Verify</button>
+            <br />
+            <button type="submit" herf="/Account/MailVerify" class="next">Verify</button>
 
 
         </div>
@@ -84,7 +85,7 @@
     {
         <br><p>@Model.ResultMessage</p>
 
-    } 
+    }
 </body>
 </html>
 

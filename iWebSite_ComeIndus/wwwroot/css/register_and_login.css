@@ -62,14 +62,8 @@ background-color:var(lighten(main,5%));
 .form {
     margin: 0 50px;
     padding: 70px 50px;
-    /*   position:absolute; height:500px; top:50%; margin-top:-300px;*/
-    /*position: left;*/
-    /* background: rgba(var(--form-bg,9));*/
-    /*  padding: 40px;*/
     max-width: 500px;
-    /* border-radius: br;
-    box-shadow: 0 4px 10px 4px rgba(var(--form-bg),.3);*/
-    height:570px;
+    height: 570px;
 }
 
 
@@ -77,59 +71,45 @@ background-color:var(lighten(main,5%));
 .forms {
     margin: 0 50px;
     padding: 70px 50px;
-    /*   position:absolute; height:500px; top:50%; margin-top:-300px;*/
-    /*position: left;*/
-    /* background: rgba(var(--form-bg,9));*/
-    /*  padding: 40px;*/
     max-width: 500px;
-    /* border-radius: br;
-    box-shadow: 0 4px 10px 4px rgba(var(--form-bg),.3);*/
     height:700px;
 }
-  
-  .tab-group {
-    list-style:none;
-    padding:0;
-    margin:0 0 40px 0;}
 
-   .tab-group:after {
-      content: "";
-      display: table;
-      clear: both;
+.tab-group {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+}
+
+    .tab-group:after {
+        content: "";
+        display: table;
+        clear: both;
     }
 
-   div.forms li a {
-      display:block;
-      text-decoration:none;
-      padding:15px;
-      /*background:rgba(var(--gray-light,.25));*/
-      color:#707070;
-      font-size:20px;
-      float:left;
-      width:50%;
-      text-align:center;
-      cursor:pointer;
-      transition:.5s ease;}
+div.forms li a {
+    display: block;
+    text-decoration: none;
+    padding: 15px;
+    color: #707070;
+    font-size: 20px;
+    float: left;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+    transition: .5s ease;
+}
 
-      div.forms  li a:hover {
-        /*background:var(--main-dark);*/
-        color:#6FCCC1;
-      }
-    
+    div.forms li a:hover {
+        color: #6FCCC1;
+    }
+
+
     .active a {
-    /*  background:var(--main);*/
-      color:#6FCCC1;
-    
-      border-bottom:2px solid #6FCCC1;
-      
-    }
-  
+    color: #6FCCC1;
+    border-bottom: 2px solid #6FCCC1;
+}
 
-
-
-    .tab-content > div:last-child {
-        display:none;
-      }
       
     
     label{
@@ -155,17 +135,6 @@ background-color:var(lighten(main,5%));
 }
 
 
-
-/*
-.date input{
-    color:#8D8D8D;
-
-    width:100%;
-    height:100%;
-    
-
-}
-*/
 
 
 .fogroup input:focus, textarea:focus {
