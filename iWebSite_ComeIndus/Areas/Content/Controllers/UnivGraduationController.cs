@@ -31,6 +31,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
         //--------------------------
 
+        /// <summary>
+        /// GetDB 畢業人數
+        /// </summary>
+        /// <param name="countryNo"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
         private CountryGradModel getGradData(string countryNo="-1", string year="0") 
         {
             var sqlStr = string.Format(
@@ -62,6 +68,11 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             return model;
         }
 
+        /// <summary>
+        /// 同年不同國
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
         [HttpGet()]
         public Dictionary<string, CountryGradModel> GraduationFromDiffCountry(string year="0")
         {
@@ -81,6 +92,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             return graduationData; 
         }
 
+        /// <summary>
+        /// 同國不同年
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
         [HttpGet()]
         public CountryGradModel GraduationFromDiffYear(string year = "0", string country="")
         {
@@ -105,10 +122,10 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         /// <param name="year"></param>
         /// <returns></returns>
         [HttpGet()]
-        public IActionResult Download(string year = "2011")
+        public IActionResult Download(string Year = "-1", string Country = "-1")
         {
-            //~/Content/UnivGraduation/Download?year=2011
-            return RedirectToAction("UnivGraduation", "excel", new UnivGraduationModel() { Year = year });
+            //~/Content/UnivGraduation/Download?Year=2011,2012&Country=1,8
+            return RedirectToAction("UnivGraduation", "excel", new UnivGraduationModel() { Year = Year, Country = Country});
         }
     }
 }
