@@ -15,11 +15,11 @@
         </div>
         <div class="years">
             <select class="taiyears" onchange="getData(this)">
-                <option>2019</option>
-                <option>2018</option>
-                <option>2017</option>
-                <option>2016</option>
-                <option>2015</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
             </select>
         </div>
         <div class="box">
@@ -31,7 +31,8 @@
 
 <!-- Chart code -->
 <script>
-
+    var D;
+    var ob;
     function getData(selectedObj) {
         $.ajax({
             type: "GET",
@@ -46,6 +47,7 @@
             success: function (data) {
                 console.log(data);
                 console.log(data["台灣"]);
+                ob = selectedObj;
                 //drawChart(data);
             },
             error: function (e) {

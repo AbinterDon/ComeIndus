@@ -10,17 +10,60 @@ using System.Data;
 namespace iWebSite_ComeIndus.Areas.Content.Controllers
 {
     [Area(areaName: "Content")]
+
     public class UnivGraduationController : _BaseController
     {
         public IActionResult Index()
         {
             //return View("ShowUnivGraduation");
+            return View("GraduationFromDiffYear");
+        }
+
+        public IActionResult DiffCountry()
+        {
             return View("GraduationFromDiffCountry");
         }
 
+        public IActionResult DiffYear()
+        {
+            return View("GraduationFromDiffYear");
+        }
+
+        //--------------------------
+
+        private CountryGradModel getGradData(string countryNo="-1", string year="0") 
+        {
+            var sqlStr = string.Format(
+                    "select [DeptName], [GraduationNumber], [GraduationYear] " +
+                    "from[dbo].[Department] as a " +
+                    "inner join( " +
+                    "select[CountryDeptNo],[CountryNo], [DeptNo] " +
+                    "from[dbo].[CountryDepartment] " +
+                    "where CountryNo = {0} " +
+                    ") as b " +
+                    "on b.DeptNo = a.DeptNo " +
+                    "inner join( " +
+                    "select * " +
+                    "from[dbo].[Graduation] " +
+                    "where GraduationYear = {1} " +
+                    ") as c " +
+                    "on b.CountryDeptNo = c.CountryDeptNo", SqlVal2(countryNo), SqlVal2(year));
+
+            var countryGradData = _DB_GetData(sqlStr);
+
+            CountryGradModel model = new CountryGradModel();
+
+            foreach (DataRow gradRow in countryGradData.Rows)
+            {
+                model.DeptName.Add(gradRow.ItemArray.GetValue(0).ToString());
+                model.GraduationNumber.Add((int)gradRow.ItemArray.GetValue(1));
+            }
+
+            return model;
+        }
+
         [HttpGet()]
-        //public List<UnivGraduationModel> ShowUnivGraduation(UnivGraduationModel Model)
-        public Dictionary<string, CountryGradModel> GraduationFromDiffCountry(string year)
+        public Dictionary<string, CountryGradModel> GraduationFromDiffCountry(string year="0")
         {
             var sqlStr = string.Format("select [CountryNo], [CountryName] from Countries");
             var data = _DB_GetData(sqlStr);
@@ -32,37 +75,28 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                 string countryNo = row.ItemArray.GetValue(0).ToString();
                 string countryName = row.ItemArray.GetValue(1).ToString();
 
-                sqlStr = string.Format(
-                "select [DeptName], [GraduationNumber], [GraduationYear] " +
-                "from[dbo].[Department] as a " +
-                "inner join( " +
-                "select[CountryDeptNo],[CountryNo], [DeptNo] " +
-                "from[dbo].[CountryDepartment] " +
-                "where CountryNo = {0} " +
-                ") as b " +
-                "on b.DeptNo = a.DeptNo " +
-                "inner join( " +
-                "select * " +
-                "from[dbo].[Graduation] " +
-                "where GraduationYear = {1} " +
-                ") as c " +
-                "on b.CountryDeptNo = c.CountryDeptNo", countryNo, year);
-
-                var countryGradData = _DB_GetData(sqlStr);
-                CountryGradModel model = new CountryGradModel();
-                model.DeptName = new List<string>();
-                model.GraduationNumber = new List<int>();
-
-                foreach (DataRow gradRow in countryGradData.Rows)
-                {
-                    model.DeptName.Add(gradRow.ItemArray.GetValue(0).ToString());
-                    model.GraduationNumber.Add((int)gradRow.ItemArray.GetValue(1));
-                }
-
-                graduationData[countryName] = model;
+                graduationData[countryName] = getGradData(countryNo, year);
             }
 
             return graduationData; 
+        }
+
+        [HttpGet()]
+        public CountryGradModel GraduationFromDiffYear(string year = "0", string country="")
+        {
+
+            var sqlStr = string.Format("select [CountryNo], [CountryName] from Countries where CountryName = {0}", SqlVal2(country));
+            var data = _DB_GetData(sqlStr);
+
+            foreach (DataRow row in data.Rows)
+            {
+                string countryNo = row.ItemArray.GetValue(0).ToString();
+                string countryName = row.ItemArray.GetValue(1).ToString();
+
+                return getGradData(countryNo, year);
+            }
+
+            return new CountryGradModel();
         }
 
         /// <summary>
