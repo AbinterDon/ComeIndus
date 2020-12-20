@@ -65,6 +65,16 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             return graduationData; 
         }
 
-       
+        /// <summary>
+        /// 下載
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        [HttpGet()]
+        public IActionResult Download(string year = "2011")
+        {
+            //~/Content/UnivGraduation/Download?year=2011
+            return RedirectToAction("UnivGraduation", "excel", new UnivGraduationModel() { Year = year });
+        }
     }
 }

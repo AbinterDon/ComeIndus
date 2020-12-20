@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace iWebSite_ComeIndus.Areas.Content.Models
 {
-    /*
     public class UnivGraduationModel
     {
         public string Country { get; set; }
@@ -13,7 +12,6 @@ namespace iWebSite_ComeIndus.Areas.Content.Models
         public string Department { get; set; }
         public string Year { get; set; }
     }
-    */
 
     public class CountryGradModel
     {
