@@ -163,12 +163,6 @@
                             });
 
                         function newFeedBack() {
-                            var D = {
-                                TypeNo: $('#FDoption').find(":selected").val(),
-                                Title: $("#FBTitle").val(),
-                                Content: $('#FBContent').val()
-                            };
-                            console.log(D)
                                 $.ajax({
                                     type: "POST",
                                     url: "/FeedBack/FeedBack/NewFeedBack",
