@@ -9,8 +9,6 @@
         <script src="~/js/register_and_login.js"></script>
     </head>
     <body>
-
-
         <div class="forms" id='form'>
             <ul class="tab-group">
                 <li class="tab "><a href="/Account/Register">Sign Up</a></li>
@@ -45,13 +43,10 @@
                     @if (Model != null && Model.ok == false)
                     {
                         <p>@Model.ResultMessage</p>
-
-                    </div>
+                    }
+                 </div>
             </div>
         </div>
-
-
-        }
     </body>
 </html>
 //value = "@if (Model.Account != null) { Model.Account; } else { null; }"
