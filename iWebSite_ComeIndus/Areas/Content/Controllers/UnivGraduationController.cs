@@ -124,8 +124,32 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         [HttpGet()]
         public IActionResult Download(string Year = "-1", string Country = "-1")
         {
-            //~/Content/UnivGraduation/Download?Year=2011,2012&Country=1,8
-            return RedirectToAction("UnivGraduation", "excel", new UnivGraduationModel() { Year = Year, Country = Country});
+            //是否存在cookies(登入且是會員才可以下載Excel)
+            if (!string.IsNullOrEmpty(Request.Cookies["account"]) && !string.IsNullOrEmpty(Request.Cookies["userName"]))
+            {
+                //SQL Insert Member
+                var sqlStr = string.Format("select Authority from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
+
+                //SQL Check
+                var data = _DB_GetData(sqlStr);
+
+                //資料庫內是否有此帳號
+                if (data.Rows.Count > 0)
+                {
+                    //~/Content/UnivGraduation/Download?Year=2011,2012&Country=1,8
+                    return RedirectToAction("UnivGraduation", "excel", new UnivGraduationModel() { Year = Year, Country = Country });
+                }
+                else
+                {
+                    return RedirectToAction("~/Home/Error");
+                }
+            }
+            else
+            {
+                return Redirect("~/Home/Error");
+            }
+            
+            //return RedirectToAction("UnivGraduation", "excel", new UnivGraduationModel() { Year = Year, Country = Country});
         }
     }
 }
