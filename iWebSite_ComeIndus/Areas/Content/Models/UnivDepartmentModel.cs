@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,4 +13,6 @@ namespace iWebSite_ComeIndus.Areas.Content.Models
         public DateTime CreateTime { get; set; }
         public DateTime ModifyTime { get; set; }
     }
+
+   
 }

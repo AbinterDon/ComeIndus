@@ -1,4 +1,5 @@
-﻿<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+﻿@model List<iWebSite_ComeIndus.Areas.Content.Models.TimeModel>;
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <head>
@@ -14,10 +15,9 @@
             position: absolute;
             right: 0px;
             top: 50px;
-            color:#3BB0A2;
+            color: #3BB0A2;
             font-weight: bold;
         }
-
     </style>
 </head>
 
@@ -26,7 +26,7 @@
     <div class="button">
         <a class="button btn btn-link btn-lg top" href="/Content/UnivGraduation/diffyear">前往同國比較>></a>
     </div>
-    
+
     <div class="container sty1">
         <div class="title">
             <h2 class="tai">Taiwan</h2>
@@ -34,18 +34,19 @@
         </div>
         <div class="years">
             <select class="taiyears" onchange="getData(this)">
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
+                @foreach (var year in Model)
+                {
+                    <option value="@year.Year">@year.Year 年</option>
+                }
             </select>
+            <span id="progress" style="color:black"></span>
         </div>
         <div class="box">
+            <>
             <div class="chartdiv" id="chartdiv1"></div>
             <div class="chartdiv" id="chartdiv2"></div>
         </div>
- <button class="btn btn-light btn-lg down">下載</button>
+        <button class="btn btn-light btn-lg down">下載</button>
     </div>
 </header>
 
@@ -61,10 +62,10 @@
             dataType: "json",
             async: true,
             beforeSend: function () {
-                // null
+               
             },
             success: function (data) {
-                console.log(data);
+                //console.log(data);
 
                 taiobj = data["中國"]
                 var deptName = taiobj.deptName
@@ -79,13 +80,14 @@
                 var inum2 = []
                 sinDeptName.forEach((v, i) => inum2.push({ "depName": sinDeptName[i], "studentNum": singGadNum[i] }));
                 drawChart(inum2, "chartdiv2")
+               
             },
             error: function (e) {
                 console.log(e);
             }
         });
     }
-    
+
 
     function drawChart(data, name) {  // 4. 這時這裡的data就會是inum
         am4core.ready(function () {
