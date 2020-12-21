@@ -11,12 +11,13 @@
             background-color: #1D3255;
         }
 
-        .box{
-            width:100%;
-            height:700px;
-            position:relative;
-            top:30px
+        .box {
+            width: 100%;
+            height: 700px;
+            position: relative;
+            top: 30px
         }
+
         .formstyle {
             display: flex;
             align-items: center;
@@ -32,6 +33,7 @@
             padding: 50px 0px 20px 0px;
             text-align: center;
         }
+
         form {
             background-color: #ffffff;
             color: #1D3255;
@@ -41,15 +43,17 @@
             border-radius: 10px;
             border: 2px solid #3BB0A2;
         }
-        input, select, textarea{
+
+        input, select, textarea {
             display: block;
             background-color: transparent;
             border: none;
             border: solid 3px #1D3255;
             padding: 1px 2px;
         }
-        label{
-            padding:1px 0px 1px 0px
+
+        label {
+            padding: 1px 0px 1px 0px
         }
     </style>
 </head>
@@ -93,14 +97,24 @@
                     </div>
                 </div>
             </div>
-            <input type="submit" value="送出">
+            <input type="submit" value="送出" id="sendMsg">
         </form>
+
     </div>
 
 </div>
 
+@{ if (ViewData["checkMsg"] != null)
+    {
+        <script type="text/javascript">
+        var message = @Html.Raw(Json.Serialize(ViewData["result"]));
+        alert(message);
+        </script>
+    }
 
-<span style="font-size:30px">@ViewData["result"]</span>
+}
+
+<!--<span style="font-size:30px">@ViewData["result"]</span>-->
 
 <script type="text/javascript">
     $('#startDate').datetimepicker({
@@ -113,4 +127,7 @@
         format: 'YYYY/MM/DD',
         locale: moment.locale('zh-cn')
     });
+
+
+
 </script>

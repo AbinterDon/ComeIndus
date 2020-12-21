@@ -59,13 +59,20 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         public ActionResult NewNews(NewsModel Model)
         {
             string resMsg = "";
+            string checkMsg = "";
+            
             // 長度限制
-            if (Model.NewsContent.Length > 200 || Model.NewsTitle.Length > 50)
+            if (Model.NewsContent.Length > 200 || Model.NewsTitle.Length > 50 || Model.NewsContent == null || Model.NewsTitle == null)
             {
-                resMsg = "標題或內容超出長度限制!!";
+
+                resMsg = "標題或內容不符合長度限制!! 標題與內容不可為空，且標題要在50字內，內容不可超過200字";
+               
+                checkMsg = "false";
+                
             }
             else
             {
+                checkMsg = "true";
                 //SQL Insert
                 var sqlStr = string.Format(
                 @"INSERT INTO [dbo].[News](" +
@@ -101,7 +108,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 //新增是否成功
                 if (check == 1)
                 {
-                    resMsg = "Success";
+                    resMsg = "新增成功";
                     //return View("NewNews", "Success!!");
                 }
                 else
@@ -113,6 +120,9 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             //return View("NewNews", "Fail :(");
             ViewData["result"] = resMsg;
             ViewData["NewsTypes"] = NewsTypes;
+            ViewData["checkMsg"] = checkMsg;
+            TempData["Message"] = resMsg;
+                
             return View();
         }
 
