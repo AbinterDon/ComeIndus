@@ -33,7 +33,7 @@
             <h2 class="sin">Singapore</h2>
         </div>
         <div class="years">
-            <select class="taiyears" onchange="getData(this)">
+            <select id="selectYear" class="taiyears" onchange="getData(this)">
                 <option value="2019">2019</option>
                 <option value="2018">2018</option>
                 <option value="2017">2017</option>
@@ -45,13 +45,29 @@
             <div class="chartdiv" id="chartdiv1"></div>
             <div class="chartdiv" id="chartdiv2"></div>
         </div>
- <button class="btn btn-light btn-lg down">下載</button>
+ <button class="btn btn-light btn-lg down" onclick="download()">下載</button>
     </div>
 </header>
 
 <!-- Chart code -->
 <script>
-    var D;
+    function download() {
+        var year = document.getElementById("selectYear").value;;
+        fetch(`/Content/UnivGraduation/Download?Year=${year}&Country=7,8`).then(resp => resp.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                // the filename you want
+                a.download = `UnivGraduation_${year}_Taiwan_Singapore.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            })
+            .catch((e) => console.error(e));
+    }
     function getData(selectedObj) {
         $.ajax({
             type: "GET",
@@ -66,7 +82,7 @@
             success: function (data) {
                 console.log(data);
 
-                taiobj = data["中國"]
+                taiobj = data["台灣"]
                 var deptName = taiobj.deptName
                 var gradNum = taiobj.graduationNumber
                 var inum = []

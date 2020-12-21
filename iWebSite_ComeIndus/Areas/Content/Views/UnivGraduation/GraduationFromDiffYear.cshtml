@@ -51,7 +51,7 @@
             <div class="chartdiv" id="chartdiv1"></div>
             <div class="chartdiv" id="chartdiv2"></div>
         </div>
-        <button class="btn btn-light btn-lg down">下載</button>
+        <button class="btn btn-light btn-lg down" onclick="download('taiwan')">下載</button>
     </div>
 </header>
 <header id="sin">
@@ -79,12 +79,45 @@
             <div class="chartdiv" id="chartdiv3"></div>
             <div class="chartdiv" id="chartdiv4"></div>
         </div>
-        <button class="btn btn-light btn-lg down">下載</button>
+        <button id="download" class="btn btn-light btn-lg down" onclick="download('singapore')">下載</button>
     </div>
 </header>
 
 
 <script>
+    function download(country) {
+        var year1;
+        var year2;
+        var coun;
+        if (country == 'taiwan') {
+            coun = 8;  // 之後改成玟婷傳的值
+            year1 = document.getElementById("select1").value;
+            year2 = document.getElementById("select2").value;
+        } else if (country == 'singapore') {
+            coun = 7;  // 之後改成玟婷傳的值
+            year1 = document.getElementById("select3").value;
+            year2 = document.getElementById("select4").value;
+        } else {
+            // throw error
+            console.error("wrong country");
+            return;
+        }
+        fetch(`/Content/UnivGraduation/Download?Year=${year1},${year2}&Country=${coun}`).then(resp => resp.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                // the filename you want
+                a.download = `UnivGraduation_${year1}_${year2}_${country}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            })
+            .catch((e) => console.error(e));
+    }
+
     function getData(selectedObj) {
         $.ajax({
             type: "GET",
@@ -117,7 +150,7 @@
         });
     }
 
-    function drawChart(data, name) {  // 4. 這時這裡的data就會是inum
+    function drawChart(data, name) {  
         am4core.ready(function () {
             var chartIndex = am4core.registry.baseSprites.findIndex((v) => v.htmlContainer.id == name);
             if (chartIndex != -1) {
@@ -153,6 +186,27 @@
         var tempSelect = document.getElementById("select" + i.toString());
         getData(tempSelect);
     }
+
+    $.ajax({
+        url: "", //請求的url地址
+        dataType: "String", //返回格式為json
+        async: true, //請求是否非同步，預設為非同步，這也是ajax重要特性
+        data: { "year": "value" }, //引數值
+        type: "GET", //請求方式
+        beforeSend: function () {
+            //請求前的處理
+        },
+        success: function (req) {
+            //請求成功時處理
+        },
+        complete: function () {
+            //請求完成的處理
+        },
+        error: function () {
+            //請求出錯處理
+        }
+    });
+
 </script>
 
 
