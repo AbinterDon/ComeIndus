@@ -85,6 +85,7 @@
 
 
 <script>
+    //下載
     function download(country) {
         var year1;
         var year2;
@@ -187,25 +188,6 @@
         getData(tempSelect);
     }
 
-    $.ajax({
-        url: "", //請求的url地址
-        dataType: "String", //返回格式為json
-        async: true, //請求是否非同步，預設為非同步，這也是ajax重要特性
-        data: { "year": "value" }, //引數值
-        type: "GET", //請求方式
-        beforeSend: function () {
-            //請求前的處理
-        },
-        success: function (req) {
-            //請求成功時處理
-        },
-        complete: function () {
-            //請求完成的處理
-        },
-        error: function () {
-            //請求出錯處理
-        }
-    });
 
 </script>
 

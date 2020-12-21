@@ -51,6 +51,7 @@
 
 <!-- Chart code -->
 <script>
+    //下載
     function download() {
         var year = document.getElementById("selectYear").value;;
         fetch(`/Content/UnivGraduation/Download?Year=${year}&Country=7,8`).then(resp => resp.blob())
