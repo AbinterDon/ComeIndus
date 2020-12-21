@@ -52,7 +52,24 @@
 
 <!-- Chart code -->
 <script>
-    var D;
+    //下載
+    function download() {
+        var year = document.getElementById("selectYear").value;;
+        fetch(`/Content/UnivGraduation/Download?Year=${year}&Country=7,8`).then(resp => resp.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                // the filename you want
+                a.download = `UnivGraduation_${year}_Taiwan_Singapore.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            })
+            .catch((e) => console.error(e));
+    }
     function getData(selectedObj) {
         $.ajax({
             type: "GET",
@@ -67,7 +84,7 @@
             success: function (data) {
                 //console.log(data);
 
-                taiobj = data["中國"]
+                taiobj = data["台灣"]
                 var deptName = taiobj.deptName
                 var gradNum = taiobj.graduationNumber
                 var inum = []
