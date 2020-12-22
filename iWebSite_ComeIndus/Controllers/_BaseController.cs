@@ -253,6 +253,10 @@ namespace iWebSite_ComeIndus.Controllers
             }
         }
 
+        /// <summary>
+        /// 取得目前登入者使用者權限
+        /// </summary>
+        /// <returns></returns>
         public string getUserAuthority() 
         {
             // 使用此函數時為防止錯誤Cookie，須明確檢查值為0或1

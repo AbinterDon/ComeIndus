@@ -93,7 +93,7 @@
                 <h1>New</h1>
                 @if (ViewData["Authority"]!= null && ViewData["Authority"].ToString() == "1")
                  {
-                    <a style='visibility:@ViewData["admin"]' class="btn btn-lg btn-default addbtn" href="News/News/NewNews">+ 新增</a>
+                    <a style='visibility:@ViewData["admin"]' class="btn btn-lg btn-default addbtn" href="/News/News/NewNews">+ 新增</a>
                  }
             </div>
             <div class="newbox">
@@ -102,7 +102,7 @@
                     @foreach (var item in Model)
                     {
                         <li class="style">
-                            <a class="textnew" href="News/News/ShowNews?NewsNo=@item.NewsNo">
+                            <a class="textnew" href="/News/News/ShowNews?NewsNo=@item.NewsNo">
                                 @item.NewsStart.ToString("yyyy/MM/dd")&emsp;
                                 @item.TypeDescription&emsp;
                                 @item.NewsTitle
@@ -110,7 +110,7 @@
                         </li>
                     }
                 </ul>
-                <a class="textmore" href="News/News/ShowNews">more</a>
+                <a class="textmore" href="/News/News/ShowNews">more</a>
             </div>
         </div><img class="marginbottom mountain" src="https://awiclass.monoame.com/img/margin/m_works.svg" />
     </div>

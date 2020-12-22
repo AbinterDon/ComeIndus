@@ -1,82 +1,44 @@
 ﻿@model Verify
+@{
+    ViewData["Title"] = "ComeIndus - 信箱驗證";
+}
 <html>
 <head>
-    <link href="~/css/register_and_login.css" rel="stylesheet" />
-    
-
-    <script type="text/javascript">
-
-        function timeout() {
-            var time = 60;//定義60秒的倒計時
-
-            //設定一個定時，一秒執行一次
-            var mytime = setInterval(function () {
-                subs();
-            }, 1000)
-
-
-            function subs() {
-                if (time > 0) {
-                    time--;
-                    $('#emialcore').attr("value", "請" + time + "秒後再試");
-                    $('#emialcore').attr("disabled", true);//按鍵不可用
-                }
-               else if (time == 0) {
-                    clearInterval(mytime);
-                    $('#emialcore').attr("value", "Sent again");
-                    $('#emialcore').attr("disabled", false);//按鍵可用
-                } else {
-                    $('#emialcore').attr("disabled", true);//按鍵不可用
-                }
-            }
-        }
-
-            $(document).ready(function () {
-               timeout();
-            })
-        
-
-
-
-    </script>
+    <link href="~/css/AccountStyle.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <script src="~/js/jqTimeReciprocal-1.0.0.js"></script>
 </head>
 <body>
     @* 是否顯示驗證成功訊息 *@
     @if (Model != null && Model.Verified == true)
     {
-
         <p>@Model.ResultMessage</p>
         <a href="/">回首頁</a>
-
     }
     else
     {
         //驗證表單
         <br><br><br>
         <div class="form">
-            <form id="SendForm" action="/Account/MailVerify" method="POST">
+            <form id="SendForm" action="/Account/MailVerify" onsubmit="return Verify();" method="POST">
                 <p class='update'>Please check your email</p>
                 <label>Your Account:@Model.Account</label>
                 <input type="hidden" id="Account" name="Account" value="@Model.Account">
                 <input type="hidden" id="Username" name="Username" value="@Model.Username">
-
                 <div class="formcell">
                     <div>
-                        <input type="button" onclick="Resend(); timeout();" class="btn btn-danger" id="emialcore" value="Sent">
-
+                        <input type="button" onclick="Resend();" class="btn btn-danger" id="emialcore" value="Sent">
                     </div>
                     <div>
                         <input type="text" class='required' id="VerificationCode" name="VerificationCode" placeholder="Verification Code...">
                     </div>
                 </div>
             </form>
-
             <br />
-            <button type="submit" herf="/Account/MailVerify" class="next">Verify</button>
-
-
+            @* 驗證 *@
+            <button type="submit" onclick="Verify();" class="next">Verify</button>
         </div>
-
     }
     <br>
 
@@ -84,14 +46,25 @@
     @if (Model != null && Model.ok == false)
     {
         <br><p>@Model.ResultMessage</p>
-
     }
 </body>
 </html>
 
 <script>
+    //Ready
+    $(document).ready(function () {
+        //初始化
+        jqTimeReciprocal.Init({
+            //控制的按鈕
+            objReciprocalBtn: "#emialcore",
+        });
+    });
+
     //再寄送一次驗證碼
     function Resend() {
+        //開始倒數
+        jqTimeReciprocal.DoWork();
+
         // 取得 ID 屬性為 Send 的表單
         var form = document.forms['SendForm'];
 
@@ -119,5 +92,18 @@
                 toastr.clear();
             }
         });
+    }
+
+    //送出驗證
+    function Verify() {
+        if ($("#VerificationCode").val() == "") {
+            alert("驗證碼不得為空");
+            return false;
+        } else {
+            var frm = document.getElementById('SendForm');
+            //送出表單
+            frm.submit();
+            return true;
+        }
     }
 </script>

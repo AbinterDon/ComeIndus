@@ -320,10 +320,13 @@ namespace iWebSite_ComeIndus.Controllers
                 AutoMailClass mail = new AutoMailClass();
 
                 #region 亂數密碼
-                string ranpwd = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
+                string ranNumber = "0123456789";
+                string ranUpper = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
+                string ranLower = "abcdefghijkmnopqrstuvwxyz";
+                string ranSymbol = "!@#$%^&*";
 
                 //密碼長度
-                int passwordLength = 8;
+                int passwordLength = 10;
 
                 //密碼 char
                 char[] chars = new char[passwordLength];
@@ -334,7 +337,20 @@ namespace iWebSite_ComeIndus.Controllers
                 //開始亂數
                 for (int i = 0; i < passwordLength; i++)
                 {
-                    chars[i] = ranpwd[rnd.Next(0, ranpwd.Length)];
+                    if(i % 5 == 0)
+                    {
+                        chars[i] = ranNumber[rnd.Next(0, ranNumber.Length)];
+                    }else if(i % 3 == 0)
+                    {
+                        chars[i] = ranUpper[rnd.Next(0, ranUpper.Length)];
+                    }else if (i % 2 == 0)
+                    {
+                        chars[i] = ranLower[rnd.Next(0, ranLower.Length)];
+                    }
+                    else
+                    {
+                        chars[i] = ranSymbol[rnd.Next(0, ranSymbol.Length)];
+                    }
                 }
 
                 //New Password

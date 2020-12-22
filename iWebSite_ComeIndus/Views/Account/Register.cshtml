@@ -1,8 +1,11 @@
 ﻿@model Member
+@{
+    ViewData["Title"] = "ComeIndus - 註冊會員";
+}
 <html>
 <head>
-    <link href="~/css/register_and_login.css" rel="stylesheet" />
-    <script src="~/js/register_and_login.js"></script>
+    <link href="~/css/AccountStyle.css" rel="stylesheet" />
+    <script src="~/js/jqAccountUnit.js"></script>
 </head>
 <body>
     <div class="forms" id='form'>
@@ -12,11 +15,9 @@
             <li class="tab "><a href="/Account/Login">Sign In</a></li>
         </ul>
 
-
         <div class="tab-content">
             <div id="signup">
                 <form action="/Account/Register" method="POST" name="signupform" id='signupform'>
-                    <!--onsubmit="register()"-->
                     <div class='fogroup'>
                         <input type='text' class='required' id='Actualname' name='Actualname' placeholder="Actualname">
                     </div>
@@ -44,7 +45,7 @@
                     <br><br>
 
                     <div class="sex">
-                        <select id=gender class='required' name="Gender">
+                        <select id=Gender class='required' name="Gender">
                             <option value="0" selected>Gender*</option>
                             <option value="1">男</option>
                             <option value="2">女</option>
@@ -54,29 +55,22 @@
 
                     <br>
                     <div class="fogroup">
-                        <label for="birthday">Enter your birthday*</label>
+                        <label for="birthday">Enter your birthday</label>
 
                         <input type="date" id="Birthday" name="Birthday">
                     </div>
 
                     <br>
                     <button type="submit" class="button button-block " id="getstart" onclick="return false" href="/Account/MailVerify"> Get Started</button>
-
-
                 </form>
-
+                @* 回應訊息 *@
                 @if (Model != null && Model.ok == false)
                 {
                     <p>@Model.ResultMessage</p>
                 }
             </div>
-
-
         </div>
         <br>
-
     </div>
-
-
 </body>
 </html>

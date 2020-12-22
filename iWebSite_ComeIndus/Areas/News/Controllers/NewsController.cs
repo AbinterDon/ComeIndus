@@ -147,15 +147,22 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             }
 
             ViewData["NewsTypes"] = NewsTypes;
-            if (getUserAuthority() == "1" || getUserAuthority() == "0" || getUserAuthority() == null)
-            //if (getUserAuthority() == "1")
+
+            //目前登入權限
+            var Authority = getUserAuthority();
+
+            //權限
+            ViewData["Authority"] = Authority;
+
+            //任何人都可進來查看 最新消息
+            if (Authority == "1" || Authority == "0" || Authority == null)
             {
                 return View(GetNews(NewsNo));
             }
             else
             {
-                //先暫時導到此頁面，之後改到其他頁面
-                return View("~/Views/Home/Index.cshtml");
+                //導致Error頁面
+                return RedirectToAction("~/Home/Error");
                 //return StatusCode(403);
             }
         }
