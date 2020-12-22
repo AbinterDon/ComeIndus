@@ -19,7 +19,7 @@ header .container {
   display: -webkit-box;
   display: flex;
   -webkit-box-pack: center;
-          justify-content: center;
+  ustify-content: center;
 }
 header .container .years {
   display: -webkit-box;

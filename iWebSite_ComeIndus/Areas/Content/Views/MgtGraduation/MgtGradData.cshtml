@@ -1,250 +1,259 @@
 ﻿@using iWebSite_ComeIndus.Areas.Content.Models;
 @model MgtGradModel;
-
 <!--CSS:暫時先複製別的檔案來用-->
-    <style>
-        * {
-            box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+    header {
+        min-height: 700px;
+        min-width: 1000px;
+        display: flex;
+        justify-content: center;
+        background-color: white;
+    }
+    h2 {
+        text-align: center;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: white;
+        padding: 50px 0px 20px 0px;
+    }
 
-        h2 {
+    th, td {
+        padding: 20px;
+    }
+    /*Table Styles*/
+
+    .table-wrapper {
+        margin: 10px 70px 70px;
+        box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+    }
+
+    .fl-table {
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        border: none;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        background-color: white;
+        margin-bottom: 30px;
+    }
+
+        .fl-table td, .fl-table th {
             text-align: center;
-            font-size: 18px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: white;
-            padding: 50px 0px 20px 0px;
+            padding: 8px;
         }
 
-        th, td {
-            padding: 20px;
-        }
-        /*Table Styles*/
-
-        .table-wrapper {
-            margin: 10px 70px 70px;
-            box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-        }
-
-        .fl-table {
-            border-radius: 5px;
+        .fl-table td {
+            border-right: 1px solid #f8f8f8;
             font-size: 12px;
-            font-weight: normal;
-            border: none;
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 100%;
-            white-space: nowrap;
-            background-color: white;
-            margin-bottom: 30px;
         }
 
-            .fl-table td, .fl-table th {
-                text-align: center;
-                padding: 8px;
-            }
+        .fl-table thead th {
+            color: #ffffff;
+            background: #3BB0A2;
+        }
 
-            .fl-table td {
-                border-right: 1px solid #f8f8f8;
-                font-size: 12px;
-            }
-
-            .fl-table thead th {
+        .fl-table thead th:nth-child(odd) {
                 color: #ffffff;
-                background: #3BB0A2;
-            }
+                background: #324960;
+        }
 
-                .fl-table thead th:nth-child(odd) {
-                    color: #ffffff;
-                    background: #324960;
+        .fl-table tr:nth-child(even) {
+            background: #F8F8F8;
+        }
+        
+</style>
+
+
+<header>
+    <div class="container">
+        <div style="margin-top:100px">
+            <label>年份</label>
+            <select id="yearOption">
+                <option value="*">all</option>
+                @foreach (var Time in Model.Years)
+                {
+                    <option value="@Time.Year">@Time.Year</option>
                 }
+            </select>
 
-            .fl-table tr:nth-child(even) {
-                background: #F8F8F8;
-            }
-    </style>
+            <label>國家</label>
+            <select id="countryOption" onchange="displayDept(this)">
+                @foreach (var countryDept in Model.CountryDepts)
+                {
+                    <option value="@countryDept.CountryNo">@countryDept.CountryName</option>
+                }
+            </select>
 
-
-    <div style="margin-top:100px">
-        <label>年份</label>
-        <select id="yearOption">
-            <option value="*">all</option>
-            @foreach (var Time in Model.Years)
-            {
-                <option value="@Time.Year">@Time.Year</option>
-            }
-        </select>
-
-        <label>國家</label>
-        <select id="countryOption" onchange="displayDept(this)">
+            <label>科系</label>
             @foreach (var countryDept in Model.CountryDepts)
             {
-                <option value="@countryDept.CountryNo">@countryDept.CountryName</option>
+                <select class="deptOptions" country="@countryDept.CountryNo">
+                    <option value="*">all</option>
+                    @for (int i = 0; i < countryDept.DeptName.Count; i++)
+                    {
+                        <option value="@countryDept.CountryDeptNo[i]">@countryDept.DeptName[i]</option>
+                    }
+
+                </select>
             }
-        </select>
+            <span class="insert">
+                <label>輸入畢業人數</label>
+                <input id="gradNum">
+            </span>
 
-        <label>科系</label>
-        @foreach (var countryDept in Model.CountryDepts)
-        {
-            <select class="deptOptions" country="@countryDept.CountryNo">
-                <option value="*">all</option>
-                @for (int i = 0; i < countryDept.DeptName.Count; i++)
-                {
-                    <option value="@countryDept.CountryDeptNo[i]">@countryDept.DeptName[i]</option>
+            <button type="button" onclick="searchSubmit()" class="headerBut">查詢</button>
+            <button type="button" onclick="showEdit()" class="headerBut">編輯</button>
+            <button type="button" onclick="insertSubmit()" class="insert">新增</button>
+            <button type="button" onclick="butCancel()" class="cancel">取消</button>
+        </div>
+
+        <div>
+            <table id="gradData"class="fl-table">
+            </table>
+            <sapn id="msg" style="color:red;font-size:25px"></sapn>
+        </div>
+
+    </div>
+</header>
+
+
+<script>
+    $(function () {
+        $(".deptOptions").css("display", "None");
+        $(".deptOptions").first().css("display", "");
+        $(".insert").css("display", "None");
+        $(".cancel").css("display", "None");
+
+    });
+
+    // 依照選取國家顯示相應科系列表
+    function displayDept(countryObj) {
+        var countryNo = countryObj.value;
+        $(".deptOptions").css("display", "None");
+        $(".deptOptions[country='" + countryNo + "']").css("display", "");
+    }
+
+    function showEdit() {
+        $(".headerBut").css("display", "None");
+        $(".insert").css("display", "");
+        $(".cancel").css("display", "");
+    }
+
+    function butCancel() {
+        $(".headerBut").css("display", "");
+        $(".insert").css("display", "None");
+        $(".cancel").css("display", "None");
+    }
+
+    function searchSubmit() {
+        var year = $("#yearOption").val();
+        var countryNo = $("#countryOption").val();
+        var countryDeptNo = $(".deptOptions[country='" + countryNo + "']").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/Content/MgtGraduation/ShowGrad",
+            data: {
+                year: year,
+                countryNo: countryNo,
+                countryDeptNo: countryDeptNo
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                console.log(data);
+                D = data;
+                var table = $("#gradData");
+                table.empty();
+                $("#msg").text("");
+
+                var row = $('<tr>');
+
+                row.append($('<th>').html("年份"));
+                row.append($('<th>').html("科系"));
+                row.append($('<th>').html("畢業人數"));
+                table.append(row);
+
+                if (data.length == 0) {
+                    $("#msg").text("No Data");
+
+                } else {
+                    for (var i = 0; i < data.length; i++) {
+                        var row = $('<tr>');
+                        row.append($('<td>').html(data[i].year));
+                        row.append($('<td countryDeptNo=' + data[i].countryDeptNo + '>').html(data[i].deptName));
+                        row.append($('<td>').html(data[i].graduationNumber));
+                        table.append(row);
+                    }
+
+
                 }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
 
-            </select>
+    function insertSubmit() {
+        var year = $("#yearOption").val();
+        var countryNo = $("#countryOption").val();
+        var countryDeptNo = $(".deptOptions[country='" + countryNo + "']").val();
+        var gradNum = $("#gradNum").val();
+
+        //輸入檢查
+        if (year == "*" || countryDeptNo == "*") {
+            alert("請選擇確切的年份和科系");
+            return
+        } else if (gradNum == "") {
+            alert("請輸入人數");
+            return
         }
 
-        <span class="insert">
-            <label>輸入畢業人數</label>
-            <input id="gradNum">
-        </span>
+        $.ajax({
+            type: "GET",
+            url: "/Content/MgtGraduation/InsertGrad",
+            data: {
+                year: year,
+                countryDeptNo: countryDeptNo,
+                gradNum: gradNum
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            beforeSend: function () {
 
-        <button type="button" onclick="searchSubmit()" class="headerBut">查詢</button>
-        <button type="button" onclick="showEdit()" class="headerBut">編輯</button>
-        <button type="button" onclick="insertSubmit()" class="insert">新增</button>
-        <button type="button" onclick="butCancel()" class="cancel">取消</button>
-    </div>
+            },
+            success: function (result) {
+                //console.log(data);
+                if (result == true) {
+                    searchSubmit();
+                    $("#msg").text("新增成功");
+                } else {
+                    $("#msg").text("新增失敗");
+                }
 
-   
 
-    <div>
-        <table id="gradData">
-        </table>
-        <sapn id="msg" style="color:red;font-size:25px"></sapn>
-    </div>
-
-    <script>
-        $(function () {
-            $(".deptOptions").css("display", "None");
-            $(".deptOptions").first().css("display", "");
-            $(".insert").css("display", "None");
-            $(".cancel").css("display", "None");
-            
+            },
+            error: function (e) {
+                console.log(e);
+            }
         });
 
-        // 依照選取國家顯示相應科系列表
-        function displayDept(countryObj) {
-            var countryNo = countryObj.value;
-            $(".deptOptions").css("display", "None");
-            $(".deptOptions[country='" + countryNo + "']").css("display", "");
-        }
-
-        function showEdit() {
-            $(".headerBut").css("display", "None");
-            $(".insert").css("display", "");
-            $(".cancel").css("display", "");
-        }
-
-        function butCancel() {
-            $(".headerBut").css("display", "");
-            $(".insert").css("display", "None");
-            $(".cancel").css("display", "None");
-        }
-
-        function searchSubmit() {
-            var year = $("#yearOption").val();
-            var countryNo = $("#countryOption").val();
-            var countryDeptNo = $(".deptOptions[country='" + countryNo + "']").val();
-
-            $.ajax({
-                type: "GET",
-                url: "/Content/MgtGraduation/ShowGrad",
-                data: {
-                    year: year,
-                    countryNo: countryNo,
-                    countryDeptNo: countryDeptNo
-                },
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false,
-                beforeSend: function () {
-
-                },
-                success: function (data) {
-                    console.log(data);
-                    D = data;
-                    var table = $("#gradData");
-                    table.empty();
-                    $("#msg").text("");
-
-                    var row = $('<tr>');
-
-                    row.append($('<th>').html("年份"));
-                    row.append($('<th>').html("科系"));
-                    row.append($('<th>').html("畢業人數"));
-                    table.append(row);
-
-                    if (data.length == 0) {
-                        $("#msg").text("No Data");
-                       
-                    } else {
-                        for (var i = 0; i < data.length; i++) {
-                            var row = $('<tr>');
-                            row.append($('<td>').html(data[i].year));
-                            row.append($('<td countryDeptNo=' + data[i].countryDeptNo + '>').html(data[i].deptName));
-                            row.append($('<td>').html(data[i].graduationNumber));
-                            table.append(row);
-                        }
-
-                
-                    }
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
-
-        function insertSubmit() {
-            var year = $("#yearOption").val();
-            var countryNo = $("#countryOption").val();
-            var countryDeptNo = $(".deptOptions[country='" + countryNo + "']").val();
-            var gradNum = $("#gradNum").val();
-           
-            //輸入檢查
-            if (year == "*" || countryDeptNo == "*") {
-                alert("請選擇確切的年份和科系");
-                return
-            } else if (gradNum == "") {
-                alert("請輸入人數");
-                return
-            }
-
-            $.ajax({
-                type: "GET",
-                url: "/Content/MgtGraduation/InsertGrad",
-                data: {
-                    year: year,
-                    countryDeptNo: countryDeptNo,
-                    gradNum: gradNum
-                },
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: true,
-                beforeSend: function () {
-
-                },
-                success: function (result) {
-                    //console.log(data);
-                    if (result == true) {
-                        searchSubmit();
-                        $("#msg").text("新增成功");
-                    } else {
-                        $("#msg").text("新增失敗");
-                    }
-
-                    
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-
-        }
+    }
 
 
-    </script>
+</script>

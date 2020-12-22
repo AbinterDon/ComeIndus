@@ -11,6 +11,12 @@
             right: 20px;
             bottom: 10px;
         }
+        .source {
+            position: absolute;
+            right: 540px;
+            bottom: 20px;
+            letter-spacing: 2px;
+        }
 
         .top {
             position: absolute;
@@ -19,10 +25,31 @@
             color: #3BB0A2;
             font-weight: bold;
         }
+        .top-left {
+            position: absolute;
+            left: 0px;
+            top: 50px;
+            color: #1D3255;
+            font-weight: bold;
+        }
+        .top-left-dwon {
+            position: absolute;
+            left: 100px;
+            top: 50px;
+            color: #1D3255;
+            font-weight: bold;
+        }
+
     </style>
 
 </head>
 <header id="tai">
+    <div class="button">
+        <a class="button btn btn-link btn-lg top-left" href="/content/UnivDepartment/">科系管理</a>
+     </div>
+    <div class="button">
+        <a class="button btn btn-link btn-lg top-left-dwon" href="/content/MgtGraduation">畢業人數管理</a>
+    </div>
     <div class="button">
         <a class="button btn btn-link btn-lg top" href="/content/UnivGraduation/DiffCountry">前往不同國比較>></a>
     </div>
@@ -35,7 +62,7 @@
             <!--select裡的屬性須留著-->
 
             <select id="select1" class="sty taiyears" country="台灣" returnTo="chartdiv1" onchange="getData(this)">
-                @foreach(var year in Model)
+                @foreach (var year in Model)
                 {
                     <option value="@year.Year">@year.Year 年</option>
                 }
@@ -78,6 +105,7 @@
             <div class="chartdiv" id="chartdiv4"></div>
         </div>
         <button id="download" class="btn btn-light btn-lg down" onclick="download('singapore')">下載</button>
+        <a href="https://data.gov.sg/dataset/universities-intake-enrolment-and-graduates-by-course" class="source">資料來源:data.gov.sg</a>
     </div>
 </header>
 
