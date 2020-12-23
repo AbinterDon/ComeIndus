@@ -260,6 +260,15 @@ namespace iWebSite_ComeIndus.Controllers
         public string getUserAuthority() 
         {
             // 使用此函數時為防止錯誤Cookie，須明確檢查值為0或1
+            // null: 帳戶不存在於DB中
+            // 0: 普通會員
+            // 1: 系統管理員
+
+            if(Request.Cookies["account"] == null)
+            {
+                return null;
+            }
+
             var sqlStr = string.Format("select Authority from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
             var data = _DB_GetData(sqlStr);
 

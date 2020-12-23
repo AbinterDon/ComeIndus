@@ -121,6 +121,7 @@
             <button type="button" onclick="showEdit()" class="headerBut">編輯</button>
             <button type="button" onclick="insertSubmit()" class="insert">新增</button>
             <button type="button" onclick="butCancel()" class="cancel">取消</button>
+            <sapn id="msg" style="color:red;font-size:25px"></sapn>
         </div>
 
         <div>
@@ -140,8 +141,6 @@
         $(".insert").css("display", "None");
         $(".cancel").css("display", "None");
         $(".secondYear").css("display", "None");
-
-
     });
 
     // 依照選取國家顯示相應科系列表
@@ -156,6 +155,7 @@
         $(".insert").css("display", "");
         $(".cancel").css("display", "");
         $(".rowBut").css("display", "");
+        $(".secondYear").css("display", "None");
     }
 
     function showRowEdit(cell) {
@@ -171,6 +171,8 @@
         $(".cancel").css("display", "None");
         $(".rowBut").css("display", "None");
         $(".rowEdit").css("display", "None");
+        $(".secondYear").css("display", "");
+        yearOptionAdjust();
     }
 
     function rowCancel() {
@@ -179,7 +181,11 @@
     }
 
     function yearOptionAdjust(yearObj) {
+        if (yearObj == null) {
+            yearObj = $("#yearStartOption")[0] //get html dom (js)
+        }
         var index = yearObj.selectedIndex;
+
         if (index > 0) {
             $(".secondYear").css("display", "");
             $("#yearEndOption").children().css("display", "")
@@ -292,7 +298,7 @@
                     searchSubmit();
                     $("#msg").text("新增成功");
                 } else {
-                    $("#msg").text("新增失敗!! 請確保輸入值為整數且不為負");
+                    $("#msg").text("新增失敗!! 可能失敗原因：輸入錯誤(須為整數且不為負)、權限不足");
                 }
 
 
@@ -332,6 +338,8 @@
                         $("#msg").text("刪除失敗");
                     }
 
+                    butCancel();
+                    
 
                 },
                 error: function (e) {
@@ -368,10 +376,11 @@
                         searchSubmit();
                         $("#msg").text("更新成功");
                     } else {
-                        $("#msg").text("更新失敗!! 請確保輸入值為整數且不為負");
+                        $("#msg").text("更新失敗!! 可能失敗原因：輸入錯誤(須為整數且不為負)、權限不足");
                     }
 
-
+                    butCancel();
+                    
                 },
                 error: function (e) {
                     console.log(e);

@@ -14,6 +14,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
     {
         public IActionResult Index()
         {
+            // admin check
+            if(getUserAuthority() != "1")
+            {
+                return Redirect("~/Home/Error");
+            }
+
             MgtGradModel mgtModel = new MgtGradModel();
 
             mgtModel.Years = getTime();
@@ -54,6 +60,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         
         public List<UnivGraduationModel> ShowGrad(string yearStart, string yearEnd, string countryNo, string countryDeptNo)
         {
+            // admin check
+            if (getUserAuthority() != "1")
+            {
+                return null;
+            }
+
             string condition =  "";
 
             if (countryDeptNo != "*")
@@ -64,8 +76,6 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             {
                 condition = string.Format("where CountryNo = {0} ", SqlVal2(countryNo));
             }
-
-            
 
             if(yearStart != "*")
             {
@@ -101,6 +111,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
         public bool InsertGrad(string year, string countryDeptNo, string gradNum)
         {
+            // admin check
+            if (getUserAuthority() != "1")
+            {
+                return false;
+            }
+
             int gradNumInt;
 
             if (!int.TryParse(gradNum, out gradNumInt) || gradNumInt < 0)
@@ -137,6 +153,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
         public bool DeleteGrad(string year, string countryDeptNo)
         {
+            // admin check
+            if (getUserAuthority() != "1")
+            {
+                return false;
+            }
+
             var sqlStr = string.Format("DELETE FROM [dbo].[Graduation]" +
                 "WHERE CountryDeptNo={0} AND GraduationYear={1} ", 
                 SqlVal2(countryDeptNo), SqlVal2(year));
@@ -156,6 +178,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
         public bool UpdateGrad(string year, string countryDeptNo, string graduationNumber)
         {
+            // admin check
+            if (getUserAuthority() != "1")
+            {
+                return false;
+            }
+
             int gradNumInt;
 
             if (!int.TryParse(graduationNumber, out gradNumInt) || gradNumInt < 0)
