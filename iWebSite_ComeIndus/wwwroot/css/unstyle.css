@@ -19,14 +19,14 @@ header .container {
   display: -webkit-box;
   display: flex;
   -webkit-box-pack: center;
-  ustify-content: center;
+  justify-content: center;
 }
 header .container .years {
   display: -webkit-box;
   display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-          flex-direction: row;
+  flex-direction: row;
   position: absolute;
   top: 200px;
 }
@@ -75,8 +75,7 @@ section#sin .container {
   min-width: 1000px;
   display: -webkit-box;
   display: flex;
-  -webkit-box-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 section#sin .container .years {
   display: -webkit-box;
