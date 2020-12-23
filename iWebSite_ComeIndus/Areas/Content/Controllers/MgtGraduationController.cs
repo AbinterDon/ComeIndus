@@ -52,7 +52,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         }
 
         
-        public List<UnivGraduationModel> ShowGrad(string year, string countryNo, string countryDeptNo)
+        public List<UnivGraduationModel> ShowGrad(string yearStart, string yearEnd, string countryNo, string countryDeptNo)
         {
             string condition =  "";
 
@@ -65,9 +65,11 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                 condition = string.Format("where CountryNo = {0} ", SqlVal2(countryNo));
             }
 
-            if (year != "*")
+            
+
+            if(yearStart != "*")
             {
-                condition += string.Format("and GraduationYear = {0}", SqlVal2(year));
+                condition += string.Format("and GraduationYear >= {0} and GraduationYear <= {1}", SqlVal2(yearStart), SqlVal2(yearEnd));   
             }
 
             List<UnivGraduationModel> graduationData = new List<UnivGraduationModel>();
@@ -99,7 +101,13 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
         public bool InsertGrad(string year, string countryDeptNo, string gradNum)
         {
-            var sqlStr = string.Format("INSERT INTO [dbo].[Graduation] " +
+            int gradNumInt;
+
+            if (!int.TryParse(gradNum, out gradNumInt) || gradNumInt < 0)
+            {
+                return false;
+            }
+                var sqlStr = string.Format("INSERT INTO [dbo].[Graduation] " +
                 "([CountryDeptNo] " +
                 ",[GraduationYear] " +
                 ",[GraduationNumber] " +
@@ -126,7 +134,58 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                 return false;
             }
         }
-        
+
+        public bool DeleteGrad(string year, string countryDeptNo)
+        {
+            var sqlStr = string.Format("DELETE FROM [dbo].[Graduation]" +
+                "WHERE CountryDeptNo={0} AND GraduationYear={1} ", 
+                SqlVal2(countryDeptNo), SqlVal2(year));
+
+            var check = _DB_Execute(sqlStr);
+
+            //是否成功
+            if (check == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool UpdateGrad(string year, string countryDeptNo, string graduationNumber)
+        {
+            int gradNumInt;
+
+            if (!int.TryParse(graduationNumber, out gradNumInt) || gradNumInt < 0)
+            {
+                return false;
+            }
+
+            var sqlStr = string.Format("UPDATE [dbo].[Graduation] " +
+                "SET [GraduationNumber] = {0} " +
+                ",[ModifyTime] = getDate() " +
+                ",[CreateUser] = {1} " +
+                "WHERE " +
+                "CountryDeptNo={2} AND GraduationYear={3}",
+                SqlVal2(graduationNumber), 
+                SqlVal2(Request.Cookies["account"]), 
+                SqlVal2(countryDeptNo), 
+                SqlVal2(year));
+
+            var check = _DB_Execute(sqlStr);
+
+            //是否成功
+            if (check == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         private List<TimeModel> getTime()
         {

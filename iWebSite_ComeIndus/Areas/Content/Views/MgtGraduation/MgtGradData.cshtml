@@ -77,8 +77,15 @@
     <div class="container">
         <div style="margin-top:100px">
             <label>年份</label>
-            <select id="yearOption">
+            <select id="yearStartOption" onchange="yearOptionAdjust(this)">
                 <option value="*">all</option>
+                @foreach (var Time in Model.Years)
+                {
+                    <option value="@Time.Year">@Time.Year</option>
+                }
+            </select>
+            <label class="secondYear"> ~ </label>
+            <select id="yearEndOption" class="secondYear">
                 @foreach (var Time in Model.Years)
                 {
                     <option value="@Time.Year">@Time.Year</option>
@@ -132,6 +139,8 @@
         $(".deptOptions").first().css("display", "");
         $(".insert").css("display", "None");
         $(".cancel").css("display", "None");
+        $(".secondYear").css("display", "None");
+
 
     });
 
@@ -146,16 +155,44 @@
         $(".headerBut").css("display", "None");
         $(".insert").css("display", "");
         $(".cancel").css("display", "");
+        $(".rowBut").css("display", "");
+    }
+
+    function showRowEdit(cell) {
+        var row = $(cell).parent();
+        row.children(".rowEdit").css("display", "")
+        $(".rowBut").css("display", "None");
+       
     }
 
     function butCancel() {
         $(".headerBut").css("display", "");
         $(".insert").css("display", "None");
         $(".cancel").css("display", "None");
+        $(".rowBut").css("display", "None");
+        $(".rowEdit").css("display", "None");
+    }
+
+    function rowCancel() {
+        $(".rowEdit").css("display", "None");
+        $(".rowBut").css("display", "");
+    }
+
+    function yearOptionAdjust(yearObj) {
+        var index = yearObj.selectedIndex;
+        if (index > 0) {
+            $(".secondYear").css("display", "");
+            $("#yearEndOption").children().css("display", "")
+            $("#yearEndOption").children().slice(0, index - 1).css("display", "None")
+            $("#yearEndOption").children("option").eq(index-1).attr("selected", "selected")
+        } else {
+            $(".secondYear").css("display", "None");
+        }
     }
 
     function searchSubmit() {
-        var year = $("#yearOption").val();
+        var yearStart = $("#yearStartOption").val();
+        var yearEnd = $("#yearEndOption").val();
         var countryNo = $("#countryOption").val();
         var countryDeptNo = $(".deptOptions[country='" + countryNo + "']").val();
 
@@ -163,7 +200,8 @@
             type: "GET",
             url: "/Content/MgtGraduation/ShowGrad",
             data: {
-                year: year,
+                yearStart: yearStart,
+                yearEnd: yearEnd,
                 countryNo: countryNo,
                 countryDeptNo: countryDeptNo
             },
@@ -173,9 +211,7 @@
             beforeSend: function () {
 
             },
-            success: function (data) {
-                console.log(data);
-                D = data;
+            success: function (data) {             
                 var table = $("#gradData");
                 table.empty();
                 $("#msg").text("");
@@ -196,10 +232,23 @@
                         row.append($('<td>').html(data[i].year));
                         row.append($('<td countryDeptNo=' + data[i].countryDeptNo + '>').html(data[i].deptName));
                         row.append($('<td>').html(data[i].graduationNumber));
+
+                        // button
+                        var dataNo = "year='" + data[i].year + "' countryDeptNo='" + data[i].countryDeptNo + "'";
+                        row.append($('<button class="rowBut" onclick="deleteSubmit(this)" ' + dataNo + '">').html("刪除"));
+                        row.append($('<button class="rowBut" onclick="showRowEdit(this)">').html("修改"));
+
+                        // input
+                        row.append($('<input class="rowEdit" id="rowEditInput" placeholder="請輸入畢業人數">'));
+                        row.append($('<button class="rowEdit" onclick="updateSubmit(this)" ' + dataNo + '">').html("確定"));
+                        row.append($('<button class="rowEdit" onclick="rowCancel(this)" ' + dataNo + '">').html("取消"));
+
+                        
                         table.append(row);
                     }
 
-
+                    $(".rowBut").css("display", "None");
+                    $(".rowEdit").css("display", "None");
                 }
             },
             error: function (e) {
@@ -209,7 +258,7 @@
     }
 
     function insertSubmit() {
-        var year = $("#yearOption").val();
+        var year = $("#yearStartOption").val();
         var countryNo = $("#countryOption").val();
         var countryDeptNo = $(".deptOptions[country='" + countryNo + "']").val();
         var gradNum = $("#gradNum").val();
@@ -243,7 +292,7 @@
                     searchSubmit();
                     $("#msg").text("新增成功");
                 } else {
-                    $("#msg").text("新增失敗");
+                    $("#msg").text("新增失敗!! 請確保輸入值為整數且不為負");
                 }
 
 
@@ -253,6 +302,82 @@
             }
         });
 
+    }
+
+    function deleteSubmit(butObj) {
+        var year = butObj.getAttribute("year");
+        var countryDeptNo = butObj.getAttribute("countryDeptNo");
+
+        var isOk = confirm("確定要刪除嗎? 此動作無法復原喔");
+        if (isOk) {
+            $.ajax({
+                type: "GET",
+                url: "/Content/MgtGraduation/DeleteGrad",
+                data: {
+                    year: year,
+                    countryDeptNo: countryDeptNo,
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    //console.log(data);
+                    if (result == true) {
+                        searchSubmit();
+                        $("#msg").text("刪除成功");
+                    } else {
+                        $("#msg").text("刪除失敗");
+                    }
+
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+    }
+
+    function updateSubmit(butObj) {
+        var year = butObj.getAttribute("year");
+        var countryDeptNo = butObj.getAttribute("countryDeptNo");
+        var gradNum = $(butObj).parent().find("#rowEditInput").val();
+
+        var isOk = confirm("確定要更改嗎? 此動作無法復原喔");
+        if (isOk) {
+            $.ajax({
+                type: "GET",
+                url: "/Content/MgtGraduation/UpdateGrad",
+                data: {
+                    year: year,
+                    countryDeptNo: countryDeptNo,
+                    graduationNumber: gradNum
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    //console.log(data);
+                    if (result == true) {
+                        searchSubmit();
+                        $("#msg").text("更新成功");
+                    } else {
+                        $("#msg").text("更新失敗!! 請確保輸入值為整數且不為負");
+                    }
+
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
     }
 
 
