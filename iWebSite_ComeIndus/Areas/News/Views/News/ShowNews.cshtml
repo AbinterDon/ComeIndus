@@ -69,6 +69,17 @@
         .fl-table tr:nth-child(even) {
             background: #F8F8F8;
         }
+
+    .Newstitle {
+        white-space: normal;
+        max-width: 200px;
+        
+    }
+    .NewsContent {
+        white-space: normal;
+        max-width: 250px;
+       
+    }
 </style>
 
 <head>
@@ -100,8 +111,8 @@
                         <!-- ko ifnot: IsEdit() && Item() == @row["NewsNo"] -->
                         <td>@row["NewsStart"]</td>
                         <td>@row["TypeName"]</td>
-                        <td>@row["NewsTitle"]</td>
-                        <td>@row["NewsContent"]</td>
+                        <td class="Newstitle">@row["NewsTitle"]</td>
+                        <td class ="NewsContent">@row["NewsContent"]</td>
                         <td>@row["NewsHits"]</td>
                         @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
                         {
