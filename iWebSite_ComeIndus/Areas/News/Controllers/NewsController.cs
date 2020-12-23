@@ -34,7 +34,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         public ActionResult NewNews()
         {
             //SQL Select all type
-            var sqlStr = string.Format("SELECT NewsTypeNo, TypeDescription FROM [dbo].[NewsType]");
+            var sqlStr = string.Format("SELECT NewsTypeNo, TypeName FROM [dbo].[NewsType]");
             var data = _DB_GetData(sqlStr);
 
             NewsTypes = new List<NewsTypeModel>();
@@ -42,7 +42,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             {
                 NewsTypeModel model = new NewsTypeModel();
                 model.NewsTypeNo = row.ItemArray.GetValue(0).ToString();
-                model.TypeDescription = row.ItemArray.GetValue(1).ToString();
+                model.TypeName = row.ItemArray.GetValue(1).ToString();
                 NewsTypes.Add(model);
             }
 
@@ -62,7 +62,10 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             string checkMsg = "";
             
             // 長度限制
-            if (Model.NewsContent.Length > 200 || Model.NewsTitle.Length > 50 || Model.NewsContent == null || Model.NewsTitle == null)
+            if (string.IsNullOrEmpty(Model.NewsTitle) ||
+                string.IsNullOrEmpty(Model.NewsContent) ||
+                Model.NewsContent.Length > 200 ||
+                Model.NewsTitle.Length > 50)
             {
 
                 resMsg = "標題或內容不符合長度限制!! 標題與內容不可為空，且標題要在50字內，內容不可超過200字";
@@ -70,6 +73,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 checkMsg = "false";
                 
             }
+            
             else
             {
                 checkMsg = "true";
@@ -109,6 +113,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 if (check == 1)
                 {
                     resMsg = "新增成功";
+                    
                     //return View("NewNews", "Success!!");
                 }
                 else
@@ -122,8 +127,18 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             ViewData["NewsTypes"] = NewsTypes;
             ViewData["checkMsg"] = checkMsg;
             TempData["Message"] = resMsg;
-                
-            return View();
+
+            if(checkMsg == "false" || resMsg == "Failed")
+             {
+                 return View(Model);
+             }
+             /*else
+             {
+                 //return RedirectToAction("ShowNews");
+                 return View(Model);
+             }
+            */
+            return View(Model);
         }
 
         /// <summary>
@@ -134,7 +149,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         public ActionResult ShowNews(string NewsNo)
         {
             //SQL Select all type
-            var sqlTypes = string.Format("SELECT NewsTypeNo, TypeDescription FROM [dbo].[NewsType]");
+            var sqlTypes = string.Format("SELECT NewsTypeNo, TypeName FROM [dbo].[NewsType]");
             var dataTypes = _DB_GetData(sqlTypes);
 
             NewsTypes = new List<NewsTypeModel>();
@@ -142,7 +157,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             {
                 NewsTypeModel model = new NewsTypeModel();
                 model.NewsTypeNo = row.ItemArray.GetValue(0).ToString();
-                model.TypeDescription = row.ItemArray.GetValue(1).ToString();
+                model.TypeName = row.ItemArray.GetValue(1).ToString();
                 NewsTypes.Add(model);
             }
 
@@ -185,7 +200,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             if (!string.IsNullOrEmpty(NewsNo))
             {
                 var sqlStr = string.Format("" +
-                        "SELECT NewsNo, [dbo].[News].NewsTypeNo, TypeDescription, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
+                        "SELECT NewsNo, [dbo].[News].NewsTypeNo, TypeName, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
                         "FROM [dbo].[News] INNER JOIN [dbo].[NewsType] on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
                         "where NewsNo = {0}", NewsNo
                     );
@@ -216,7 +231,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             {
                 //SQL 順便做有效時間塞選
                 var sqlStr = string.Format("" +
-                        "SELECT {0} NewsNo, [dbo].[News].NewsTypeNo, TypeDescription, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
+                        "SELECT {0} NewsNo, [dbo].[News].NewsTypeNo, TypeName, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
                         "FROM [dbo].[News] INNER JOIN [dbo].[NewsType] on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
                         "where NewsEnd >= (SELECT convert(varchar, getdate(), 111)) " +
                         "ORDER BY NewsStart DESC", GetCount
@@ -250,7 +265,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                         {
                             NewsNo = row.ItemArray.GetValue(0).ToString(),
                             NewsTypeNo = row.ItemArray.GetValue(1).ToString(),
-                            TypeDescription = row.ItemArray.GetValue(2).ToString(),
+                            TypeName = row.ItemArray.GetValue(2).ToString(),
                             NewsTitle = row.ItemArray.GetValue(3).ToString(),
                             NewsContent = row.ItemArray.GetValue(4).ToString(),
                             NewsHits = Convert.ToInt32(row.ItemArray.GetValue(5)),

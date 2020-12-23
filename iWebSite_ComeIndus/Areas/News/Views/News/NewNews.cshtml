@@ -1,4 +1,5 @@
-﻿@using iWebSite_ComeIndus.Areas.News.Models
+﻿@model NewsModel
+@using iWebSite_ComeIndus.Areas.News.Models
 <head>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -39,7 +40,7 @@
             color: #1D3255;
             padding: 20px;
             width: 500px;
-            height: 480px;
+            height: 520px;
             border-radius: 10px;
             border: 2px solid #3BB0A2;
         }
@@ -62,41 +63,62 @@
 <div class="box">
     <h2>最新消息</h2>
     <div class="formstyle">
-        <form action="NewNews" method="post">
+        <form action="NewNews" method="post" name="theForm" onsubmit="return checkForm(this)">
             <label>類型：</label>
             <select name="NewsTypeNo">
                 @{ List<NewsTypeModel> types = (List<NewsTypeModel>)ViewData["NewsTypes"];
                     foreach (var news in types)
                     {
-                        <option value=@news.NewsTypeNo>@news.TypeDescription</option>
+                        <option value=@news.NewsTypeNo>@news.TypeName</option>
                     } }
             </select>
+
             <label>標題：</label>
-            <input type="text" name="NewsTitle">
+            @if (Model != null && !string.IsNullOrEmpty(Model.NewsTitle))
+            {
+                <textarea name="NewsTitle" rows="3" cols="40">@Model.NewsTitle </textarea>
+            }
+            else
+            {
+                <textarea name="NewsTitle" rows="3" cols="40"></textarea>
+            }
+
             <label>內容：</label>
-            <textarea name="NewsContent" rows="5" cols="40"></textarea>
+            @if (Model != null && !string.IsNullOrEmpty(Model.NewsContent))
+            {
+                <textarea name="NewsContent" rows="5" cols="40">@Model.NewsContent</textarea>
+            }
+            else
+            {
+                <textarea name="NewsContent" rows="5" cols="40"></textarea>
+            }
+
+
             <label>開始日期：</label>
+
             <div class="row">
                 <div class="form-group col-md-5">
                     <div class="input-group date" id="startDate">
-                        <input type="text" class="form-control" name="NewsStart" />
+                        <input type="text" class="form-control" name="NewsStart" id="startTime" />
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </span>
                     </div>
                 </div>
             </div>
+
             <label>結束日期：</label>
             <div class="row">
                 <div class="form-group col-md-5">
                     <div class="input-group date" id="endDate">
-                        <input type="text" class="form-control" name="NewsEnd" />
+                        <input type="text" class="form-control" name="NewsEnd" id="endTime" />
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </span>
                     </div>
                 </div>
             </div>
+            <span class="mb-4" style="font-size:15px ; color:red" id="checkDate"></span>
             <input type="submit" value="送出" id="sendMsg">
         </form>
 
@@ -104,11 +126,19 @@
 
 </div>
 
-@{ if (ViewData["checkMsg"] != null)
+@{ if (ViewData["checkMsg"] == "true")
     {
         <script type="text/javascript">
         var message = @Html.Raw(Json.Serialize(ViewData["result"]));
-        alert(message);
+            alert(message);
+            document.location.href = "/News/News/ShowNews";
+        </script>
+    }
+    else if (ViewData["checkMsg"] == "false")
+    {
+        <script type="text/javascript">
+            var message = @Html.Raw(Json.Serialize(ViewData["result"]));
+            alert(message);
         </script>
     }
 
@@ -117,17 +147,67 @@
 <!--<span style="font-size:30px">@ViewData["result"]</span>-->
 
 <script type="text/javascript">
-    $('#startDate').datetimepicker({
-        format: 'YYYY/MM/DD',
-        locale: moment.locale('zh-cn'),
-        minDate: new Date()
-    });
+    let start = new Date();
+    console.log(typeof (start), "start", start);
 
+
+
+   // $(document).ready(function () {
+        $('#startDate').datetimepicker({
+            format: 'YYYY/MM/DD',
+            locale: moment.locale('zh-cn'),
+            minDate: new Date()
+
+        });
     $('#endDate').datetimepicker({
-        format: 'YYYY/MM/DD',
-        locale: moment.locale('zh-cn')
-    });
+            format: 'YYYY/MM/DD',
+            locale: moment.locale('zh-cn'),
+            minDate: new Date()
+        });
+
+   // });
 
 
+    function getTime() {
+        /*
+         var dateStart = $("#startTime").val();
+         dateStart = dateStart.replace("-", "/");
+         start = dateStart;
+         $('#endDate').data("DateTimePicker").minDate(start);
+         $('#endDate').data("DateTimePicker").defaultDate(start);
 
-</script>
+         */
+
+        var dateStart = $("#startTime").val();
+
+        var dateEnd = $("#endTime").val();
+
+        dateStart = dateStart.replace("-", "/");
+        dateEnd = dateEnd.replace("-", "/");
+        start = dateStart;
+
+        if (dateStart == "" || dateEnd == "" || dateStart > dateEnd) {
+
+            return false;
+
+        }
+        else {
+            return true;
+
+        }
+    }
+    function checkForm() {
+        var frm = document.forms["theForm"];
+        if (!getTime()) {
+            alert("時間不可為空，且結束時間不可比開始時間早");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    //var continueCheck = window.setInterval("getTime()");
+
+
+        </script>

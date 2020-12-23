@@ -99,7 +99,7 @@
                     <tr>
                         <!-- ko ifnot: IsEdit() && Item() == @row["NewsNo"] -->
                         <td>@row["NewsStart"]</td>
-                        <td>@row["TypeDescription"]</td>
+                        <td>@row["TypeName"]</td>
                         <td>@row["NewsTitle"]</td>
                         <td>@row["NewsContent"]</td>
                         <td>@row["NewsHits"]</td>
@@ -117,12 +117,12 @@
                         <!-- ko if: IsEdit() && Item() == @row["NewsNo"] -->
                         <td>@row["NewsStart"]</td>
                         <td>
-                            <select name="NewsTypeNo" id="TypeDescription">
+                            <select name="NewsTypeNo" id="TypeName">
                                 @{ List<NewsTypeModel> types = (List<NewsTypeModel>)ViewData["NewsTypes"];
-                                    <option value=@row["NewsTypeNo"] style="display:none">@row["TypeDescription"]</option>
+                                    <option value=@row["NewsTypeNo"] style="display:none">@row["TypeName"]</option>
                                     foreach (var news in types)
                                     {
-                                        <option value=@news.NewsTypeNo>@news.TypeDescription</option>
+                                        <option value=@news.NewsTypeNo>@news.TypeName</option>
                                     }
                                 }
                             </select>
@@ -135,7 +135,7 @@
                         </td>
                         <td>@row["NewsHits"]</td>
                         <td>
-                            <button class="btn" type="button" onclick="saveNews(@row["NewsNo"], 'TypeDescription', 'NewsTitle', 'NewsContent')">確認</button>
+                            <button class="btn" type="button" onclick="saveNews(@row["NewsNo"], 'TypeName', 'NewsTitle', 'NewsContent')">確認</button>
                             <span>&nbsp;&nbsp;</span>
                             <button class="btn" type="button" onclick="cancel(@row["NewsNo"])">取消</button>
                         </td>
@@ -162,8 +162,8 @@
         this.Item(data);
     }
 
-    function saveNews(data, TypeDescription, NewsTitle, NewsContent) {
-        newsTypeNo = document.getElementById(TypeDescription).value;
+    function saveNews(data, TypeName, NewsTitle, NewsContent) {
+        newsTypeNo = document.getElementById(TypeName).value;
         newsTitle = document.getElementById(NewsTitle).value;
         newsContent = document.getElementById(NewsContent).value;
 

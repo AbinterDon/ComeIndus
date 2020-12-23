@@ -9,7 +9,7 @@ namespace iWebSite_ComeIndus.Areas.News.Models
     public class NewsTypeModel
     {
         public string NewsTypeNo { get; set; }
-        public string TypeDescription { get; set; }
+        public string TypeName { get; set; }
     }
     public class NewsModel : NewsTypeModel
     {
