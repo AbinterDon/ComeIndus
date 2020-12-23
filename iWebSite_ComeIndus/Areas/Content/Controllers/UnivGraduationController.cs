@@ -22,12 +22,21 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
         public IActionResult DiffCountry()
         {
+            //目前登入權限
+            var Authority = getUserAuthority();
 
+            //權限
+            ViewData["Authority"] = Authority;
             return View("GraduationFromDiffCountry", getTime());
         }
 
         public IActionResult DiffYear()
         {
+            //目前登入權限
+            var Authority = getUserAuthority();
+
+            //權限
+            ViewData["Authority"] = Authority;
             return View("GraduationFromDiffYear", getTime());
         }
 
@@ -121,7 +130,6 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         [HttpGet()]
         public DeptGradModel GraduationFromDiffYear(string year = "0", string country="")
         {
-
             var sqlStr = string.Format("select [CountryNo], [CountryName] from Countries where CountryName = {0}", SqlVal2(country));
             var data = _DB_GetData(sqlStr);
 

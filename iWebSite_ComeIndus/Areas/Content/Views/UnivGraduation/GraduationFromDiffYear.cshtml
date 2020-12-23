@@ -11,6 +11,7 @@
             right: 20px;
             bottom: 10px;
         }
+
         .source {
             position: absolute;
             right: 540px;
@@ -25,6 +26,7 @@
             color: #3BB0A2;
             font-weight: bold;
         }
+
         .top-left {
             position: absolute;
             left: 0px;
@@ -32,6 +34,7 @@
             color: #1D3255;
             font-weight: bold;
         }
+
         .top-left-dwon {
             position: absolute;
             left: 100px;
@@ -39,17 +42,21 @@
             color: #1D3255;
             font-weight: bold;
         }
-
     </style>
 
 </head>
 <header id="tai">
-    <div class="button">
-        <a class="button btn btn-link btn-lg top-left" href="/content/UnivDepartment/">科系管理</a>
-     </div>
-    <div class="button">
-        <a class="button btn btn-link btn-lg top-left-dwon" href="/content/MgtGraduation">畢業人數管理</a>
-    </div>
+    @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+    {
+        <div class="button">
+            <a class="button btn btn-link btn-lg top-left" href="/content/UnivDepartment/">科系管理</a>
+        </div>
+        <div class="button">
+            <a class="button btn btn-link btn-lg top-left-dwon" href="/content/MgtGraduation">畢業人數管理</a>
+        </div>
+
+    }
+
     <div class="button">
         <a class="button btn btn-link btn-lg top" href="/content/UnivGraduation/DiffCountry">前往不同國比較>></a>
     </div>
@@ -78,7 +85,10 @@
             <div class="chartdiv" id="chartdiv1"></div>
             <div class="chartdiv" id="chartdiv2"></div>
         </div>
-        <button class="btn btn-light btn-lg down" onclick="download('taiwan')">下載</button>
+        @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+        {
+            <button class="btn btn-light btn-lg down" onclick="download('taiwan')">下載</button>
+        }
     </div>
 </header>
 <header id="sin">
@@ -104,7 +114,11 @@
             <div class="chartdiv" id="chartdiv3"></div>
             <div class="chartdiv" id="chartdiv4"></div>
         </div>
-        <button id="download" class="btn btn-light btn-lg down" onclick="download('singapore')">下載</button>
+        @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+        {
+            <button id="download" class="btn btn-light btn-lg down" onclick="download('singapore')">下載</button>
+        }
+
         <a href="https://data.gov.sg/dataset/universities-intake-enrolment-and-graduates-by-course" class="source">資料來源:data.gov.sg</a>
     </div>
 </header>
@@ -177,7 +191,7 @@
         });
     }
 
-    function drawChart(data, name) {  
+    function drawChart(data, name) {
         am4core.ready(function () {
             var chartIndex = am4core.registry.baseSprites.findIndex((v) => v.htmlContainer.id == name);
             if (chartIndex != -1) {

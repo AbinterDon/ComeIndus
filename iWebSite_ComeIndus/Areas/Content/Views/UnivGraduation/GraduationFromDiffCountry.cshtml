@@ -43,12 +43,16 @@
 
 <!-- HTML -->
 <header id="tai">
-    <div class="button">
-        <a class="button btn btn-link btn-lg top-left" href="/content/UnivDepartment/">科系管理</a>
-    </div>
-    <div class="button">
-        <a class="button btn btn-link btn-lg top-left-dwon" href="/content/MgtGraduation">畢業人數管理</a>
-    </div>
+    @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+    {
+        <div class="button">
+            <a class="button btn btn-link btn-lg top-left" href="/content/UnivDepartment/">科系管理</a>
+        </div>
+        <div class="button">
+            <a class="button btn btn-link btn-lg top-left-dwon" href="/content/MgtGraduation">畢業人數管理</a>
+        </div>
+
+    }
     <div class="button">
         <a class="button btn btn-link btn-lg top" href="/Content/UnivGraduation/diffyear">前往同國比較>></a>
     </div>
@@ -59,7 +63,7 @@
             <h2 class="sin">Singapore</h2>
         </div>
         <div class="years">
-            <select class="taiyears" onchange="getData(this)">
+            <select id="selectYear" class="taiyears" onchange="getData(this)">
                 @foreach (var year in Model)
                 {
                     <option value="@year.Year">@year.Year 年</option>
@@ -72,7 +76,10 @@
             <div class="chartdiv" id="chartdiv1"></div>
             <div class="chartdiv" id="chartdiv2"></div>
         </div>
-        <button class="btn btn-light btn-lg down">下載</button>
+        @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+        {
+            <button class="btn btn-light btn-lg down" onclick="download()">下載</button>
+        }
         <a href="https://data.gov.sg/dataset/universities-intake-enrolment-and-graduates-by-course" class="source">資料來源:data.gov.sg</a>
     </div>
 </header>
@@ -81,7 +88,8 @@
 <script>
     //下載
     function download() {
-        var year = document.getElementById("selectYear").value;;
+        var year = document.getElementById("selectYear").value;
+        console.log(`/Content/UnivGraduation/Download?Year=${year}&Country=7,8`);
         fetch(`/Content/UnivGraduation/Download?Year=${year}&Country=7,8`).then(resp => resp.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
@@ -122,7 +130,7 @@
                 var sinDeptName = sinobj.deptName
                 var singGadNum = sinobj.graduationNumber
                 var inum2 = []
-                sinDeptName.forEach((v, i) => inum2.push({ "depName": sinDeptName[i], "studentNum": singGadNum[i] }));
+                sinDeptName.forEach((v, i) => inum2.push({ "deptName": sinDeptName[i], "studentNum": singGadNum[i] }));
                 drawChart(inum2, "chartdiv2")
                
             },
