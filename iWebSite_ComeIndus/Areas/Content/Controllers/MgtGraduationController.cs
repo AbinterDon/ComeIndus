@@ -111,12 +111,25 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
         public bool InsertGrad(string year, string countryDeptNo, string gradNum)
         {
-            // admin check
+            
             if (getUserAuthority() != "1")
-            {
+            {   // admin check
                 return false;
             }
+            else
+            {
+                // 檢查是否重複新增
+                var sqlSelect = string.Format("select 1 from [dbo].[Graduation] " +
+                    "where GraduationYear={0} and CountryDeptNo={1}", SqlVal2(year), SqlVal2(countryDeptNo));
 
+                var dataSelect = _DB_GetData(sqlSelect);
+                if(dataSelect.Rows.Count > 0)
+                {
+                    return false;
+                }
+            }
+
+            
             int gradNumInt;
 
             if (!int.TryParse(gradNum, out gradNumInt) || gradNumInt < 0)

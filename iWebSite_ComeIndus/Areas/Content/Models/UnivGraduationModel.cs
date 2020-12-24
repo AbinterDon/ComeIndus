@@ -15,23 +15,19 @@ namespace iWebSite_ComeIndus.Areas.Content.Models
         public string GraduationNumber { get; set; }
     }
 
-    public class DeptGradModel
-    {
-        public List<string> DeptName { get; set; }
-        public List<int> GraduationNumber { get; set; }
-        // default value
-        public DeptGradModel()
-        {
-            DeptName = new List<string>();
-            GraduationNumber = new List<int>();
-        }
-    }
-
-    public class CountryDeptModel:DeptGradModel
+    public class CountryDeptModel
     {
         public string CountryNo { get; set; }
         public string CountryName { get; set; }
         public List<string> CountryDeptNo { get; set; }
+        public List<string> DeptName { get; set; }
+        public List<int> GraduationNumber { get; set; }
+        // default value
+        public CountryDeptModel()
+        {
+            DeptName = new List<string>();
+            GraduationNumber = new List<int>();
+        }
     }
 
     public class TimeModel

@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 
 namespace iWebSite_ComeIndus.Areas.Content.Models
 {
-    public class UnivDepartmentModel
+    public class DeptModel
     {
+        public string DeptNo { get; set; }
         public string DeptName { get; set; }
         public string DeptDescription { get; set; }
-        public DateTime CreateTime { get; set; }
-        public DateTime ModifyTime { get; set; }
+        public string CreateTime { get; set; }
+        public string ModifyTime { get; set; }
+    }
+
+    public class MgtDeptModel
+    {
+        public string CountryNo { get; set; }
+        public string CountryName { get; set; }
+        public List<DeptModel> Depts { get; set; }
     }
 
    

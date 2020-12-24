@@ -66,10 +66,10 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         /// <param name="countryNo"></param>
         /// <param name="year"></param>
         /// <returns></returns>
-        private DeptGradModel getGradData(string countryNo="-1", string year="0") 
+        private CountryDeptModel getGradData(string countryNo="-1", string year="0") 
         {
             var sqlStr = string.Format(
-                    "select [DeptName], [GraduationNumber], [GraduationYear] " +
+                    "select [DeptName], [GraduationNumber], [GraduationYear]" +
                     "from[dbo].[Department] as a " +
                     "inner join( " +
                     "select[CountryDeptNo],[CountryNo], [DeptNo] " +
@@ -86,7 +86,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
             var countryGradData = _DB_GetData(sqlStr);
 
-            DeptGradModel model = new DeptGradModel();
+            CountryDeptModel model = new CountryDeptModel();
 
             foreach (DataRow gradRow in countryGradData.Rows)
             {
@@ -103,19 +103,22 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         /// <param name="year"></param>
         /// <returns></returns>
         [HttpGet()]
-        public Dictionary<string, DeptGradModel> GraduationFromDiffCountry(string year="0")
+        public Dictionary<string, CountryDeptModel> GraduationFromDiffCountry(string year="0")
         {
             var sqlStr = string.Format("select [CountryNo], [CountryName] from Countries");
             var data = _DB_GetData(sqlStr);
 
-            Dictionary<string, DeptGradModel> graduationData = new Dictionary<string, DeptGradModel>();
+            Dictionary<string, CountryDeptModel> graduationData = new Dictionary<string, CountryDeptModel>();
 
             foreach (DataRow row in data.Rows)
             {
                 string countryNo = row.ItemArray.GetValue(0).ToString();
                 string countryName = row.ItemArray.GetValue(1).ToString();
 
-                graduationData[countryName] = getGradData(countryNo, year);
+                CountryDeptModel gradModel = getGradData(countryNo, year);
+                gradModel.CountryNo = countryNo;
+
+                graduationData[countryName] = gradModel;
             }
 
             return graduationData; 
@@ -128,20 +131,23 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         /// <param name="country"></param>
         /// <returns></returns>
         [HttpGet()]
-        public DeptGradModel GraduationFromDiffYear(string year = "0", string country="")
+        public CountryDeptModel GraduationFromDiffYear(string year = "0", string country="")
         {
             var sqlStr = string.Format("select [CountryNo], [CountryName] from Countries where CountryName = {0}", SqlVal2(country));
             var data = _DB_GetData(sqlStr);
 
-            foreach (DataRow row in data.Rows)
+            if (data.Rows.Count > 0)
             {
-                string countryNo = row.ItemArray.GetValue(0).ToString();
-                string countryName = row.ItemArray.GetValue(1).ToString();
+                string countryNo = data.Rows[0].ItemArray.GetValue(0).ToString();
+                string countryName = data.Rows[0].ItemArray.GetValue(1).ToString();
 
-                return getGradData(countryNo, year);
+                CountryDeptModel gradModel = getGradData(countryNo, year);
+                gradModel.CountryNo = countryNo;
+
+                return gradModel;
             }
 
-            return new DeptGradModel();
+            return new CountryDeptModel();
         }
 
         /// <summary>
