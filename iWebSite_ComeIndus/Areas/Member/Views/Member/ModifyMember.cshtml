@@ -1,38 +1,92 @@
 ﻿@model iWebSite_ComeIndus.Models.Member
 <html>
-    <head>
-    </head>
+<head>
+
+    <link href="~/css/memberInfor.css" rel="stylesheet" />
+</head>
     <body>
-        <form id="sign" action="/Account/Register" method="POST">
-            <!--onsubmit="register()"-->
-            <label>會員帳號:</label>
-            <input type="email" id="Account" name="Account">
-            <br><br>
-            <label>會員密碼:</label>
-            <input type="Password" id="Password" name="Password">
-            <br><br>
-            <label>確認密碼:</label>
-            <input type="Password" id="PasswordCheck" name="PasswordCheck">
-            <br><br>
-            <label>會員暱稱:</label>
-            <input type="text" id="Username" name="Username">
-            <br><br>
-            <label>真實姓名:</label>
-            <input type="text" id="Actualname" name="Actualname">
-            <br><br>
-            <label>會員性別:</label>
-            <select name="Gender">
-                <option value="0" selected>請選擇您的性別</option>
-                <option value="1">男</option>
-                <option value="2">女</option>
-                <option value="3">不願透漏</option>
-            </select>
-            <br><br>
-            <label>會員生日:</label>
-            <input type="date" id="Birthday" name="Birthday">
-            <br><br>
-            <input type="submit" value="註冊">
-        </form>
+        <div class="container member mt-10">
+
+            <div class="row">
+
+                <div class="col-3 d-flex flex-column ">
+                    <h6 class="title font-weight-bolder">會員中心</h6>
+
+                    <div id="button">
+                        <img id="showimg" src="~/source/imgupload.png" class="imgUpload mb-3" />
+                        <button id="uploadb" class="uploadbutton">上傳大頭照</button>
+                        <input type="file" id="inputFile" style="opacity: 0;">
+                    </div>
+
+                </div>
+
+                <div class="col-9">
+                    <h6 class="font-weight-bolder">個人資料修改</h6>
+                    <hr class="mt-2 border-grayinfo">
+                    <form class="text-grayinfo">
+                        <div class="form-group row">
+                            <label for="Account" class="col-3 col-sm-2 col-form-label">會員帳號</label>
+                            <div class="col-9 col-sm-10">
+                                <input type="text" class="form-control-plaintext" id="Account" value="email@example.com">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Actualname" class="col-3 col-sm-2 col-form-label">真實姓名</label>
+                            <div class="col-6 col-sm-5">
+                                <input type="text" class="form-control" id="Actualname" placeholder="" required>
+                            </div>
+                            <span id="ActualnameCheck"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Nickname" class="col-3 col-sm-2 col-form-label">會員暱稱</label>
+                            <div class="col-6 col-sm-5">
+                                <input type="text" class="form-control" id="Nickname" placeholder="" required>
+                            </div>
+                            <span id="NicknameCheck"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Password" class="col-4 col-sm-2 col-form-label">密碼</label>
+                            <div class="col-8 col-sm-5">
+                                <input type="text" class="form-control" id="Password" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="PasswordCheck" class="col-4 col-sm-2 col-form-label">再輸入一次密碼</label>
+                            <div class="col-8 col-sm-5">
+                                <input type="text" class="form-control" id="PasswordCheck" placeholder="">
+                                <span id="passCheck"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Birthday" class="col-3 col-sm-2 col-form-label">出生日期</label>
+                            <div class="col-6 col-sm-5">
+                                <input type="text" class="form-control" id="Birthday" placeholder="YYYY/MM/DD 例如：1980/01/01">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="gender" class="col-3 col-md-2 col-form-label">性別</label>
+                            <div class="col-4 col-md-3">
+                                <select class="form-control" id="gender">
+                                    <option>女</option>
+                                    <option>男</option>
+                                    <option>不願透露</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="changeButton form-group d-felx mt-5 justify-content-end">
+                            <button class="save mr-3">儲存</button>
+                            <button class="cancel">取消</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="~/js/memberInfor.js"></script>
         <br>
         @if (Model != null && Model.ok == false)
         {

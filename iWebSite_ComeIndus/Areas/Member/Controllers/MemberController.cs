@@ -3,17 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using iWebSite_ComeIndus.Controllers;
 
 namespace iWebSite_ComeIndus.Areas.Member.Controllers
 {
+    [Area(areaName: "Member")]
     public class MemberController : Controller
     {
-        [Area(areaName: "Member")]
+       
 
-        public ActionResult Index()
-        {
-            return View("ShowMember");
-        }
+        
 
         [HttpGet]
         public ActionResult DeleteMember()
