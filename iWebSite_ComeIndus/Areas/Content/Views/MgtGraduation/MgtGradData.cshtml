@@ -12,7 +12,6 @@
         min-width: 1000px;
         display: flex;
         justify-content: center;
-        background-color: white;
     }
     h2 {
         text-align: center;
@@ -69,14 +68,22 @@
         .fl-table tr:nth-child(even) {
             background: #F8F8F8;
         }
-        
+        label.coun{
+            color:white;
+        }
+        label.de{
+             color:white;
+        }
+        label.ye{
+            color:white;
+        }
 </style>
 
 
 <header>
     <div class="container">
         <div style="margin-top:100px">
-            <label>年份</label>
+            <label class="ye">年份</label>
             <select id="yearStartOption" onchange="yearOptionAdjust(this)">
                 <option value="*">all</option>
                 @foreach (var Time in Model.Years)
@@ -91,8 +98,8 @@
                     <option value="@Time.Year">@Time.Year</option>
                 }
             </select>
-
-            <label>國家</label>
+           
+            <label class="coun">國家</label>
             <select id="countryOption" onchange="displayDept(this)">
                 @foreach (var countryDept in Model.CountryDepts)
                 {
@@ -100,7 +107,7 @@
                 }
             </select>
 
-            <label>科系</label>
+            <label class="de">科系</label>
             @foreach (var countryDept in Model.CountryDepts)
             {
                 <select class="deptOptions" country="@countryDept.CountryNo">
