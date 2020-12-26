@@ -1,78 +1,99 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
+
 * {
-  font-family: "Oswald", 微軟正黑體;
+    font-family: "Oswald", 微軟正黑體;
 }
 
 html, body {
-  overflow-x: hidden;
-  font-size: 16px;
+    overflow-x: hidden;
+    font-size: 16px;
 }
 
 header {
-  position: relative;
-  background-color: #fff;
-  text-align: center;
+    position: relative;
+    background-color: #fff;
+    text-align: center;
 }
-header .container {
-  min-height: 700px;
-  min-width: 1000px;
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-pack: center;
-          justify-content: center;
+
+    header .container {
+        min-height: 700px;
+        min-width: 1000px;
+        display: flex;
+        justify-content: center;
+    }
+
+        header .container .years {
+            display: flex;
+            flex-direction: row;
+            position: absolute;
+            top: 100px;
+        }
+
+        header .container .title {
+            display: flex;
+            position: absolute;
+            top: 150px;
+            color: #1D3255;
+        }
+
+            header .container .title h2 {
+                font-size: 50px;
+            }
+
+            header .container .title .tai {
+                padding-left: 100px;
+                padding-right: 100px;
+            }
+
+            header .container .title .sin {
+                padding-left: 160px;
+                padding-right: 160px;
+                color: #3BB0A2;
+            }
+
+            header .container .title .chi {
+                padding-left: 100px;
+                padding-right: 100px;
+            }
+
+        header .container .box {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            position: absolute;
+            top: 250px;
+            min-width: 600px;
+        }
+
+        header .container .chartdiv {
+            background-color: transparent;
+            border: 1px solid #eee;
+            margin-right: 10px;
+            margin-left: 10px;
+            width: 400px;
+            height: 200px;
+            color: #fff;
+        }
+
+.down {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
 }
-header .container .years {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-          flex-direction: row;
-  position: absolute;
-  top: 200px;
-}
-header .container .title {
-  display: -webkit-box;
-  display: flex;
-  position: absolute;
-  top: 100px;
-  color: #1D3255;
-}
-header .container .title h2 {
-  font-size: 50px;
-}
-header .container .title .tai {
-  padding-right: 210px;
-}
-header .container .title .sin {
-  padding-left: 210px;
-  color: #3BB0A2;
-}
-header .container .box {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-          flex-direction: row;
-  -webkit-box-pack: center;
-          justify-content: center;
-  position: absolute;
-  top: 250px;
-  min-width: 600px;
-}
-header .container .chartdiv {
-  background-color: transparent;
-  border: 1px solid #eee;
-  margin-right: 10px;
-  margin-left: 10px;
-  width: 550px;
-  height: 350px;
-  color: #fff;
+
+.top {
+    position: absolute;
+    right: 0px;
+    top: 50px;
+    color: #3BB0A2;
+    font-weight: bold;
 }
 
 footer#footer {
-  background-color: #3BB0A2;
-  text-align: center;
+    background-color: #3BB0A2;
+    text-align: center;
 }
-footer#footer .text {
-  padding: 25px 0px;
-}
+
+    footer#footer .text {
+        padding: 25px 0px;
+    }

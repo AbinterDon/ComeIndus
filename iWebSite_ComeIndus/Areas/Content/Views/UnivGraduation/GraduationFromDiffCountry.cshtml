@@ -2,6 +2,7 @@
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="//cdn.amcharts.com/lib/4/plugins/sliceGrouper.js"></script>
 <head>
     <link rel="stylesheet" href="~/css/unisamestyle.css">
     <style>
@@ -12,7 +13,8 @@
         }
         .source {
             position: absolute;
-            right: 540px;
+            right: auto;
+            left:auto;
             bottom: 20px;
             letter-spacing: 3px;
         }
@@ -61,6 +63,7 @@
         <div class="title">
             <h2 class="tai">Taiwan</h2>
             <h2 class="sin">Singapore</h2>
+            <h2 class="chi">China</h2>
         </div>
         <div class="years">
             <select id="selectYear" class="taiyears" onchange="getData(this)">
@@ -72,9 +75,9 @@
             <span id="progress" style="color:black"></span>
         </div>
         <div class="box">
-
             <div class="chartdiv" id="chartdiv1"></div>
             <div class="chartdiv" id="chartdiv2"></div>
+            <div class="chartdiv" id="chartdiv3"></div>
         </div>
         @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
         {
@@ -89,15 +92,14 @@
     //下載
     function download() {
         var year = document.getElementById("selectYear").value;
-        console.log(`/Content/UnivGraduation/Download?Year=${year}&Country=7,8`);
-        fetch(`/Content/UnivGraduation/Download?Year=${year}&Country=7,8`).then(resp => resp.blob())
+        fetch(`/Content/UnivGraduation/Download?Year=${year}&Country=1,7,8`).then(resp => resp.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.style.display = 'none';
                 a.href = url;
                 // the filename you want
-                a.download = `UnivGraduation_${year}_Taiwan_Singapore.xlsx`;
+                a.download = `UnivGraduation_${year}_Taiwan_Singapore_China.xlsx`;
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
@@ -114,7 +116,7 @@
             dataType: "json",
             async: true,
             beforeSend: function () {
-               
+
             },
             success: function (data) {
                 console.log(data);
@@ -124,6 +126,7 @@
                 var gradNum = taiobj.graduationNumber
                 var inum = []
                 deptName.forEach((v, i) => inum.push({ "deptName": deptName[i], "studentNum": gradNum[i] }));
+                inum = inum.sort((a, b) => b.studentNum - a.studentNum);
                 drawChart(inum, "chartdiv1")
 
                 sinobj = data["新加坡"]
@@ -131,8 +134,17 @@
                 var singGadNum = sinobj.graduationNumber
                 var inum2 = []
                 sinDeptName.forEach((v, i) => inum2.push({ "deptName": sinDeptName[i], "studentNum": singGadNum[i] }));
+                inum2 = inum2.sort((a, b) => b.studentNum - a.studentNum);
                 drawChart(inum2, "chartdiv2")
-               
+
+                chiobj = data["中國"]
+                var chiDeptName = chiobj.deptName
+                var chigGadNum = chiobj.graduationNumber
+                var inum3 = []
+                chiDeptName.forEach((v, i) => inum3.push({ "deptName": chiDeptName[i], "studentNum": chigGadNum[i] }));
+                inum3 = inum3.sort((a, b) => b.studentNum - a.studentNum);
+                drawChart(inum3, "chartdiv3")
+
             },
             error: function (e) {
                 console.log(e);
@@ -146,6 +158,7 @@
             var chartIndex = am4core.registry.baseSprites.findIndex((v) => v.htmlContainer.id == name);
             if (chartIndex != -1) {
                 am4core.registry.baseSprites[chartIndex].data = data;
+                am4core.registry.baseSprites[chartIndex].children.values[1].disabled = data.length == 0 ? false : true;
             } else {
                 // Themes begin
                 am4core.useTheme(am4themes_animated);
@@ -153,14 +166,34 @@
 
                 // Create chart instance
                 var chart = am4core.create(name, am4charts.PieChart);
+
                 // Add data
                 chart.data = data;
+
                 // Add and configure Series
                 var pieSeries = chart.series.push(new am4charts.PieSeries());
                 pieSeries.dataFields.value = "studentNum";
                 pieSeries.dataFields.category = "deptName";
                 pieSeries.slices.template.stroke = am4core.color("#fff");
                 pieSeries.slices.template.strokeOpacity = 1;
+
+                pieSeries.labels.template.paddingTop = 0;
+                pieSeries.labels.template.paddingBottom = 0;
+                pieSeries.labels.template.paddingRight = 50;
+                pieSeries.labels.template.fontSize = 10;
+
+                var emptylabel = chart.createChild(am4core.Label);
+                emptylabel.text = "The chart contains no data";
+                emptylabel.fontSize = 20;
+                emptylabel.align = "center";
+                emptylabel.disabled = data.length == 0 ? false : true;
+
+                // plugin
+                var grouper = pieSeries.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
+                // grouper.threshold = 5;
+                grouper.limit = 7;
+                grouper.groupName = "Other";
+                grouper.clickBehavior = "zoom";
 
                 // This creates initial animation
                 pieSeries.hiddenState.properties.opacity = 1;
@@ -169,8 +202,7 @@
 
                 chart.hiddenState.properties.radius = am4core.percent(0);
             }
-
         }); // end am4core.ready()
     }
-    getData({ value: 2019 });
+    getData({ value: document.getElementById("selectYear").value });
 </script>
