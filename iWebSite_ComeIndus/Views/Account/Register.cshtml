@@ -18,19 +18,26 @@
         <div class="tab-content">
             <div id="signup">
                 <form action="/Account/Register" method="POST" name="signupform" id='signupform'>
+                    <!--真實姓名-->
                     <div class='fogroup'>
                         <input type='text' class='required' id='Actualname' name='Actualname' placeholder="Actualname">
                     </div>
                     <br>
+
+                    <!--暱稱-->
                     <div class='fogroup'>
                         <input type='text' class='required' id='Username' name='Username' placeholder="Username*">
                     </div>
                     <br>
+
+                    <!--帳號-->
                     <div class="fogroup">
-                        <input type='email' class='required' id='Account' name='Account' placeholder='Email Address*' onkeyup="verifyUser()">
+                        <input type='email' class='required' id='Account' name='Account' placeholder='Email Address*' onblur="CheckAccount();">
                     </div>
                     <br>
-                    <div class="formcell">
+
+                    <!--密碼-->
+                    @*<div class="formcell">
                         <div>
                             <input type="password" class='required'
                                    id="Password" name="Password" placeholder="Password*">
@@ -40,10 +47,21 @@
                                    id="PasswordCheck" name="PasswordCheck" placeholder="Repeat Password*">
                         </div>
                         <br>
+                    </div>*@
+
+                    <!--密碼-->
+                    <div class="fogroup">
+                        <input type='password' class='required' id='Password' name='Password' placeholder='Password*'>
                     </div>
+                    <br>
+                    
+                    <!--再輸入一次密碼-->
+                    <div class="fogroup">
+                        <input type='password' class='required' id='PasswordCheck' name='PasswordCheck' placeholder='Repeat Password*'>
+                    </div>
+                    <br>
 
-                    <br><br>
-
+                    <!--性別-->
                     <div class="sex">
                         <select id=Gender class='required' name="Gender">
                             <option value="0" selected>Gender*</option>
@@ -52,8 +70,9 @@
                             <option value="3">不願透漏</option>
                         </select>
                     </div>
-
                     <br>
+
+                    <!--生日-->
                     <div class="fogroup">
                         <label for="birthday">Enter your birthday</label>
 
@@ -74,3 +93,38 @@
     </div>
 </body>
 </html>
+
+<script>
+    //再寄送一次驗證碼
+    function CheckAccount() {
+        //帳號物件
+        var Account = $("#Account");
+
+        //是否為空
+        if (Account.val() != null && Account.val() != "" && AccountCheck()) {
+            //Ajax
+            $.ajax({
+                url: '/Account/DuplicateAccountCheck',
+                data: { "Account": Account.val() },
+                method: "POST",
+                async: true,
+                success: function (response) {
+                    //錯誤訊息移除
+                    $(".emailtip").remove();
+
+                    //是否該帳號已存在
+                    if (response) {
+                        //錯誤訊息
+                        var errMsg = "<span class='emailtip'><font color=#6FCCC1 ; font size=2>*該帳號已存在</font></span>";
+
+                        //顯示錯誤訊息
+                        Account.parent().append(errMsg);
+                    } 
+                },
+                error: function (xhr, status, error) {
+                    toastr.clear();
+                }
+            });
+        }
+    }
+</script>

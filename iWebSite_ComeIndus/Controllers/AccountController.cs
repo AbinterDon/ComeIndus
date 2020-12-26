@@ -30,7 +30,7 @@ namespace iWebSite_ComeIndus.Controllers
         [HttpPost]
         public ActionResult Login(AccountModels Model)
         {
-            //SQL Insert Member
+            //SQL Select Member
             var sqlStr = string.Format("select Account,Username,Password,MailCheck,PwdChangeCheck from [dbo].[Member] where Account = {0}", SqlVal2(Model.Account));
 
             //SQL Check
@@ -453,6 +453,34 @@ namespace iWebSite_ComeIndus.Controllers
             //登出後返回首頁
             //return View("~/Views/Home/Index.cshtml");
             return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// 檢查是否有重複的帳號了
+        /// </summary>
+        /// <param name="Account"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public bool DuplicateAccountCheck(string Account)
+        {
+            //是否為空
+            if (string.IsNullOrEmpty(Account)) return false;
+
+            //SQL Select Member
+            var sqlStr = string.Format("select Account from [dbo].[Member] where Account = {0}", SqlVal2(Account));
+
+            //SQL Check
+            var data = _DB_GetData(sqlStr);
+
+            //資料庫內是否有此帳號
+            if (data.Rows.Count > 0)
+            {
+                //已經有該帳號
+                return true;
+            }
+
+            //資料庫內目前沒此帳號
+            return false;
         }
     }
 }
