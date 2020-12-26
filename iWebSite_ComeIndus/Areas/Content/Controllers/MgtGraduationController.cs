@@ -147,9 +147,9 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                 " {0} " +
                 ",{1} " +
                 ",{2} " +
-                ",getDate() " +
-                ",getDate() " +
-                ",{3}) ", SqlVal2(countryDeptNo), SqlVal2(year), SqlVal2(gradNum), SqlVal2(Request.Cookies["account"]));
+                ",{3} " +
+                ",{4} " +
+                ",{5}) ", SqlVal2(countryDeptNo), SqlVal2(year), SqlVal2(gradNum), DBC.ChangeTimeZone(), DBC.ChangeTimeZone(), SqlVal2(Request.Cookies["account"]));
             
             var check = _DB_Execute(sqlStr);
 
@@ -206,11 +206,12 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
             var sqlStr = string.Format("UPDATE [dbo].[Graduation] " +
                 "SET [GraduationNumber] = {0} " +
-                ",[ModifyTime] = getDate() " +
-                ",[CreateUser] = {1} " +
+                ",[ModifyTime] = {1} " +
+                ",[CreateUser] = {2} " +
                 "WHERE " +
-                "CountryDeptNo={2} AND GraduationYear={3}",
-                SqlVal2(graduationNumber), 
+                "CountryDeptNo={3} AND GraduationYear={4}",
+                SqlVal2(graduationNumber),
+                DBC.ChangeTimeZone(),
                 SqlVal2(Request.Cookies["account"]), 
                 SqlVal2(countryDeptNo), 
                 SqlVal2(year));

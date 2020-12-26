@@ -38,6 +38,10 @@ namespace iWebSite_ComeIndus.Helper
                 /// 首頁最新消息數量
                 /// </summary>
                 IndexNewsCount,
+                /// <summary>
+                /// 系統時區
+                /// </summary>
+                SystemTimeZone,
                 #endregion 
 
                 #region 核心 Core
@@ -57,6 +61,11 @@ namespace iWebSite_ComeIndus.Helper
             /// 首頁最新消息數量
             /// </summary>
             public static string IndexNewsCount { get { return ConfigHelperMethods.GetConfig(AppSettingsKey.IndexNewsCount); } }
+
+            /// <summary>
+            /// 系統時區
+            /// </summary>
+            public static string SystemTimeZone { get { return ConfigHelperMethods.GetConfig(AppSettingsKey.SystemTimeZone); } }
 
             /// <summary>
             /// DB 連線字串

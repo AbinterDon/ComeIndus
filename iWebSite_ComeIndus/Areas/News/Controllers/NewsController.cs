@@ -101,8 +101,8 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                     SqlVal2(Model.NewsTitle),
                     SqlVal2(Model.NewsContent),
                     0,
-                    "getDate()",
-                    "getDate()",
+                    DBC.ChangeTimeZone(),
+                    DBC.ChangeTimeZone(),
                     SqlVal2(Model.NewsStart),
                     SqlVal2(Model.NewsEnd) + ")"
                 );
@@ -233,8 +233,8 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 var sqlStr = string.Format("" +
                         "SELECT {0} NewsNo, [dbo].[News].NewsTypeNo, TypeName, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
                         "FROM [dbo].[News] INNER JOIN [dbo].[NewsType] on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
-                        "where NewsEnd >= (SELECT convert(varchar, getdate(), 111)) " +
-                        "ORDER BY NewsStart DESC", GetCount
+                        "where NewsEnd >= (SELECT convert(varchar, {1}, 111)) " +
+                        "ORDER BY NewsStart DESC", GetCount, DBC.ChangeTimeZone()
                     );
 
                 //Return
@@ -298,7 +298,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 "SET [NewsTypeNo] = '" + NewsTypeNo + "', " +
                 "[NewsTitle] = '" + NewsTitle + "', " +
                 "[NewsContent] = '" + NewsContent + "', " +
-                "[ModifyTime] = getDate() " +
+                "[ModifyTime] = " + DBC.ChangeTimeZone() +
                 "WHERE [NewsNo] = '" + NewsNo + "'";
 
             var check = _DB_Execute(sqlStr);

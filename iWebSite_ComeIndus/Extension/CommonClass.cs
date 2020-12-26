@@ -460,5 +460,15 @@ namespace iWebSite_ComeIndus.Extension
 
             return RetV;
         }
+
+        /// <summary>
+        /// 切換時區
+        /// </summary>
+        /// <returns></returns>
+        public string ChangeTimeZone()
+        {
+            //取得本系統時區
+            return "SWITCHOFFSET(getdate(), '" + ConfigHelper.AppSettings.SystemTimeZone + "')";
+        }
     }
 }

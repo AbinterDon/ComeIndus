@@ -145,8 +145,8 @@ namespace iWebSite_ComeIndus.Controllers
                     SqlVal2(Model.PhotoURL),
                     SqlVal2(Model.MailCheck),
                     SqlVal2(Model.PwdChangeCheck),
-                    "getDate()",
-                    "getDate()",
+                    DBC.ChangeTimeZone(),
+                    DBC.ChangeTimeZone(),
                     SqlVal2(Model.Authority)+")"
                 );
 
@@ -365,8 +365,8 @@ namespace iWebSite_ComeIndus.Controllers
                     var sqlWhere = string.Format("Account = {0}", SqlVal2(Model.Account));
 
                     //sql str
-                    sqlStr = string.Format("UPDATE Member SET Password = {0}, PwdChangeCheck = {1}, ModifyTime = getdate() where {2} and 1=1",
-                        SqlVal2(SHA256_Encryption(pwd)), SqlVal2("1"), sqlWhere);
+                    sqlStr = string.Format("UPDATE Member SET Password = {0}, PwdChangeCheck = {1}, ModifyTime = {2} where {3} and 1=1",
+                        SqlVal2(SHA256_Encryption(pwd)), SqlVal2("1"), DBC.ChangeTimeZone(), sqlWhere);
 
                     //SQL Check Update成功(True)或失敗(False)
                     return _DB_Execute(sqlStr) == 1 ? true : false;
@@ -408,8 +408,8 @@ namespace iWebSite_ComeIndus.Controllers
             var sqlWhere = string.Format("Account = {0}", SqlVal2(Model.Account));
 
             //sql str
-            var sqlStr = string.Format("UPDATE Member SET Password = {0}, PwdChangeCheck = {1}, ModifyTime = getdate() where {2} and 1=1",
-                SqlVal2(SHA256_Encryption(Model.Password)), SqlVal2("0"), sqlWhere);
+            var sqlStr = string.Format("UPDATE Member SET Password = {0}, PwdChangeCheck = {1}, ModifyTime = {2} where {3} and 1=1",
+                SqlVal2(SHA256_Encryption(Model.Password)), SqlVal2("0"), DBC.ChangeTimeZone(), sqlWhere);
 
             //SQL Check Update成功(True)或失敗(False)
             if (_DB_Execute(sqlStr) == 1)

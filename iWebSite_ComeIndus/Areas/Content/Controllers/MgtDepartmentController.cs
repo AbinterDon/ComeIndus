@@ -54,8 +54,8 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                         "{3}",
                         SqlVal2(DeptName),
                         SqlVal2(DeptDescription),
-                        "getDate()",
-                        "getDate()" + ")"
+                        DBC.ChangeTimeZone(),
+                        DBC.ChangeTimeZone() + ")"
                     );
 
                 
@@ -74,9 +74,9 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                         "VALUES " +
                         "({0}, " +
                         " {1}, " +
-                        "getDate(), " +
-                        "getDate())", 
-                        CountryNo, insertedID);
+                        "{2}, " +
+                        "{3})", 
+                        CountryNo, insertedID, DBC.ChangeTimeZone(), DBC.ChangeTimeZone());
 
                     var check = _DB_Execute(sqlStr);
 
@@ -159,7 +159,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             string sqlStr = "UPDATE [dbo].[Department] " +
                 "SET [DeptName] = '" + DeptName + "', " +
                 "[DeptDescription] = '" + DeptDescription + "', " +
-                "[ModifyTime] = getDate() " +
+                "[ModifyTime] = " + DBC.ChangeTimeZone() +
                 "WHERE [DeptNo] = '" + DeptNo + "'";
 
             var check = _DB_Execute(sqlStr);

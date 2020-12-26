@@ -80,7 +80,7 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
                         SqlVal2(Request.Cookies["account"]),
                         SqlVal2(Title),
                         SqlVal2(Content),
-                        "getDate()" + ")"
+                        DBC.ChangeTimeZone() + ")"
                     );
 
                 var check = _DB_Execute(sqlStr);
