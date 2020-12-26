@@ -13,33 +13,42 @@
     @* 是否顯示驗證成功訊息 *@
     @if (Model != null && Model.Verified == true)
     {
-        <p>@Model.ResultMessage</p>
-        <a href="/">回首頁</a>
-    }
-    else
-    {
-        //驗證表單
-        <br><br><br>
-        <div class="form">
-            <form id="SendForm" action="/Account/MailVerify" onsubmit="return Verify();" method="POST">
-                <p class='update'>Please check your email</p>
-                <label>Your Account:@Model.Account</label>
-                <input type="hidden" id="Account" name="Account" value="@Model.Account">
-                <input type="hidden" id="Username" name="Username" value="@Model.Username">
-                <div class="formcell">
-                    <div>
-                        <input type="button" onclick="Resend();" class="btn btn-danger" id="emialcore" value="Sent">
+<br><br><br>
+                <div class="form">
+                    <p class='update'>@Model.ResultMessage</p>
+                    <br />
+
+                    <div class='nextbutton'>
+
+                        <button type="button" href="/Home/Index" class="next" onclick="location.href='/Home/Index'">回首頁</button>
+
                     </div>
-                    <div>
-                        <input type="text" class='required' id="VerificationCode" name="VerificationCode" placeholder="Verification Code...">
-                    </div>
-                </div>
-            </form>
-            <br />
-            @* 驗證 *@
-            <button type="submit" onclick="Verify();" class="next">Verify</button>
-        </div>
-    }
+
+                </div> }
+                            else
+                            {
+                                //驗證表單
+                                <br><br><br>
+                                <div class="form">
+                                    <form id="SendForm" action="/Account/MailVerify" onsubmit="return Verify();" method="POST">
+                                        <p class='update'>Please check your email</p>
+                                        <label>Your Account:@Model.Account</label>
+                                        <input type="hidden" id="Account" name="Account" value="@Model.Account">
+                                        <input type="hidden" id="Username" name="Username" value="@Model.Username">
+                                        <div class="formcell">
+                                            <div>
+                                                <input type="button" onclick="Resend();" class="btn btn-danger" id="emialcore" value="Sent">
+                                            </div>
+                                            <div>
+                                                <input type="text" class='required' id="VerificationCode" name="VerificationCode" placeholder="Verification Code...">
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <br />
+                                    @* 驗證 *@
+                                    <button type="submit" onclick="Verify();" class="next">Verify</button>
+                                </div>
+                            }
     <br>
 
     @* 是否要顯示錯誤訊息 *@
