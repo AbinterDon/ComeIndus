@@ -83,8 +83,11 @@
 </style>
 
 <head>
+   
     <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    
+
 </head>
 
 <header>
@@ -159,9 +162,11 @@
 </header>
 
 <script type="text/javascript">
+    
     this.IsEdit = ko.observable(false);
     this.Item = ko.observable(0);
     ko.applyBindings($("#NewsInfo").get(0));
+    
 
     function editNews(data) {
         this.IsEdit(true);
@@ -177,7 +182,11 @@
         newsTypeNo = document.getElementById(TypeName).value;
         newsTitle = document.getElementById(NewsTitle).value;
         newsContent = document.getElementById(NewsContent).value;
-
+        if (newsTitle.length == 0 || newsContent.length == 0||
+            newsTitle.length > 50 || newsContent.length > 200) {
+            alert("標題與內容不可為空，且標題要在50字內，內容不可超過200字");
+            return false;
+        }
         this.IsEdit(false);
         this.Item(data);
 
