@@ -99,7 +99,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                     "{7}",
                     SqlVal2(Model.NewsTypeNo),
                     SqlVal2(Model.NewsTitle),
-                    SqlVal2(Model.NewsContent),
+                    SqlVal2(Model.NewsContent.Replace("\n", "<br>")),
                     0,
                     DBC.ChangeTimeZone(),
                     DBC.ChangeTimeZone(),
@@ -296,8 +296,8 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             string resMsg = "";
             string sqlStr = "UPDATE [dbo].[News] " +
                 "SET [NewsTypeNo] = '" + NewsTypeNo + "', " +
-                "[NewsTitle] = '" + NewsTitle + "', " +
-                "[NewsContent] = '" + NewsContent + "', " +
+                "[NewsTitle] = N'" + NewsTitle + "', " +
+                "[NewsContent] = N'" + NewsContent.Replace("\n", "<br>") + "', " +
                 "[ModifyTime] = " + DBC.ChangeTimeZone() +
                 "WHERE [NewsNo] = '" + NewsNo + "'";
 

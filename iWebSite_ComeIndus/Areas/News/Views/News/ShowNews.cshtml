@@ -73,7 +73,7 @@
     .Newstitle {
         white-space: normal;
         max-width: 200px;
-        
+
     }
     .NewsContent {
         white-space: normal;
@@ -83,10 +83,10 @@
 </style>
 
 <head>
-   
+
     <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-    
+
 
 </head>
 
@@ -115,7 +115,7 @@
                         <td>@row["NewsStart"]</td>
                         <td>@row["TypeName"]</td>
                         <td class="Newstitle">@row["NewsTitle"]</td>
-                        <td class ="NewsContent">@row["NewsContent"]</td>
+                        <td class="NewsContent">@Html.Raw(@row["NewsContent"])</td>
                         <td>@row["NewsHits"]</td>
                         @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
                         {
@@ -145,7 +145,7 @@
                             <input type="text" name="NewsTitle" value="@row["NewsTitle"]" id="NewsTitle">
                         </td>
                         <td>
-                            <textarea name="NewsContent" rows="5" cols="40" id="NewsContent">@row["NewsContent"]</textarea>
+                            <textarea name="NewsContent" rows="5" cols="40" id="NewsContent">@Html.Raw(@row["NewsContent"])</textarea>
                         </td>
                         <td>@row["NewsHits"]</td>
                         <td>
@@ -162,11 +162,11 @@
 </header>
 
 <script type="text/javascript">
-    
+
     this.IsEdit = ko.observable(false);
     this.Item = ko.observable(0);
     ko.applyBindings($("#NewsInfo").get(0));
-    
+
 
     function editNews(data) {
         this.IsEdit(true);
