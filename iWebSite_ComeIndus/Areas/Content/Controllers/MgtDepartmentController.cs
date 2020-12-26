@@ -157,8 +157,8 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
             string resMsg = "";
             string sqlStr = "UPDATE [dbo].[Department] " +
-                "SET [DeptName] = '" + DeptName + "', " +
-                "[DeptDescription] = '" + DeptDescription + "', " +
+                "SET [DeptName] = N'" + DeptName + "', " +
+                "[DeptDescription] = N'" + DeptDescription + "', " +
                 "[ModifyTime] = " + DBC.ChangeTimeZone() +
                 "WHERE [DeptNo] = '" + DeptNo + "'";
 
