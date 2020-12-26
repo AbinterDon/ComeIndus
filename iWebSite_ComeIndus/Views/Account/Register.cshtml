@@ -93,38 +93,3 @@
     </div>
 </body>
 </html>
-
-<script>
-    //再寄送一次驗證碼
-    function CheckAccount() {
-        //帳號物件
-        var Account = $("#Account");
-
-        //是否為空
-        if (Account.val() != null && Account.val() != "" && AccountCheck()) {
-            //Ajax
-            $.ajax({
-                url: '/Account/DuplicateAccountCheck',
-                data: { "Account": Account.val() },
-                method: "POST",
-                async: true,
-                success: function (response) {
-                    //錯誤訊息移除
-                    $(".emailtip").remove();
-
-                    //是否該帳號已存在
-                    if (response) {
-                        //錯誤訊息
-                        var errMsg = "<span class='emailtip'><font color=#6FCCC1 ; font size=2>*該帳號已存在</font></span>";
-
-                        //顯示錯誤訊息
-                        Account.parent().append(errMsg);
-                    } 
-                },
-                error: function (xhr, status, error) {
-                    toastr.clear();
-                }
-            });
-        }
-    }
-</script>

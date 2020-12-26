@@ -17,14 +17,48 @@ $(document).ready(function () {
 
     //註冊按鈕 事件
     $("#getstart").click(function () {
+        console.log(UsernameCheck());
+        console.log(CheckAccount());
+        console.log(PasswordCheck());
+        console.log(RepeatPwdCheck());
+        console.log(GenderCheck());
+
         //註冊條件檢查 & BirthdayCheck()
         if (UsernameCheck() &
             AccountCheck() &
             PasswordCheck() &
             RepeatPwdCheck() &
             GenderCheck()) {
-            //送出表單 註冊
-            document.signupform.submit();
+
+            //帳號物件
+            var Account = $("#Account");
+
+            //Ajax 送出前檢查帳號是否重複
+            $.ajax({
+                url: '/Account/DuplicateAccountCheck',
+                data: { "Account": Account.val() },
+                method: "POST",
+                async: true,
+                success: function (response) {
+                    //錯誤訊息移除
+                    $(".emailtip").remove();
+
+                    //是否該帳號已存在
+                    if (response) {
+                        //錯誤訊息
+                        var errMsg = "<span class='emailtip'><font color=#6FCCC1 ; font size=2>*該帳號已存在</font></span>";
+
+                        //顯示錯誤訊息
+                        Account.parent().append(errMsg);
+
+                        //跳出錯誤訊息
+                        alert("註冊資料不符合規定。");
+                    } else {
+                        //送出表單 註冊
+                        document.signupform.submit();
+                    }
+                }
+            });
         } else {
             //錯誤訊息
             alert("註冊資料不符合規定。");
@@ -221,4 +255,34 @@ function BirthdayCheck() {
     }
     //Return 成功
     return true;
+}
+
+//檢查是否有重複帳號
+function CheckAccount() {
+    //帳號物件
+    var Account = $("#Account");
+
+    //是否為空
+    if (Account.val() != null && Account.val() != "" && AccountCheck()) {
+        //Ajax
+        $.ajax({
+            url: '/Account/DuplicateAccountCheck',
+            data: { "Account": Account.val() },
+            method: "POST",
+            async: true,
+            success: function (response) {
+                //錯誤訊息移除
+                $(".emailtip").remove();
+
+                //是否該帳號已存在
+                if (response) {
+                    //錯誤訊息
+                    var errMsg = "<span class='emailtip'><font color=#6FCCC1 ; font size=2>*該帳號已存在</font></span>";
+
+                    //顯示錯誤訊息
+                    Account.parent().append(errMsg);
+                } 
+            }
+        });
+    }
 }
