@@ -5,7 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\" />
+    <Compile Remove="Areas\About\Views\NewFolder\**" />
+    <Content Remove="Areas\About\Views\NewFolder\**" />
+    <EmbeddedResource Remove="Areas\About\Views\NewFolder\**" />
+    <None Remove="Areas\About\Views\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
