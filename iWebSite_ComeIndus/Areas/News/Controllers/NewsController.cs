@@ -177,7 +177,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             else
             {
                 //導致Error頁面
-                return RedirectToAction("~/Home/Error");
+                return Redirect("~/Home/Error");
                 //return StatusCode(403);
             }
         }
@@ -196,7 +196,7 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
                 GetCount = string.Format("TOP({0})", GetCount) ;
             }
 
-            //若取得數量不為空
+            //若取得NewsNo不為空
             if (!string.IsNullOrEmpty(NewsNo))
             {
                 var sqlStr = string.Format("" +

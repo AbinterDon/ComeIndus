@@ -126,7 +126,7 @@
 
 </div>
 
-@{ if (ViewData["checkMsg"] == "true")
+@{ if (ViewData["checkMsg"].ToString() == "true")
     {
         <script type="text/javascript">
         var message = @Html.Raw(Json.Serialize(ViewData["result"]));
@@ -134,7 +134,7 @@
             document.location.href = "/News/News/ShowNews";
         </script>
     }
-    else if (ViewData["checkMsg"] == "false")
+    else if (ViewData["checkMsg"].ToString() == "false")
     {
         <script type="text/javascript">
             var message = @Html.Raw(Json.Serialize(ViewData["result"]));

@@ -1,61 +1,66 @@
-﻿@model iWebSite_ComeIndus.Models.Member
+﻿@using iWebSite_ComeIndus.Models
+@using System.Data
+@model DataTable
+
 <html>
 <head>
-
     <link href="~/css/memberInfor.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 </head>
-    <body>
-        <div class="container member mt-10">
+<body>
+    <div class="container member mt-10">
 
-            <div class="row">
+        <div class="row">
 
-                <div class="col-3 d-flex flex-column ">
-                    <h6 class="title font-weight-bolder">會員中心</h6>
+            <div class="col-3 d-flex flex-column ">
+                <h6 class="title font-weight-bolder">會員中心</h6>
 
-                    <div id="button">
-                        <img id="showimg" src="~/source/imgupload.png" class="imgUpload mb-3" />
-                        <button id="uploadb" class="uploadbutton">上傳大頭照</button>
-                        <input type="file" id="inputFile" style="opacity: 0;">
-                    </div>
-
+                <div id="button">
+                    <img id="showimg" src="~/source/imgupload.png" class="imgUpload mb-3" />
+                    <button id="uploadb" class="uploadbutton">上傳大頭照</button>
+                    <input type="file" id="inputFile" style="opacity: 0;">
                 </div>
 
-                <div class="col-9">
-                    <h6 class="font-weight-bolder">個人資料修改</h6>
-                    <hr class="mt-2 border-grayinfo">
-                    <form class="text-grayinfo">
+            </div>
+
+            <div class="col-9">
+                <h6 class="font-weight-bolder">個人資料修改</h6>
+                <hr class="mt-2 border-grayinfo">
+                <form method="post" class="text-grayinfo" name="updateymemberform" id="updateymemberform">
+                    @foreach (DataRow row in Model.Rows)
+                     {
                         <div class="form-group row">
                             <label for="Account" class="col-3 col-sm-2 col-form-label">會員帳號</label>
                             <div class="col-9 col-sm-10">
-                                <input type="text" class="form-control-plaintext" id="Account" value="email@example.com">
+                                <input type="text" class="form-control-plaintext" name="Account" id="Account" disabled>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="Actualname" class="col-3 col-sm-2 col-form-label">真實姓名</label>
                             <div class="col-6 col-sm-5">
-                                <input type="text" class="form-control" id="Actualname" placeholder="" required>
+                                <input type="text" class="form-control" name="Actualname" id="Actualname" value="@row["Actualname"]" required>
                             </div>
                             <span id="ActualnameCheck"></span>
                         </div>
                         <div class="form-group row">
-                            <label for="Nickname" class="col-3 col-sm-2 col-form-label">會員暱稱</label>
+                            <label for="Username" class="col-3 col-sm-2 col-form-label">會員暱稱</label>
                             <div class="col-6 col-sm-5">
-                                <input type="text" class="form-control" id="Nickname" placeholder="" required>
+                                <input type="text" class="form-control" name="Username" id="Username" value="@row["Username"]" required>
                             </div>
-                            <span id="NicknameCheck"></span>
+                            <span id="UsernameCheck"></span>
                         </div>
 
                         <div class="form-group row">
                             <label for="Password" class="col-4 col-sm-2 col-form-label">密碼</label>
                             <div class="col-8 col-sm-5">
-                                <input type="text" class="form-control" id="Password" placeholder="">
+                                <input type="password" class="form-control" name="Password" id="Password" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="PasswordCheck" class="col-4 col-sm-2 col-form-label">再輸入一次密碼</label>
                             <div class="col-8 col-sm-5">
-                                <input type="text" class="form-control" id="PasswordCheck" placeholder="">
+                                <input type="password" class="form-control" id="PasswordCheck" required>
                                 <span id="passCheck"></span>
                             </div>
                         </div>
@@ -63,34 +68,82 @@
                         <div class="form-group row">
                             <label for="Birthday" class="col-3 col-sm-2 col-form-label">出生日期</label>
                             <div class="col-6 col-sm-5">
-                                <input type="text" class="form-control" id="Birthday" placeholder="YYYY/MM/DD 例如：1980/01/01">
+                                <input type="date" class="form-control" name="Birthday" id="Birthday" value="@row["Birthday"]">
                             </div>
                         </div>
+
                         <div class="form-group row">
-                            <label for="gender" class="col-3 col-md-2 col-form-label">性別</label>
+                            <label for="Gender" class="col-3 col-md-2 col-form-label">性別</label>
                             <div class="col-4 col-md-3">
-                                <select class="form-control" id="gender">
-                                    <option>女</option>
-                                    <option>男</option>
-                                    <option>不願透露</option>
+                                <select class="form-control" name="Gender" id="Gender">
+                                    <!-- ko if: @row["Gender"] == 1 -->
+                                    <option value=@row["Gender"] style="display: none">男</option>
+                                    <!-- /ko -->
+                                    <!-- ko if: @row["Gender"] == 2 -->
+                                    <option value=@row["Gender"] style="display: none">女</option>
+                                    <!-- /ko -->
+                                    <!-- ko if: @row["Gender"] == 3 -->
+                                    <option value=@row["Gender"] style="display: none">不願透露</option>
+                                    <!-- /ko -->
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                    <option value="3">不願透漏</option>
                                 </select>
                             </div>
-
                         </div>
+
                         <div class="changeButton form-group d-felx mt-5 justify-content-end">
-                            <button class="save mr-3">儲存</button>
-                            <button class="cancel">取消</button>
+                            <button class="save mr-3" type="button" onclick="saveMember('Actualname', 'Username', 'Password', 'Birthday', 'Gender')">儲存</button>
+                            <button class="cancel" type="button" onclick="cancel()">取消</button>
                         </div>
-
-                    </form>
-                </div>
+                     }
+                </form>
             </div>
         </div>
-        <script src="~/js/memberInfor.js"></script>
-        <br>
-        @if (Model != null && Model.ok == false)
-        {
-            <p>@Model.ResultMessage</p>
+    </div>
+    <script src="~/js/memberInfor.js"></script>
+    <script type="text/javascript">
+
+        ko.applyBindings($("#updateymemberform").get(0));
+
+        var url = location.href.split("?");
+        var account = (url[1].split("="))[1];
+        document.getElementById("Account").value = account;
+
+        function saveMember(Actualname, Username, Password, Birthday, Gender) {
+            actualname = document.getElementById(Actualname).value;
+            username = document.getElementById(Username).value;
+            password = document.getElementById(Password).value;
+            birthday = document.getElementById(Birthday).value;
+            gender = document.getElementById(Gender).value;
+
+            if (actualname.length == 0 || username.length == 0 ||
+                password.length == 0 || birthday.length == 0 || gender.length == 0) {
+                alert("會員資料尚未填寫完畢");
+                return false;
+            }
+            else {
+                let args = {
+                    Account: account,
+                    Actualname: actualname,
+                    Username: username,
+                    Password: password,
+                    Birthday: birthday,
+                    Gender: gender
+                };
+
+                $.post('@Url.Action("UpdateMember")', args, data => { });
+                document.location.href = "/Member/Member/ShowMember";
+            }
         }
-    </body>
+
+        function cancel() {
+            document.getElementById('Actualname').value = "";
+            document.getElementById('Username').value = "";
+            document.getElementById('Password').value = "";
+            document.getElementById('Birthday').value = "";
+            document.getElementById('Gender').value = "";
+        }
+    </script>
+</body>
 </html>
