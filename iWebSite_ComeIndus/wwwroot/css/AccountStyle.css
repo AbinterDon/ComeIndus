@@ -31,11 +31,7 @@ body {
     font-family: 'Titillium Web', sans-serif;
     background-image: url( https://i.ibb.co/wKxfHPT/Artboard-6.png );
     background-repeat: no-repeat;
-    /*background-position: left;*/
-    background-size: Cover;
-    background-size: Contain;
     background-size: 100% 100%;
-    background-size: 100% auto;
 }
 
 
@@ -66,7 +62,7 @@ a {
     margin: 0 50px;
     padding: 70px 50px;
     max-width: 500px;
-    height: 700px;
+    /*height: auto;*/
 }
 
 .tab-group {

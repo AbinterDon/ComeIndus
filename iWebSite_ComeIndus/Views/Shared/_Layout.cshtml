@@ -43,7 +43,7 @@
                     <li><a href="/content/UnivGraduation/DiffCountry">數據查詢</a></li>
                     <li><a href="/#section_new">最新消息<span class="sr-only">(current)</span></a></li>
                     @*<li><a asp-area="" asp-controller="Account" asp-action="Login">會員登入</a></li>*@
-                    <li><a id ="Log" href="/Account/Login">會員登入</a></li>
+                    <li><a id="Log" href="/Account/Login">會員登入</a></li>
                     @*<li><a href="/Account/LogOff">會員登出</a></li>*@
                     <li><a href="/About/About">關於我們</a></li>
                     <li><a href="/#section_feedback">意見回饋</a></li>
@@ -89,6 +89,19 @@
             console.log("Failed");
         }
     });
+
+    //動態調整頁面大小
+    function calculateWindowHeight() {
+        //瀏覽器大小 - Footer
+        var windowHeight = $(window).height() - 110;
+
+        //動態調整
+        $('.layout-container').css('min-height', windowHeight, "px");
+
+    }
+
+    //每毫秒調整一次
+    var continueCheck = window.setInterval("calculateWindowHeight()",100);
 </script>
 
 
