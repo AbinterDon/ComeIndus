@@ -119,9 +119,9 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
             //權限
             ViewData["Authority"] = Authority;
 
-            if (Authority == "1")
+            if (Authority == "1" || Authority == "0")
             {
-                return View(GetMember());
+                return View(GetMember(Authority));
             }
             else
             {
@@ -134,13 +134,26 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         /// <summary>
         /// 撈DB會員資料
         /// </summary>
+        /// <param name="Authority"></param>
         /// <returns></returns>
-        private DataTable GetMember()
+        private DataTable GetMember(string Authority)
         {
-            var sqlStr = string.Format("" +
+            var sqlStr = "";
+            if (Authority == "1")
+            {
+                sqlStr = string.Format("" +
                     "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,111) as Birthday, Gender " +
                     "FROM [dbo].[Member]"
                 );
+            }
+            else if (Authority == "0")
+            {
+                sqlStr = string.Format("" +
+                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,111) as Birthday, Gender " +
+                    "FROM [dbo].[Member] " +
+                    "WHERE Account = {0}"
+                , SqlVal2(Request.Cookies["account"]));
+            }
 
             //Return
             return _DB_GetData(sqlStr);

@@ -92,6 +92,10 @@
                          {
                             <th width="15%">管理員</th>
                          }
+                        @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "0")
+                         {
+                            <th width="15%">會員資料更新</th>
+                         }
                     </tr>
                 </thead>
                 <tbody>
@@ -119,6 +123,12 @@
                                     <button class="btn" type="button" onclick="editMember('@row["Account"]')">修改</button>
                                     <span>&nbsp;&nbsp;</span>
                                     <button class="btn" type="button" onclick="deleteMember('@row["Account"]')">刪除</button>
+                                </td>
+                             }
+                            @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "0")
+                             {
+                                <td>
+                                    <button class="btn" type="button" onclick="editMember('@row["Account"]')">修改</button>
                                 </td>
                              }
                         </tr>
