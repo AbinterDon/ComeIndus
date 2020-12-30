@@ -5,6 +5,8 @@
 <head>
     <link href="~/css/memberInfor.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 </head>
 <body>
     <div class="container member mt-10">
@@ -77,7 +79,7 @@
                         </div>
 
                         @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
-                         {
+                        {
                             <div class="form-group row">
                                 <label for="Authority" class="col-3 col-sm-2 col-form-label">系統權限</label>
                                 <div class="col-6 col-sm-5">
@@ -95,29 +97,29 @@
                                     <!-- /ko -->
                                 </div>
                             </div>
-                         }
+                        }
 
                         <div class="changeButton form-group d-felx mt-5 justify-content-end">
-                             @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
-                              {
-                                 <!-- ko if: @row["Authority"] == 0 -->
-                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority0')">儲存</button>
-                                 <!-- /ko -->
-                                 <!-- ko if: @row["Authority"] == 1 -->
-                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority1')">儲存</button>
-                                 <!-- /ko -->
-                              }
-                             @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "0")
-                              {
-                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', null)">儲存</button>
-                              }
+                            @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+                            {
+                                <!-- ko if: @row["Authority"] == 0 -->
+                                <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority0')">儲存</button>
+                                <!-- /ko -->
+                                <!-- ko if: @row["Authority"] == 1 -->
+                                <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority1')">儲存</button>
+                                <!-- /ko -->
+                            }
+                            @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "0")
+                            {
+                                <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', null)">儲存</button>
+                            }
                             <button class="cancel" type="button" onclick="cancel()">取消</button>
                         </div>
+                        <p class="change">
+                            <a href="~/Account/ChangePassword?Account=@row["Account"]">Change Password?</a>
+                        </p>
                     }
                 </form>
-                <p class="forgot">
-                    <a href="/Account/ForgetPassword">Forgot Password?</a>
-                </p>
             </div>
         </div>
     </div>
@@ -132,6 +134,7 @@
             document.getElementById("Account").value = account;
         }
 
+        //儲存
         function saveMember(Account, Actualname, Username, Birthday, Gender, Authority) {
             account = document.getElementById(Account).value;
             actualname = document.getElementById(Actualname).value;
@@ -159,8 +162,28 @@
                     Authority: authority
                 };
 
-                $.post('@Url.Action("UpdateMember")', args, data => { });
-                document.location.href = "/Member/Member/ShowMember";
+                //$.post('@Url.Action("UpdateMember")', args, data => { });
+
+                //Ajax
+                $.ajax({
+                    url: '@Url.Action("UpdateMember")',
+                    data: args,
+                    method: "POST",
+                    async: true,
+                    success: function (response) {
+                        toastr.clear();
+                        if (response) {
+                            toastr.success("修改成功");
+                        } else {
+                            toastr.error("修改失敗");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.clear();
+                    }
+                });
+
+                //document.location.href = "/Member/Member/ShowMember";
             }
         }
 

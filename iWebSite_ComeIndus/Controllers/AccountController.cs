@@ -392,7 +392,17 @@ namespace iWebSite_ComeIndus.Controllers
         [HttpGet]
         public ActionResult ChangePassword(string Account)
         {
-            return View(new AccountModels() { Account = Account });//PartialView
+            //若有沒有帳號 則取得Cookie的帳號
+            if (string.IsNullOrEmpty(Account)) Account = Request.Cookies["account"];
+            
+            //檢測Account是否還是空的
+            if (!string.IsNullOrEmpty(Account)) {
+                return View(new AccountModels() { Account = Account });//PartialView
+            }
+            else
+            {
+                return Redirect("~/Home/Error");
+            }
         }
 
         /// <summary>
@@ -414,6 +424,10 @@ namespace iWebSite_ComeIndus.Controllers
             //SQL Check Update成功(True)或失敗(False)
             if (_DB_Execute(sqlStr) == 1)
             {
+                // 刪除cookie，預設使用者關閉瀏覽器時清除
+                Response.Cookies.Delete("userName");
+                Response.Cookies.Delete("account");
+
                 //修改成功，重新登入
                 return RedirectToAction("Login","Account",new AccountModels() { Account = Model.Account});
             }

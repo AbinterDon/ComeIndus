@@ -30,12 +30,13 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
             //目前登入權限
             var Authority = getUserAuthority();
 
+            //若有沒有帳號 則取得Cookie的帳號
             if (string.IsNullOrEmpty(Account)) Account = Request.Cookies["account"];
 
             //權限
             ViewData["Authority"] = Authority;
 
-            if (Authority == "1" || Authority == "0")
+            if (Authority!=null && (Authority == "1" || Authority == "0"))
             {
                 return View(GetAccount(Account));
             }
@@ -74,7 +75,7 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         /// <param name="Gender"></param>
         /// <param name="Authority"></param>
         /// <returns></returns>
-        public ActionResult UpdateMember(string Account, string Actualname, string Username, DateTime Birthday, string Gender, string Authority)
+        public bool UpdateMember(string Account, string Actualname, string Username, DateTime Birthday, string Gender, string Authority)
         {
             var sqlStr = "";
 
@@ -122,12 +123,14 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
             //修改是否成功
             if (check == 1)
             {
-                return View();
+                return true;
+                //return View();
             }
             else
             {
+                return false;
                 //導致Error頁面
-                return Redirect("~/Home/Error");
+                //return Redirect("~/Home/Error");
                 //return StatusCode(403);
             }
         }
@@ -144,9 +147,14 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
             //權限
             ViewData["Authority"] = Authority;
 
-            if (Authority == "1" || Authority == "0")
+            //是管理員的話
+            if (Authority == "1")
             {
                 return View(GetMember(Authority));
+
+            }else if(Authority == "0")//是一般會員
+            {
+                return RedirectToAction("ModifyMember");
             }
             else
             {

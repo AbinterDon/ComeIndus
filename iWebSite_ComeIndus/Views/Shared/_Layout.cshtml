@@ -48,7 +48,7 @@
                     <li><a href="/content/UnivGraduation/DiffCountry">數據查詢</a></li>
                     <li><a href="/#section_new">最新消息<span class="sr-only">(current)</span></a></li>
                     @*<li><a asp-area="" asp-controller="Account" asp-action="Login">會員登入</a></li>*@
-                    <li ><a class="NavDis" id="MemberCenter" href="/Member/Member/ModifyMember">會員中心</a></li>
+                    <li ><a class="NavDis" id="MemberCenter" href="/Member/Member/ShowMember">會員中心</a></li>
                     <li><a id="Log" href="/Account/Login">會員登入</a></li>
                     <li><a href="/About/About">關於我們</a></li>
                     <li><a href="/#section_feedback">意見回饋</a></li>
@@ -79,6 +79,7 @@
         url: '/Account/CheckLoginStatus',
         async: false,
         success: function (response) {
+            //是會員的話
             if (response) {
                 //抓Object
                 var Log = document.getElementById("Log");

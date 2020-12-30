@@ -175,7 +175,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("~/Home/Error");
+                    return Redirect("~/Home/Error");
                 }
             }
             else
