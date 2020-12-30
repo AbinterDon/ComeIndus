@@ -55,7 +55,7 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         private DataTable GetAccount(string Account)
         {
             var sqlStr = string.Format("" +
-                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,120) as Birthday, Gender " +
+                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,120) as Birthday, Gender, Authority " +
                     "FROM [dbo].[Member] " +
                     "Where Account = {0}", SqlVal2(Account)
                 );
@@ -70,29 +70,52 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         /// <param name="Account"></param>
         /// <param name="Actualname"></param>
         /// <param name="Username"></param>
-        /// <param name="Password"></param>
         /// <param name="Birthday"></param>
         /// <param name="Gender"></param>
+        /// <param name="Authority"></param>
         /// <returns></returns>
-        public ActionResult UpdateMember(string Account, string Actualname, string Username, string Password, DateTime Birthday, string Gender)
+        public ActionResult UpdateMember(string Account, string Actualname, string Username, DateTime Birthday, string Gender, string Authority)
         {
-            var sqlStr = string.Format(
-            @"UPDATE [dbo].[Member] " +
-                "SET [Actualname] = {0}, " +
-                "[Username] = {1}, " +
-                "[Password] = {2}, " +
-                "[Birthday] = {3}, " +
-                "[Gender] = {4}, " +
-                "[ModifyTime] = {5} " +
-                "WHERE [Account] = {6}",
-                SqlVal2(Actualname),
-                SqlVal2(Username),
-                SqlVal2(SHA256_Encryption(Password)),
-                SqlVal2(Birthday),
-                SqlVal2(Gender),
-                DBC.ChangeTimeZone(),
-                SqlVal2(Account)
-            );
+            var sqlStr = "";
+
+            if (!string.IsNullOrEmpty(Authority))
+            {
+                sqlStr = string.Format(
+                    @"UPDATE [dbo].[Member] " +
+                        "SET [Actualname] = {0}, " +
+                        "[Username] = {1}, " +
+                        "[Birthday] = {2}, " +
+                        "[Gender] = {3}, " +
+                        "[Authority] = {4}, " +
+                        "[ModifyTime] = {5} " +
+                        "WHERE [Account] = {6}",
+                        SqlVal2(Actualname),
+                        SqlVal2(Username),
+                        SqlVal2(Birthday),
+                        SqlVal2(Gender),
+                        SqlVal2(Authority),
+                        DBC.ChangeTimeZone(),
+                        SqlVal2(Account)
+                );
+            }
+            else
+            {
+                sqlStr = string.Format(
+                    @"UPDATE [dbo].[Member] " +
+                        "SET [Actualname] = {0}, " +
+                        "[Username] = {1}, " +
+                        "[Birthday] = {2}, " +
+                        "[Gender] = {3}, " +
+                        "[ModifyTime] = {4} " +
+                        "WHERE [Account] = {5}",
+                        SqlVal2(Actualname),
+                        SqlVal2(Username),
+                        SqlVal2(Birthday),
+                        SqlVal2(Gender),
+                        DBC.ChangeTimeZone(),
+                        SqlVal2(Account)
+                );
+            }
 
             var check = _DB_Execute(sqlStr);
 
@@ -144,7 +167,7 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
             if (Authority == "1")
             {
                 sqlStr = string.Format("" +
-                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,111) as Birthday, Gender " +
+                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,111) as Birthday, Gender, Authority " +
                     "FROM [dbo].[Member]"
                 );
             }
