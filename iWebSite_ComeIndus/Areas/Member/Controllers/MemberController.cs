@@ -30,6 +30,8 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
             //目前登入權限
             var Authority = getUserAuthority();
 
+            if (string.IsNullOrEmpty(Account)) Account = Request.Cookies["account"];
+
             //權限
             ViewData["Authority"] = Authority;
 
