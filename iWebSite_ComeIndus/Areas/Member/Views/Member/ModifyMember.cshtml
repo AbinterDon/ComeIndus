@@ -7,43 +7,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+
 </head>
 <body>
     <div class="container member mt-10">
 
-        <div class="row">
 
-            <div class="col-3 d-flex flex-column ">
-                <h6 class="title font-weight-bolder">會員中心</h6>
+        <!--
+        <div class="col-3 d-flex flex-column ">
+            <h6 class="title font-weight-bolder">會員中心</h6>
 
-                <div id="button">
-                    <img id="showimg" src="~/source/imgupload.png" class="imgUpload mb-3" />
-                    <button id="uploadb" class="uploadbutton">上傳大頭照</button>
-                    <input type="file" id="inputFile" style="opacity: 0;">
-                </div>
-
+            <div id="button">
+                <img id="showimg" src="~/source/imgupload.png" class="imgUpload mb-3" />
+                <button id="uploadb" class="uploadbutton">上傳大頭照</button>
+                <input type="file" id="inputFile" style="opacity: 0;">
             </div>
 
-            <div class="col-9">
-                <h6 class="font-weight-bolder">個人資料修改</h6>
+        </div>
+            -->
+        <div class="row">
+
+            <div class="col-7">
+                <h4 class="font-weight-bolder">個人資料修改</h4>
                 <hr class="mt-2 border-grayinfo">
-                <form method="post" class="text-grayinfo" name="updateymemberform" id="updateymemberform">
+                <form method="post" class="text-form" name="updateymemberform" id="updateymemberform">
                     @foreach (DataRow row in Model.Rows)
                     {
-                        <div class="form-group row">
+                        <div class="form-group row mb-5 ">
                             <label for="Account" class="col-3 col-sm-2 col-form-label">會員帳號</label>
                             <div class="col-9 col-sm-10">
-                                <input type="text" class="form-control-plaintext" name="Account" id="Account" value="@row["Account"]" disabled>
+                                <input type="text" class="form-control-plaintext disabled" name="Account" id="Account" value="@row["Account"]" disabled>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row mb-5">
                             <label for="Actualname" class="col-3 col-sm-2 col-form-label">真實姓名</label>
                             <div class="col-6 col-sm-5">
                                 <input type="text" class="form-control" name="Actualname" id="Actualname" value="@row["Actualname"]" required>
                             </div>
                             <span id="ActualnameCheck"></span>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row mb-5">
                             <label for="Username" class="col-3 col-sm-2 col-form-label">會員暱稱</label>
                             <div class="col-6 col-sm-5">
                                 <input type="text" class="form-control" name="Username" id="Username" value="@row["Username"]" required>
@@ -51,22 +55,24 @@
                             <span id="UsernameCheck"></span>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mb-5">
                             <label for="Birthday" class="col-3 col-sm-2 col-form-label">出生日期</label>
                             <div class="col-6 col-sm-5">
                                 <input type="date" class="form-control" name="Birthday" id="Birthday" value="@row["Birthday"]">
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mb-5">
                             <label for="Gender" class="col-3 col-md-2 col-form-label">性別</label>
                             <div class="col-4 col-md-3">
-                                <select class="form-control" name="Gender" id="Gender">
+                                <select class="form-control" name="Gender" id="Gender" style="padding:0 5px;">
                                     <!-- ko if: @row["Gender"] == 1 -->
                                     <option value=@row["Gender"] style="display: none">男</option>
+
                                     <!-- /ko -->
                                     <!-- ko if: @row["Gender"] == 2 -->
                                     <option value=@row["Gender"] style="display: none">女</option>
+
                                     <!-- /ko -->
                                     <!-- ko if: @row["Gender"] == 3 -->
                                     <option value=@row["Gender"] style="display: none">不願透露</option>
@@ -80,7 +86,7 @@
 
                         @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
                         {
-                            <div class="form-group row">
+                            <div class="form-group row mb-5">
                                 <label for="Authority" class="col-3 col-sm-2 col-form-label">系統權限</label>
                                 <div class="col-6 col-sm-5">
                                     <!-- ko if: @row["Authority"] == 0 -->
@@ -88,6 +94,7 @@
                                     <label for="Authority00">一般使用者&nbsp;&nbsp;</label>
                                     <input type="radio" name="Authority0" id="Authority01" value="1">
                                     <label for="Authority01">系統管理員</label>
+
                                     <!-- /ko -->
                                     <!-- ko if: @row["Authority"] == 1 -->
                                     <input type="radio" name="Authority1" id="Authority10" value="0">
@@ -100,10 +107,12 @@
                         }
 
                         <div class="changeButton form-group d-felx mt-5 justify-content-end">
+
                             @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
                             {
                                 <!-- ko if: @row["Authority"] == 0 -->
                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority0')">儲存</button>
+
                                 <!-- /ko -->
                                 <!-- ko if: @row["Authority"] == 1 -->
                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority1')">儲存</button>
@@ -123,6 +132,7 @@
             </div>
         </div>
     </div>
+
     <script src="~/js/memberInfor.js"></script>
     <script type="text/javascript">
 
