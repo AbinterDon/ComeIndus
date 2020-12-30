@@ -89,13 +89,14 @@
                         <th>出生日期</th>
                         <th>性別</th>
                         @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
-                         {
+                        {
+                            <th>系統權限</th>
                             <th width="15%">管理員</th>
-                         }
+                        }
                         @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "0")
-                         {
+                        {
                             <th width="15%">會員資料更新</th>
-                         }
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -119,6 +120,14 @@
                             </td>
                             @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
                              {
+                                <td>
+                                    <!-- ko if: @row["Authority"] == 0 -->
+                                    <span>一般使用者</span>
+                                    <!-- /ko -->
+                                    <!-- ko if: @row["Authority"] == 1 -->
+                                    <span>系統管理員</span>
+                                    <!-- /ko -->
+                                </td>
                                 <td>
                                     <button class="btn" type="button" onclick="editMember('@row["Account"]')">修改</button>
                                     <span>&nbsp;&nbsp;</span>

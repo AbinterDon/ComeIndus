@@ -27,7 +27,7 @@
                 <hr class="mt-2 border-grayinfo">
                 <form method="post" class="text-grayinfo" name="updateymemberform" id="updateymemberform">
                     @foreach (DataRow row in Model.Rows)
-                     {
+                    {
                         <div class="form-group row">
                             <label for="Account" class="col-3 col-sm-2 col-form-label">會員帳號</label>
                             <div class="col-9 col-sm-10">
@@ -47,21 +47,6 @@
                                 <input type="text" class="form-control" name="Username" id="Username" value="@row["Username"]" required>
                             </div>
                             <span id="UsernameCheck"></span>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="Password" class="col-4 col-sm-2 col-form-label">密碼</label>
-                            <div class="col-8 col-sm-5">
-                                <input type="password" class="form-control" name="Password" id="Password" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="PasswordCheck" class="col-4 col-sm-2 col-form-label">再輸入一次密碼</label>
-                            <div class="col-8 col-sm-5">
-                                <input type="password" class="form-control" id="PasswordCheck" required>
-                                <span id="passCheck"></span>
-                            </div>
                         </div>
 
                         <div class="form-group row">
@@ -91,12 +76,48 @@
                             </div>
                         </div>
 
+                        @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+                         {
+                            <div class="form-group row">
+                                <label for="Authority" class="col-3 col-sm-2 col-form-label">系統權限</label>
+                                <div class="col-6 col-sm-5">
+                                    <!-- ko if: @row["Authority"] == 0 -->
+                                    <input type="radio" name="Authority0" id="Authority00" value="0" checked="checked">
+                                    <label for="Authority00">一般使用者&nbsp;&nbsp;</label>
+                                    <input type="radio" name="Authority0" id="Authority01" value="1">
+                                    <label for="Authority01">系統管理員</label>
+                                    <!-- /ko -->
+                                    <!-- ko if: @row["Authority"] == 1 -->
+                                    <input type="radio" name="Authority1" id="Authority10" value="0">
+                                    <label for="Authority10">一般使用者&nbsp;&nbsp;</label>
+                                    <input type="radio" name="Authority1" id="Authority11" value="1" checked="checked">
+                                    <label for="Authority11">系統管理員</label>
+                                    <!-- /ko -->
+                                </div>
+                            </div>
+                         }
+
                         <div class="changeButton form-group d-felx mt-5 justify-content-end">
-                            <button class="save mr-3" type="button" onclick="saveMember('Actualname', 'Username', 'Password', 'Birthday', 'Gender')">儲存</button>
+                             @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+                              {
+                                 <!-- ko if: @row["Authority"] == 0 -->
+                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority0')">儲存</button>
+                                 <!-- /ko -->
+                                 <!-- ko if: @row["Authority"] == 1 -->
+                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority1')">儲存</button>
+                                 <!-- /ko -->
+                              }
+                             @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "0")
+                              {
+                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', null)">儲存</button>
+                              }
                             <button class="cancel" type="button" onclick="cancel()">取消</button>
                         </div>
-                     }
+                    }
                 </form>
+                <p class="forgot">
+                    <a href="/Account/ForgetPassword">Forgot Password?</a>
+                </p>
             </div>
         </div>
     </div>
@@ -106,18 +127,25 @@
         ko.applyBindings($("#updateymemberform").get(0));
 
         var url = location.href.split("?");
-        var account = (url[1].split("="))[1];
-        document.getElementById("Account").value = account;
+        if (url.length > 1) {
+            var account = (url[1].split("="))[1];
+            document.getElementById("Account").value = account;
+        }
 
-        function saveMember(Actualname, Username, Password, Birthday, Gender) {
+        function saveMember(Account, Actualname, Username, Birthday, Gender, Authority) {
+            account = document.getElementById(Account).value;
             actualname = document.getElementById(Actualname).value;
             username = document.getElementById(Username).value;
-            password = document.getElementById(Password).value;
             birthday = document.getElementById(Birthday).value;
             gender = document.getElementById(Gender).value;
+            if (Authority == null) {
+                authority = null;
+            }
+            else {
+                authority = $("input[name=" + Authority + "]:checked").val();
+            }
 
-            if (actualname.length == 0 || username.length == 0 ||
-                password.length == 0 || birthday.length == 0 || gender.length == 0) {
+            if (actualname.length == 0 || username.length == 0 || birthday.length == 0 || gender.length == 0) {
                 alert("會員資料尚未填寫完畢");
                 return false;
             }
@@ -126,9 +154,9 @@
                     Account: account,
                     Actualname: actualname,
                     Username: username,
-                    Password: password,
                     Birthday: birthday,
-                    Gender: gender
+                    Gender: gender,
+                    Authority: authority
                 };
 
                 $.post('@Url.Action("UpdateMember")', args, data => { });
@@ -139,7 +167,6 @@
         function cancel() {
             document.getElementById('Actualname').value = "";
             document.getElementById('Username').value = "";
-            document.getElementById('Password').value = "";
             document.getElementById('Birthday').value = "";
             document.getElementById('Gender').value = "";
         }
