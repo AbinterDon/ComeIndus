@@ -55,7 +55,7 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         private DataTable GetAccount(string Account)
         {
             var sqlStr = string.Format("" +
-                    "SELECT Actualname, Username, Convert(varchar(10), Birthday,120) as Birthday, Gender " +
+                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,120) as Birthday, Gender " +
                     "FROM [dbo].[Member] " +
                     "Where Account = {0}", SqlVal2(Account)
                 );

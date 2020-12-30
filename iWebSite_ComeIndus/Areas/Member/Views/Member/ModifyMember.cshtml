@@ -1,7 +1,6 @@
 ﻿@using iWebSite_ComeIndus.Models
 @using System.Data
 @model DataTable
-
 <html>
 <head>
     <link href="~/css/memberInfor.css" rel="stylesheet" />
@@ -32,7 +31,7 @@
                         <div class="form-group row">
                             <label for="Account" class="col-3 col-sm-2 col-form-label">會員帳號</label>
                             <div class="col-9 col-sm-10">
-                                <input type="text" class="form-control-plaintext" name="Account" id="Account" disabled>
+                                <input type="text" class="form-control-plaintext" name="Account" id="Account" value="@row["Account"]" disabled>
                             </div>
                         </div>
                         <div class="form-group row">
