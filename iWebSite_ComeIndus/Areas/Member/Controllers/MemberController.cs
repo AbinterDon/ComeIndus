@@ -75,7 +75,7 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         /// <param name="Gender"></param>
         /// <param name="Authority"></param>
         /// <returns></returns>
-        public bool UpdateMember(string Account, string Actualname, string Username, DateTime Birthday, string Gender, string Authority)
+        public bool UpdateMember(string Account, string Actualname, string Username, DateTime? Birthday, string Gender, string Authority)
         {
             var sqlStr = "";
 

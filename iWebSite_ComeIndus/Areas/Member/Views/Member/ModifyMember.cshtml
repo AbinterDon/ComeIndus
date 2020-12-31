@@ -65,7 +65,7 @@
                         <div class="form-group row mb-5">
                             <label for="Gender" class="col-3 col-md-2 col-form-label">性別</label>
                             <div class="col-4 col-md-3">
-                                <select class="form-control" name="Gender" id="Gender" style="padding:0 5px;">
+                                <select class="form-control" name="Gender" id="Gender" style="padding:0 5px;border: 1px solid #6FCCC1;">
                                     <!-- ko if: @row["Gender"] == 1 -->
                                     <option value=@row["Gender"] style="display: none">男</option>
 
@@ -122,7 +122,7 @@
                             {
                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', null)">儲存</button>
                             }
-                            <button class="cancel" type="button" onclick="cancel()">取消</button>
+                            <button class="cancel" type="button" onclick="cancel()">清除</button>
                         </div>
                         <p class="change">
                             <a href="~/Account/ChangePassword?Account=@row["Account"]">Change Password?</a>
@@ -158,7 +158,7 @@
                 authority = $("input[name=" + Authority + "]:checked").val();
             }
 
-            if (actualname.length == 0 || username.length == 0 || birthday.length == 0 || gender.length == 0) {
+            if (actualname.length == 0 || username.length == 0 || gender.length == 0) {
                 alert("會員資料尚未填寫完畢");
                 return false;
             }
@@ -197,6 +197,7 @@
             }
         }
 
+        //清除
         function cancel() {
             document.getElementById('Actualname').value = "";
             document.getElementById('Username').value = "";

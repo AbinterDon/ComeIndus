@@ -35,7 +35,7 @@ namespace iWebSite_ComeIndus.Models
         public string Gender { get; set; }
 
         //生日
-        public DateTime Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
 
         //大頭照路徑
         public string PhotoURL { get; set; }
