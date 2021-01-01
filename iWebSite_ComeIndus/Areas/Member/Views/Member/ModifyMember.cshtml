@@ -88,17 +88,17 @@
                         {
                             <div class="form-group row mb-5">
                                 <label for="Authority" class="col-3 col-sm-2 col-form-label">系統權限</label>
-                                <div class="col-6 col-sm-5">
+                                <div class="radio-group d-flex align-items-end">
                                     <!-- ko if: @row["Authority"] == 0 -->
                                     <input type="radio" name="Authority0" id="Authority00" value="0" checked="checked">
-                                    <label for="Authority00">一般使用者&nbsp;&nbsp;</label>
+                                    <label for="Authority00">一般使用者&nbsp;&nbsp;&nbsp;</label>
                                     <input type="radio" name="Authority0" id="Authority01" value="1">
                                     <label for="Authority01">系統管理員</label>
 
                                     <!-- /ko -->
                                     <!-- ko if: @row["Authority"] == 1 -->
                                     <input type="radio" name="Authority1" id="Authority10" value="0">
-                                    <label for="Authority10">一般使用者&nbsp;&nbsp;</label>
+                                    <label for="Authority10">一般使用者&nbsp;&nbsp;&nbsp;</label>
                                     <input type="radio" name="Authority1" id="Authority11" value="1" checked="checked">
                                     <label for="Authority11">系統管理員</label>
                                     <!-- /ko -->

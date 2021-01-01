@@ -11049,7 +11049,7 @@ span {
 .text-form input{
     font-size: 15px;
     display: block;
-    width: 100%;
+   
     height: 100%;
     padding: 5px 10px;
     background: none;
@@ -11064,4 +11064,7 @@ span {
 }
 .text-form .disabled {
     border:none;
+}
+.radio-group input, .radio-group label:hover {
+    cursor: pointer;
 }
