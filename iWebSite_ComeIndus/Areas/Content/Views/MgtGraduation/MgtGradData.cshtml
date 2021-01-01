@@ -1,5 +1,8 @@
 ﻿@using iWebSite_ComeIndus.Areas.Content.Models;
 @model MgtGradModel;
+@{
+    ViewData["Title"] = "ComeIndus - 畢業人數管理";
+}
 <!--CSS:暫時先複製別的檔案來用-->
 <style>
     * {
@@ -7,12 +10,14 @@
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
     }
+
     header {
         min-height: 700px;
         min-width: 1000px;
         display: flex;
         justify-content: center;
     }
+
     h2 {
         text-align: center;
         font-size: 18px;
@@ -60,23 +65,26 @@
             background: #3BB0A2;
         }
 
-        .fl-table thead th:nth-child(odd) {
+            .fl-table thead th:nth-child(odd) {
                 color: #ffffff;
                 background: #324960;
-        }
+            }
 
         .fl-table tr:nth-child(even) {
             background: #F8F8F8;
         }
-        label.coun{
-            color:white;
-        }
-        label.de{
-             color:white;
-        }
-        label.ye{
-            color:white;
-        }
+
+    label.coun {
+        color: white;
+    }
+
+    label.de {
+        color: white;
+    }
+
+    label.ye {
+        color: white;
+    }
 </style>
 
 
@@ -98,7 +106,7 @@
                     <option value="@Time.Year">@Time.Year</option>
                 }
             </select>
-           
+
             <label class="coun">國家</label>
             <select id="countryOption" onchange="displayDept(this)">
                 @foreach (var countryDept in Model.CountryDepts)
@@ -132,9 +140,9 @@
 
         <div>
             <sapn id="msg" style="color:red;font-size:15px"></sapn>
-            <table id="gradData"class="fl-table">
+            <table id="gradData" class="fl-table">
             </table>
-            
+
         </div>
 
     </div>
@@ -171,7 +179,7 @@
         var row = $(cell).parent();
         row.children(".rowEdit").css("display", "")
         $(".rowBut").css("display", "None");
-       
+
     }
 
     function butCancel() {
@@ -200,7 +208,7 @@
             $(".secondYear").css("display", "");
             $("#yearEndOption").children().css("display", "")
             $("#yearEndOption").children().slice(0, index - 1).css("display", "None")
-            $("#yearEndOption").children("option").eq(index-1).attr("selected", "selected")
+            $("#yearEndOption").children("option").eq(index - 1).attr("selected", "selected")
         } else {
             $(".secondYear").css("display", "None");
         }
@@ -227,7 +235,7 @@
             beforeSend: function () {
 
             },
-            success: function (data) {             
+            success: function (data) {
                 var table = $("#gradData");
                 table.empty();
                 $("#msg").text("");
@@ -259,7 +267,7 @@
                         row.append($('<button class="rowEdit" onclick="updateSubmit(this)" ' + dataNo + '">').html("確定"));
                         row.append($('<button class="rowEdit" onclick="rowCancel(this)" ' + dataNo + '">').html("取消"));
 
-                        
+
                         table.append(row);
                     }
 
@@ -349,7 +357,7 @@
                     }
 
                     butCancel();
-                    
+
 
                 },
                 error: function (e) {
@@ -390,7 +398,7 @@
                     }
 
                     butCancel();
-                    
+
                 },
                 error: function (e) {
                     console.log(e);

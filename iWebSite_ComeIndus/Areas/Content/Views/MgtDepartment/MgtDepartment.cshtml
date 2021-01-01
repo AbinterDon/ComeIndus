@@ -1,17 +1,21 @@
 ﻿@using iWebSite_ComeIndus.Areas.Content.Models;
-
+@{
+    ViewData["Title"] = "ComeIndus - 科系管理";
+}
 <style>
     * {
         box-sizing: border-box;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
     }
+
     header {
         min-height: 700px;
         min-width: 1000px;
         display: flex;
         justify-content: center
     }
+
     select {
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -63,6 +67,7 @@
     .select:hover::after {
         color: #f39c12;
     }
+
     h2 {
         text-align: center;
         font-size: 30px;
@@ -71,6 +76,7 @@
         color: white;
         padding: 40px 0px 20px 0px;
     }
+
     h3 {
         text-align: center;
         font-size: 18px;
@@ -102,7 +108,7 @@
         white-space: nowrap;
         background-color: white;
         margin-bottom: 30px;
-        margin-top:20px;
+        margin-top: 20px;
     }
 
         .fl-table td, .fl-table th {
@@ -136,7 +142,7 @@
 </head>
 
 <header>
-   
+
     <div class="container" id="DeptInfo" style="margin-top:100px">
         <div class="select">
             <select onchange="showDeptList(this)" name="slct" id="slct">
@@ -146,9 +152,9 @@
                 }
             </select>
         </div>
-        
-       @foreach (MgtDeptModel mgtDept in Model)
-       {
+
+        @foreach (MgtDeptModel mgtDept in Model)
+        {
             <div class="deptList" section="@mgtDept.CountryNo">
                 <h2>@mgtDept.CountryName</h2>
                 <h3>科系/學群列表</h3>
@@ -214,8 +220,8 @@
                     </tbody>
                 </table>
             </div>
-        }  
-        </div>
+        }
+    </div>
     <span style="font-size: 30px;">@ViewData["result"]</span>
 </header>
 
@@ -228,7 +234,7 @@
     if (window.location.href.includes("?country=")) {
         currentCountry = window.location.href.split('?')[1].split('country=')[1];
     }
-    
+
     $(function () {
         $(".deptList").hide();
         if (currentCountry == null) {
@@ -237,7 +243,7 @@
             $(".deptList[section=" + currentCountry + "]").show();
             $("select option[value=" + currentCountry + "]").attr("selected", "selected")
         }
-        
+
     });
 
     function showDeptList(obj) {
@@ -301,7 +307,7 @@
             //window.location.reload();
             window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry
             alert(result);
-           
+
         });
     }
 </script>

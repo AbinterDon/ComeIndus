@@ -1,7 +1,9 @@
 ﻿@using iWebSite_ComeIndus.Areas.News.Models
 @using System.Data
 @model DataTable
-
+@{
+    ViewData["Title"] = "ComeIndus - 最新消息";
+}
 <style>
     * {
         border: 1px soild white;
@@ -73,8 +75,8 @@
     .Newstitle {
         white-space: normal;
         max-width: 200px;
-
     }
+
     .NewsContent {
         white-space: normal;
         max-width: 220px;

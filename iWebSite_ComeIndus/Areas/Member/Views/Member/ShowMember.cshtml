@@ -1,7 +1,9 @@
 ﻿@using iWebSite_ComeIndus.Models
 @using System.Data
 @model DataTable
-
+@{
+    ViewData["Title"] = "ComeIndus - 會員中心";
+}
 <style>
     * {
         border: 1px soild white;
@@ -101,7 +103,7 @@
                 </thead>
                 <tbody>
                     @foreach (DataRow row in Model.Rows)
-                     {
+                    {
                         <tr>
                             <td>@row["Account"]</td>
                             <td>@row["Actualname"]</td>
@@ -119,7 +121,7 @@
                                 <!-- /ko -->
                             </td>
                             @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
-                             {
+                            {
                                 <td>
                                     <!-- ko if: @row["Authority"] == 0 -->
                                     <span>一般使用者</span>
@@ -133,13 +135,13 @@
                                     <span>&nbsp;&nbsp;</span>
                                     <button class="btn" type="button" onclick="deleteMember('@row["Account"]')">刪除</button>
                                 </td>
-                             }
+                            }
                             @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "0")
-                             {
+                            {
                                 <td>
                                     <button class="btn" type="button" onclick="editMember('@row["Account"]')">修改</button>
                                 </td>
-                             }
+                            }
                         </tr>
                     }
                 </tbody>

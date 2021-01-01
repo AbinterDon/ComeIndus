@@ -1,5 +1,8 @@
 ﻿@model NewsModel
 @using iWebSite_ComeIndus.Areas.News.Models
+@{
+    ViewData["Title"] = "ComeIndus - 最新消息";
+}
 <head>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -152,20 +155,20 @@
 
 
 
-   // $(document).ready(function () {
-        $('#startDate').datetimepicker({
-            format: 'YYYY/MM/DD',
-            locale: moment.locale('zh-cn'),
-            minDate: new Date()
+    // $(document).ready(function () {
+    $('#startDate').datetimepicker({
+        format: 'YYYY/MM/DD',
+        locale: moment.locale('zh-cn'),
+        minDate: new Date()
 
-        });
+    });
     $('#endDate').datetimepicker({
-            format: 'YYYY/MM/DD',
-            locale: moment.locale('zh-cn'),
-            minDate: new Date()
-        });
+        format: 'YYYY/MM/DD',
+        locale: moment.locale('zh-cn'),
+        minDate: new Date()
+    });
 
-   // });
+    // });
 
 
     function getTime() {
@@ -210,4 +213,4 @@
     //var continueCheck = window.setInterval("getTime()");
 
 
-        </script>
+</script>

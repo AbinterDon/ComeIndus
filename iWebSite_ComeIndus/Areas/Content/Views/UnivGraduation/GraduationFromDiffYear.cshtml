@@ -1,5 +1,7 @@
 ﻿@model List<iWebSite_ComeIndus.Areas.Content.Models.TimeModel>;
-
+@{
+    ViewData["Title"] = "ComeIndus - 數據圖表";
+}
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
@@ -153,7 +155,7 @@
             <button id="download" class="btn btn-light btn-lg down" onclick="download('china')">下載</button>
         }
 
-    <a href="https://data.stats.gov.cn/easyquery.htm?cn=C0" class="source">資料來源:中國國家統計局</a>
+        <a href="https://data.stats.gov.cn/easyquery.htm?cn=C0" class="source">資料來源:中國國家統計局</a>
     </div>
 </header>
 

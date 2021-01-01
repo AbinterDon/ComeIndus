@@ -1,4 +1,7 @@
 ﻿@model List<iWebSite_ComeIndus.Areas.Content.Models.TimeModel>;
+@{
+    ViewData["Title"] = "ComeIndus - 數據圖表";
+}
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
@@ -11,13 +14,15 @@
             right: 20px;
             bottom: 10px;
         }
+
         .source {
             position: absolute;
             right: auto;
-            left:auto;
+            left: auto;
             bottom: 20px;
             letter-spacing: 3px;
         }
+
         .top {
             position: absolute;
             right: 0px;
@@ -25,6 +30,7 @@
             color: #3BB0A2;
             font-weight: bold;
         }
+
         .top-left {
             position: absolute;
             left: 0px;

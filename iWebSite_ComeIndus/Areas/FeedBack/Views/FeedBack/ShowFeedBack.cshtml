@@ -1,12 +1,15 @@
 ﻿@using System.Data
 @model DataTable
-
+@{
+    ViewData["Title"] = "ComeIndus - 意見回饋";
+}
 <style>
     * {
         box-sizing: border-box;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
     }
+
     h2 {
         text-align: center;
         font-size: 18px;
@@ -15,61 +18,61 @@
         color: white;
         padding: 50px 0px 20px 0px;
     }
+
     header {
         min-height: 700px;
         min-width: 1000px;
         display: flex;
         justify-content: center
     }
-    th,td{
-       padding:20px;
+
+    th, td {
+        padding: 20px;
     }
     /*Table Styles*/
 
-.table-wrapper{
-    margin: 10px 70px 70px;
-    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-}
-
-.fl-table {
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: normal;
-    border: none;
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 100%;
-    white-space: nowrap;
-    background-color: white;
-    margin-bottom: 30px;
-}
-
-.fl-table td, .fl-table th {
-    text-align: center;
-    padding: 8px;
-}
-
-.fl-table td {
-    border-right: 1px solid #f8f8f8;
-    font-size: 12px;
-}
-
-    .fl-table thead th {
-        color: #ffffff;
-        background: #3BB0A2;
+    .table-wrapper {
+        margin: 10px 70px 70px;
+        box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
     }
 
+    .fl-table {
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        border: none;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        background-color: white;
+        margin-bottom: 30px;
+    }
 
-.fl-table thead th:nth-child(odd) {
-    color: #ffffff;
-    background: #324960;
-}
+        .fl-table td, .fl-table th {
+            text-align: center;
+            padding: 8px;
+        }
 
-.fl-table tr:nth-child(even) {
-    background: #F8F8F8;
-}
+        .fl-table td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 12px;
+        }
+
+        .fl-table thead th {
+            color: #ffffff;
+            background: #3BB0A2;
+        }
 
 
+            .fl-table thead th:nth-child(odd) {
+                color: #ffffff;
+                background: #324960;
+            }
+
+        .fl-table tr:nth-child(even) {
+            background: #F8F8F8;
+        }
 </style>
 
 <header>
