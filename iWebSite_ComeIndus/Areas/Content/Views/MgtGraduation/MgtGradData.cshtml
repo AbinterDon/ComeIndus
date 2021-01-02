@@ -93,7 +93,7 @@
         <div style="margin-top:100px">
             <label class="ye">年份</label>
             <select id="yearStartOption" onchange="yearOptionAdjust(this)">
-                <option value="*">all</option>
+                <option value="*">全部</option>
                 @foreach (var Time in Model.Years)
                 {
                     <option value="@Time.Year">@Time.Year</option>
@@ -119,7 +119,7 @@
             @foreach (var countryDept in Model.CountryDepts)
             {
                 <select class="deptOptions" country="@countryDept.CountryNo">
-                    <option value="*">all</option>
+                    <option value="*">全部</option>
                     @for (int i = 0; i < countryDept.DeptName.Count; i++)
                     {
                         <option value="@countryDept.CountryDeptNo[i]">@countryDept.DeptName[i]</option>
