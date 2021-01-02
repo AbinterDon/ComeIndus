@@ -91,7 +91,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h1>News</h1>
-                @if (ViewData["Authority"]!= null && ViewData["Authority"].ToString() == "1")
+                @if (ViewData["StatusNo"]!= null && ViewData["StatusNo"].ToString() == "1")
                  {
                     <a style='visibility:@ViewData["admin"]' class="btn btn-lg btn-default addbtn" href="/News/News/NewNews">+ 新增</a>
                  }
@@ -191,7 +191,7 @@
                 <p>If you have any question about us,<br>Don`t hestitate to contact us !</p>
             </div>
             <div class="feedback"></div>
-            @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+            @if (ViewData["StatusNo"] != null && ViewData["StatusNo"].ToString() == "1")
             {
                 <div class="col-sm-4 btn-area">
                     <a class="btn btn-lg btn-default" href="/FeedBack/FeedBack/ShowFeedBack">查看意見回饋</a>

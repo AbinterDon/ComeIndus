@@ -193,6 +193,7 @@ namespace iWebSite_ComeIndus.Controllers
             {
                 //LogInfo("_DB_Execute", e + ":" + strSql);
                 throw e;
+
                 //return 0; //(再做參數控制出庫/DEV環境)
             }
         }
@@ -254,22 +255,23 @@ namespace iWebSite_ComeIndus.Controllers
         }
 
         /// <summary>
-        /// 取得目前登入者使用者權限
+        /// 取得目前登入者狀態
         /// </summary>
         /// <returns></returns>
-        public string getUserAuthority() 
+        public string getUserStatusNo() 
         {
             // 使用此函數時為防止錯誤Cookie，須明確檢查值為0或1
             // null: 帳戶不存在於DB中
             // 0: 普通會員
             // 1: 系統管理員
+            // 2: 停權
 
             if(Request.Cookies["account"] == null)
             {
                 return null;
             }
 
-            var sqlStr = string.Format("select Authority from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
+            var sqlStr = string.Format("select StatusNo from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
             var data = _DB_GetData(sqlStr);
 
             
@@ -282,6 +284,31 @@ namespace iWebSite_ComeIndus.Controllers
                 return null;
             }
                 
+        }
+
+        /// <summary>
+        /// 取得帳號狀態
+        /// </summary>
+        /// <returns></returns>
+        public string getUserStatusNo(string Account)
+        {
+            // 使用此函數時為防止錯誤Cookie，須明確檢查值為0或1
+            // null: 帳戶不存在於DB中
+            // 0: 普通會員
+            // 1: 系統管理員
+            // 2: 停權
+
+            var sqlStr = string.Format("select StatusNo from [dbo].[Member] where Account = {0}", SqlVal2(Account));
+            var data = _DB_GetData(sqlStr);
+
+            if (data.Rows.Count == 1)
+            {
+                return data.Rows[0].ItemArray.GetValue(0).ToString();
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

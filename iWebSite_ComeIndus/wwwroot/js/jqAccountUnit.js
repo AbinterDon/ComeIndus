@@ -17,18 +17,13 @@ $(document).ready(function () {
 
     //註冊按鈕 事件
     $("#getstart").click(function () {
-        console.log(UsernameCheck());
-        console.log(CheckAccount());
-        console.log(PasswordCheck());
-        console.log(RepeatPwdCheck());
-        console.log(GenderCheck());
-
         //註冊條件檢查 & BirthdayCheck()
         if (UsernameCheck() &
             AccountCheck() &
             PasswordCheck() &
             RepeatPwdCheck() &
-            GenderCheck()) {
+            GenderCheck() &
+            BirthdayCheck()) {
 
             //帳號物件
             var Account = $("#Account");
@@ -110,6 +105,9 @@ $(document).ready(function () {
         //    BirthdayCheck();
         //}
     })
+
+    //日期Format
+    DateFormat();
 })
 
 //使用者姓名檢測
@@ -239,13 +237,16 @@ function BirthdayCheck() {
     //錯誤訊息移除
     $(".BirthdayTip").remove();
 
-    //性別 物件
+    //生日 物件
     var Birthday = $("#Birthday");
 
-    //條件限制
-    if (Birthday.val() == "") {
+    //今日 物件
+    var Today = new Date().Format("yyyy-MM-dd");
+
+    //條件限制 檢查生日是否小於1970或大於今日
+    if (Birthday.val() != "" && (Birthday.val() < "1970-01-01" || Birthday.val() > Today)) { 
         //錯誤訊息
-        var errMsg = "<span class='gendertip'><font color=#6FCCC1 ; font size=2>*必須選填</font></span>";
+        var errMsg = "<span class='BirthdayTip'><font color=#6FCCC1 ; font size=2>*生日不得小於1970或大於今日。</font></span>";
 
         //錯誤訊息顯示
         Birthday.parent().append(errMsg);
@@ -284,5 +285,29 @@ function CheckAccount() {
                 } 
             }
         });
+    }
+}
+
+//日期Format
+function DateFormat() {
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份 
+            "d+": this.getDate(), //日 
+            "H+": this.getHours(), //小時 
+            "m+": this.getMinutes(), //分 
+            "s+": this.getSeconds(), //秒 
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+            "S": this.getMilliseconds() //毫秒 
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
+        return fmt;
     }
 }

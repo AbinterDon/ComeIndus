@@ -10,8 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-
-
+    <script src="~/js/jqAccountUnit.js"></script>
 </head>
 <body>
     <div class="container member mt-10">
@@ -53,7 +52,7 @@
                         <div class="form-group row mb-5">
                             <label for="Username" class="col-3 col-sm-2 col-form-label">會員暱稱</label>
                             <div class="col-6 col-sm-5">
-                                <input type="text" class="form-control" name="Username" id="Username" value="@row["Username"]" required>
+                                <input type="text" class="form-control" name="Username" id="Username"  onblur="UsernameCheck()" value="@row["Username"]" required>
                             </div>
                             <span id="UsernameCheck"></span>
                         </div>
@@ -61,7 +60,7 @@
                         <div class="form-group row mb-5">
                             <label for="Birthday" class="col-3 col-sm-2 col-form-label">出生日期</label>
                             <div class="col-6 col-sm-5">
-                                <input type="date" class="form-control" name="Birthday" id="Birthday" value="@row["Birthday"]">
+                                <input type="date" class="form-control" name="Birthday" id="Birthday" onchange="BirthdayCheck()" value="@row["Birthday"]">
                             </div>
                         </div>
 
@@ -87,62 +86,64 @@
                             </div>
                         </div>
 
-                        @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+                        @if (ViewData["StatusNo"] != null && ViewData["StatusNo"].ToString() == "1")
                         {
                             <div class="form-group row mb-5">
-                                <label for="Authority" class="col-3 col-sm-2 col-form-label">系統權限</label>
+                                <label for="StatusNo" class="col-3 col-sm-2 col-form-label">系統權限</label>
                                 <div class="radio-group d-flex align-items-end col-9 col-md-9">
-                                    <!-- ko if: @row["Authority"] == 0 -->
-                                    <input type="radio" name="Authority0" id="Authority00" value="0" checked="checked">
-                                    <label for="Authority00">一般使用者&nbsp;&nbsp;&nbsp;</label>
-                                    <input type="radio" name="Authority0" id="Authority01" value="1">
-                                    <label for="Authority01">系統管理員&nbsp;&nbsp;&nbsp;</label>
+                                    <!-- ko if: @row["StatusNo"] == 0 -->
+                                    <input type="radio" name="StatusNo0" id="StatusNo00" value="0" checked="checked">
+                                    <label for="StatusNo00">一般使用者&nbsp;&nbsp;&nbsp;</label>
 
-                                    <input type="radio" name="Authority0" id="Authority02" value="2">
-                                    <label for="Authority02">停用</label>
+                                    <input type="radio" name="StatusNo0" id="StatusNo01" value="1">
+                                    <label for="StatusNo01">系統管理員&nbsp;&nbsp;&nbsp;</label>
 
-
-                                    <!-- /ko -->
-                                    <!-- ko if: @row["Authority"] == 1 -->
-                                    <input type="radio" name="Authority1" id="Authority10" value="0">
-                                    <label for="Authority10">一般使用者&nbsp;&nbsp;&nbsp;</label>
-                                    <input type="radio" name="Authority1" id="Authority11" value="1" checked="checked">
-                                    <label for="Authority11">系統管理員&nbsp;&nbsp;&nbsp;</label>
-
-                                    <input type="radio" name="Authority1" id="Authority00" value="0">
-                                    <label for="Authority00">停用</label>
+                                    <input type="radio" name="StatusNo0" id="StatusNo02" value="2">
+                                    <label for="StatusNo02">停用</label>
                                     <!-- /ko -->
 
+                                    <!-- ko if: @row["StatusNo"] == 1 -->
+                                    <input type="radio" name="StatusNo1" id="StatusNo10" value="0">
+                                    <label for="StatusNo10">一般使用者&nbsp;&nbsp;&nbsp;</label>
 
-                                    <!-- ko if: @row["Authority"] == 2 -->
-                                    <input type="radio" name="Authority2" id="Authority10" value="0">
-                                    <label for="Authority10">一般使用者&nbsp;&nbsp;&nbsp;</label>
-                                    <input type="radio" name="Authority2" id="Authority11" value="1">
-                                    <label for="Authority11">系統管理員&nbsp;&nbsp;&nbsp;</label>
+                                    <input type="radio" name="StatusNo1" id="StatusNo11" value="1" checked="checked">
+                                    <label for="StatusNo11">系統管理員&nbsp;&nbsp;&nbsp;</label>
 
-                                    <input type="radio" name="Authority2" id="Authority22" value="2" checked="checked">
-                                    <label for="Authority22">停用</label>
+                                    <input type="radio" name="StatusNo1" id="StatusNo12" value="0">
+                                    <label for="StatusNo00">停用</label>
                                     <!-- /ko -->
 
+                                    <!-- ko if: @row["StatusNo"] == 2 -->
+                                    <input type="radio" name="StatusNo2" id="StatusNo20" value="0">
+                                    <label for="StatusNo10">一般使用者&nbsp;&nbsp;&nbsp;</label>
 
+                                    <input type="radio" name="StatusNo2" id="StatusNo21" value="1">
+                                    <label for="StatusNo11">系統管理員&nbsp;&nbsp;&nbsp;</label>
 
+                                    <input type="radio" name="StatusNo2" id="StatusNo22" value="2" checked="checked">
+                                    <label for="StatusNo22">停用</label>
+                                    <!-- /ko -->
                                 </div>
                             </div>
                         }
 
                         <div class="changeButton form-group d-felx mt-5 justify-content-end">
 
-                            @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+                            @if (ViewData["StatusNo"] != null && ViewData["StatusNo"].ToString() == "1")
                             {
-                                <!-- ko if: @row["Authority"] == 0 -->
-                                <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority0')">儲存</button>
-
+                                <!-- ko if: @row["StatusNo"] == 0 -->
+                                <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'StatusNo0')">儲存</button>
                                 <!-- /ko -->
-                                <!-- ko if: @row["Authority"] == 1 -->
-                                <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'Authority1')">儲存</button>
+
+                                <!-- ko if: @row["StatusNo"] == 1 -->
+                                <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'StatusNo1')">儲存</button>
+                                <!-- /ko -->
+
+                                <!-- ko if: @row["StatusNo"] == 2 -->
+                                <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', 'StatusNo2')">儲存</button>
                                 <!-- /ko -->
                             }
-                            @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "0")
+                            @if (ViewData["StatusNo"] != null && ViewData["StatusNo"].ToString() == "0")
                             {
                                 <button class="save mr-3" type="button" onclick="saveMember('Account', 'Actualname', 'Username', 'Birthday', 'Gender', null)">儲存</button>
                             }
@@ -169,31 +170,34 @@
         }
 
         //儲存
-        function saveMember(Account, Actualname, Username, Birthday, Gender, Authority) {
+        function saveMember(Account, Actualname, Username, Birthday, Gender, StatusNo) {
             account = document.getElementById(Account).value;
             actualname = document.getElementById(Actualname).value;
             username = document.getElementById(Username).value;
             birthday = document.getElementById(Birthday).value;
             gender = document.getElementById(Gender).value;
-            if (Authority == null) {
-                authority = null;
+
+            if (StatusNo == null) {
+                Status = null;
             }
             else {
-                authority = $("input[name=" + Authority + "]:checked").val();
+                Status = $("input[name=" + StatusNo + "]:checked").val();
             }
 
-            if (actualname.length == 0 || username.length == 0 || gender.length == 0) {
+            if (account.length == 0 || username.length == 0 || gender.length == 0) {
                 alert("會員資料尚未填寫完畢");
                 return false;
-            }
-            else {
+            } else if (account == Username) {
+                alert("會員暱稱不得與帳號相同");
+                return false;
+            }else {
                 let args = {
                     Account: account,
                     Actualname: actualname,
                     Username: username,
                     Birthday: birthday,
                     Gender: gender,
-                    Authority: authority
+                    StatusNo: Status
                 };
 
                 //$.post('@Url.Action("UpdateMember")', args, data => { });
@@ -216,7 +220,6 @@
                         toastr.clear();
                     }
                 });
-
                 //document.location.href = "/Member/Member/ShowMember";
             }
         }

@@ -101,7 +101,7 @@ namespace iWebSite_ComeIndus.Areas.FeedBack.Controllers
         public ActionResult ShowFeedBack()
         {
 
-            if (getUserAuthority() == "1")
+            if (getUserStatusNo() == "1")
             {
                 var sqlStr = string.Format(
                "select FeedbackNo, TypeName, FeedbackTitle, FeedbackContent, FeedbackUser, [dbo].[Feedback].CreateTime " +

@@ -53,7 +53,7 @@ namespace iWebSite_ComeIndus.Models
         public DateTime AccountEnd { get; set; }
 
         //系統權限
-        public string Authority { get; set; }
+        public string StatusNo { get; set; }
     }
 
     /// <summary>

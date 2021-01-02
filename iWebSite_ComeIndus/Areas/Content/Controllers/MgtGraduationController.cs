@@ -15,7 +15,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public IActionResult Index()
         {
             // admin check
-            if(getUserAuthority() != "1")
+            if(getUserStatusNo() != "1")
             {
                 return Redirect("~/Home/Error");
             }
@@ -61,7 +61,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public List<UnivGraduationModel> ShowGrad(string yearStart, string yearEnd, string countryNo, string countryDeptNo)
         {
             // admin check
-            if (getUserAuthority() != "1")
+            if (getUserStatusNo() != "1")
             {
                 return null;
             }
@@ -112,7 +112,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public bool InsertGrad(string year, string countryDeptNo, string gradNum)
         {
             
-            if (getUserAuthority() != "1")
+            if (getUserStatusNo() != "1")
             {   // admin check
                 return false;
             }
@@ -167,7 +167,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public bool DeleteGrad(string year, string countryDeptNo)
         {
             // admin check
-            if (getUserAuthority() != "1")
+            if (getUserStatusNo() != "1")
             {
                 return false;
             }
@@ -192,7 +192,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public bool UpdateGrad(string year, string countryDeptNo, string graduationNumber)
         {
             // admin check
-            if (getUserAuthority() != "1")
+            if (getUserStatusNo() != "1")
             {
                 return false;
             }

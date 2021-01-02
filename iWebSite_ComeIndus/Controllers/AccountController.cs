@@ -31,7 +31,7 @@ namespace iWebSite_ComeIndus.Controllers
         public ActionResult Login(AccountModels Model)
         {
             //SQL Select Member
-            var sqlStr = string.Format("select Account,Username,Password,MailCheck,PwdChangeCheck from [dbo].[Member] where Account = {0}", SqlVal2(Model.Account));
+            var sqlStr = string.Format("select Account, Username, Password, MailCheck, PwdChangeCheck, StatusNo from [dbo].[Member] where Account = {0}", SqlVal2(Model.Account));
 
             //SQL Check
             var data = _DB_GetData(sqlStr);
@@ -43,8 +43,15 @@ namespace iWebSite_ComeIndus.Controllers
                 if (Model.Account == data.Rows[0].ItemArray.GetValue(0).ToString() &&
                 SHA256_Compare(data.Rows[0].ItemArray.GetValue(2).ToString(),Model.Password))
                 {
-                    //登入成功，但尚未驗證信箱
-                    if(data.Rows[0].ItemArray.GetValue(3).ToString() != "1")
+                    //登入成功，但遭到停權
+                    if (data.Rows[0].ItemArray.GetValue(5).ToString() == "2")
+                    {
+                        //登入成功，但遭到停權
+                        Model.ok = false;
+                        Model.ResultMessage = "登入失敗，您的帳號已遭到『停權』。";
+                        return View(Model);
+                    }
+                    else if(data.Rows[0].ItemArray.GetValue(3).ToString() != "1")//登入成功，但尚未驗證信箱
                     {
                         //前往驗證信箱畫面
                         return RedirectToAction("MailVerify", "Account", new Verify() { 
@@ -105,7 +112,7 @@ namespace iWebSite_ComeIndus.Controllers
         {
             Model.ok = true;
             Model.MailCheck = "0";
-            Model.Authority = "0";
+            Model.StatusNo = "0";
             Model.PwdChangeCheck = "0";
 
             //SQL Insert Member
@@ -122,7 +129,7 @@ namespace iWebSite_ComeIndus.Controllers
                     "[PwdChangeCheck]," +
                     "[CreateTime]," +
                     "[AccountStart]," +
-                    "[Authority]" +
+                    "[StatusNo]" +
                 ")VALUES(" +
                     "{0}," +
                     "{1}," +
@@ -147,7 +154,7 @@ namespace iWebSite_ComeIndus.Controllers
                     SqlVal2(Model.PwdChangeCheck),
                     DBC.ChangeTimeZone(),
                     DBC.ChangeTimeZone(),
-                    SqlVal2(Model.Authority)+")"
+                    SqlVal2(Model.StatusNo)+")"
                 );
 
             //SQL Check
@@ -445,7 +452,7 @@ namespace iWebSite_ComeIndus.Controllers
         [HttpGet]
         public bool CheckLoginStatus()
         {
-            if (string.IsNullOrEmpty(getUserAuthority()))
+            if (string.IsNullOrEmpty(getUserStatusNo()))
             {
                 return false;
             }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using iWebSite_ComeIndus.Controllers;
 using System.Data;
+using iWebSite_ComeIndus.Areas.Member.Models;
 
 namespace iWebSite_ComeIndus.Areas.Member.Controllers
 {
@@ -28,15 +29,15 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         public IActionResult ModifyMember(string Account)
         {
             //目前登入權限
-            var Authority = getUserAuthority();
+            var StatusNo = getUserStatusNo();
 
             //若有沒有帳號 則取得Cookie的帳號
             if (string.IsNullOrEmpty(Account)) Account = Request.Cookies["account"];
 
             //權限
-            ViewData["Authority"] = Authority;
+            ViewData["StatusNo"] = StatusNo;
 
-            if (Authority!=null && (Authority == "1" || Authority == "0"))
+            if (StatusNo != null && (StatusNo == "1" || StatusNo == "0" || StatusNo == "2"))
             {
                 return View(GetAccount(Account));
             }
@@ -56,7 +57,7 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         private DataTable GetAccount(string Account)
         {
             var sqlStr = string.Format("" +
-                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,120) as Birthday, Gender, Authority " +
+                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,120) as Birthday, Gender, StatusNo " +
                     "FROM [dbo].[Member] " +
                     "Where Account = {0}", SqlVal2(Account)
                 );
@@ -68,18 +69,25 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         /// <summary>
         /// 修改會員資料
         /// </summary>
-        /// <param name="Account"></param>
-        /// <param name="Actualname"></param>
-        /// <param name="Username"></param>
-        /// <param name="Birthday"></param>
-        /// <param name="Gender"></param>
-        /// <param name="Authority"></param>
+        /// <param name="Model"></param>
         /// <returns></returns>
-        public bool UpdateMember(string Account, string Actualname, string Username, DateTime? Birthday, string Gender, string Authority)
+        public bool UpdateMember(MemberModels Model)
         {
             var sqlStr = "";
 
-            if (!string.IsNullOrEmpty(Authority))
+            DateTime Temp = new DateTime();
+
+            //檢查年分
+            if(Model.Birthday != null)
+            {
+                Temp = (DateTime)Model.Birthday;
+                if(Temp.Year <= 1970)
+                {
+                    return false;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(Model.StatusNo))
             {
                 sqlStr = string.Format(
                     @"UPDATE [dbo].[Member] " +
@@ -87,16 +95,16 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
                         "[Username] = {1}, " +
                         "[Birthday] = {2}, " +
                         "[Gender] = {3}, " +
-                        "[Authority] = {4}, " +
+                        "[StatusNo] = {4}, " +
                         "[ModifyTime] = {5} " +
                         "WHERE [Account] = {6}",
-                        SqlVal2(Actualname),
-                        SqlVal2(Username),
-                        SqlVal2(Birthday),
-                        SqlVal2(Gender),
-                        SqlVal2(Authority),
+                        SqlVal2(Model.Actualname),
+                        SqlVal2(Model.Username),
+                        SqlVal2(Model.Birthday),
+                        SqlVal2(Model.Gender),
+                        SqlVal2(Model.StatusNo),
                         DBC.ChangeTimeZone(),
-                        SqlVal2(Account)
+                        SqlVal2(Model.Account)
                 );
             }
             else
@@ -109,12 +117,12 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
                         "[Gender] = {3}, " +
                         "[ModifyTime] = {4} " +
                         "WHERE [Account] = {5}",
-                        SqlVal2(Actualname),
-                        SqlVal2(Username),
-                        SqlVal2(Birthday),
-                        SqlVal2(Gender),
+                        SqlVal2(Model.Actualname),
+                        SqlVal2(Model.Username),
+                        SqlVal2(Model.Birthday),
+                        SqlVal2(Model.Gender),
                         DBC.ChangeTimeZone(),
-                        SqlVal2(Account)
+                        SqlVal2(Model.Account)
                 );
             }
 
@@ -123,15 +131,13 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
             //修改是否成功
             if (check == 1)
             {
+                //成功
                 return true;
-                //return View();
             }
             else
             {
+                //失敗
                 return false;
-                //導致Error頁面
-                //return Redirect("~/Home/Error");
-                //return StatusCode(403);
             }
         }
 
@@ -142,17 +148,17 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         public ActionResult ShowMember()
         {
             //目前登入權限
-            var Authority = getUserAuthority();
+            var StatusNo = getUserStatusNo();
 
             //權限
-            ViewData["Authority"] = Authority;
+            ViewData["StatusNo"] = StatusNo;
 
             //是管理員的話
-            if (Authority == "1")
+            if (StatusNo == "1")
             {
-                return View(GetMember(Authority));
+                return View(GetMember(StatusNo));
 
-            }else if(Authority == "0")//是一般會員
+            }else if(StatusNo == "0")//是一般會員
             {
                 return RedirectToAction("ModifyMember");
             }
@@ -167,19 +173,19 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         /// <summary>
         /// 撈DB會員資料
         /// </summary>
-        /// <param name="Authority"></param>
+        /// <param name="StatusNo"></param>
         /// <returns></returns>
-        private DataTable GetMember(string Authority)
+        private DataTable GetMember(string StatusNo)
         {
             var sqlStr = "";
-            if (Authority == "1")
+            if (StatusNo == "1")
             {
                 sqlStr = string.Format("" +
-                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,111) as Birthday, Gender, Authority " +
+                    "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,111) as Birthday, Gender, StatusNo " +
                     "FROM [dbo].[Member]"
                 );
             }
-            else if (Authority == "0")
+            else if (StatusNo == "0")
             {
                 sqlStr = string.Format("" +
                     "SELECT Account, Actualname, Username, Convert(varchar(10), Birthday,111) as Birthday, Gender " +
@@ -197,26 +203,37 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
         /// </summary>
         /// <param name="Account"></param>
         /// <returns></returns>
-        public ActionResult DeleteMember(string Account)
+        public bool DeleteMember(string Account)
         {
-            string resMsg = "";
-            string sqlStr = "DELETE [dbo].[Member] " +
-                "WHERE [Account] = '" + Account + "'";
+            bool check = true;
 
-            var check = _DB_Execute(sqlStr);
-
-            //刪除是否成功
-            if (check == 1)
+            if(!string.IsNullOrEmpty(Account) && getUserStatusNo(Account) != "1")
             {
-                resMsg = "success";
+                string resMsg = "";
+                string sqlStr = "DELETE [dbo].[Member] " +
+                    "WHERE [Account] = '" + Account + "'";
+
+                var ExecuteCheck = _DB_Execute(sqlStr);
+
+                //刪除是否成功
+                if (ExecuteCheck == 1)
+                {
+                    resMsg = "success";
+                }
+                else
+                {
+                    resMsg = "fail";
+                    check = false;
+                }
+
+                ViewData["result"] = resMsg;
             }
             else
             {
-                resMsg = "fail";
+                check = false;
             }
 
-            ViewData["result"] = resMsg;
-            return View();
+            return check;
         }
     }
 }

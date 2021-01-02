@@ -103,7 +103,7 @@
                     <th>標題</th>
                     <th>內容</th>
                     <th>點閱次數</th>
-                    @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+                    @if (ViewData["StatusNo"] != null && ViewData["StatusNo"].ToString() == "1")
                     {
                         <th width="15%">管理員</th>
                     }
@@ -119,7 +119,7 @@
                         <td class="Newstitle">@row["NewsTitle"]</td>
                         <td class="NewsContent">@Html.Raw(@row["NewsContent"])</td>
                         <td>@row["NewsHits"]</td>
-                        @if (ViewData["Authority"] != null && ViewData["Authority"].ToString() == "1")
+                        @if (ViewData["StatusNo"] != null && ViewData["StatusNo"].ToString() == "1")
                         {
                             <td>
                                 <button class="btn" type="button" onclick="editNews(@row["NewsNo"])">修改</button>

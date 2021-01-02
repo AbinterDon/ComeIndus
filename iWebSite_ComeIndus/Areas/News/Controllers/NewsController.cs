@@ -164,13 +164,13 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             ViewData["NewsTypes"] = NewsTypes;
 
             //目前登入權限
-            var Authority = getUserAuthority();
+            var StatusNo = getUserStatusNo();
 
             //權限
-            ViewData["Authority"] = Authority;
+            ViewData["StatusNo"] = StatusNo;
 
             //任何人都可進來查看 最新消息
-            if (Authority == "1" || Authority == "0" || Authority == null)
+            if (StatusNo == "1" || StatusNo == "0" || StatusNo == null)
             {
                 return View(GetNews(NewsNo));
             }

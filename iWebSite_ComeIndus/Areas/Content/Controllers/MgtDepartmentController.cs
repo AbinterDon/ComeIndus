@@ -21,7 +21,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public string InsertUnivDepartment(string CountryNo, string DeptName, string DeptDescription)
         {
             // admin check
-            if (getUserAuthority() != "1")
+            if (getUserStatusNo() != "1")
             {
                 return "fail";
             }
@@ -103,7 +103,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public ActionResult ShowUnivDepartment() 
         {
             // admin check
-            if (getUserAuthority() != "1")
+            if (getUserStatusNo() != "1")
             {
                 return Redirect("~/Home/Error");
             }
@@ -150,7 +150,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public ActionResult UpdateUnivDepartment(string DeptNo, string DeptName, string DeptDescription)
         {
             // admin check
-            if (getUserAuthority() != "1")
+            if (getUserStatusNo() != "1")
             {
                 return null;
             }
@@ -181,7 +181,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public ActionResult DeleteUnivDepartment(string DeptNo)
         {
             // admin check
-            if (getUserAuthority() != "1")
+            if (getUserStatusNo() != "1")
             {
                 return null;
             }

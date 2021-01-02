@@ -23,20 +23,20 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         public IActionResult DiffCountry()
         {
             //目前登入權限
-            var Authority = getUserAuthority();
+            var StatusNo = getUserStatusNo();
 
             //權限
-            ViewData["Authority"] = Authority;
+            ViewData["StatusNo"] = StatusNo;
             return View("GraduationFromDiffCountry", getTime());
         }
 
         public IActionResult DiffYear()
         {
             //目前登入權限
-            var Authority = getUserAuthority();
+            var StatusNo = getUserStatusNo();
 
             //權限
-            ViewData["Authority"] = Authority;
+            ViewData["StatusNo"] = StatusNo;
             return View("GraduationFromDiffYear", getTime());
         }
 
@@ -162,7 +162,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             if (!string.IsNullOrEmpty(Request.Cookies["account"]) && !string.IsNullOrEmpty(Request.Cookies["userName"]))
             {
                 //SQL Insert Member
-                var sqlStr = string.Format("select Authority from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
+                var sqlStr = string.Format("select StatusNo from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
 
                 //SQL Check
                 var data = _DB_GetData(sqlStr);

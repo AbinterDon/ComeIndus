@@ -37,7 +37,7 @@ namespace iWebSite_ComeIndus.Controllers
             if (!string.IsNullOrEmpty(Request.Cookies["account"]) && !string.IsNullOrEmpty(Request.Cookies["userName"]))
             {
                 //SQL Insert Member
-                var sqlStr = string.Format("select Authority from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
+                var sqlStr = string.Format("select StatusNo from [dbo].[Member] where Account = {0}", SqlVal2(Request.Cookies["account"]));
 
                 //SQL Check
                 var data = _DB_GetData(sqlStr);
@@ -46,7 +46,7 @@ namespace iWebSite_ComeIndus.Controllers
                 if (data.Rows.Count > 0)
                 {
                     //取得權限
-                    ViewData["Authority"] = data.Rows[0].ItemArray.GetValue(0).ToString();
+                    ViewData["StatusNo"] = data.Rows[0].ItemArray.GetValue(0).ToString();
                     //return View(new SetResult() { ok = true });
                 }
             }
