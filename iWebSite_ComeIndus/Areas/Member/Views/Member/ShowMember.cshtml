@@ -163,34 +163,36 @@
 
     //刪除
     function deleteMember(data) {
-        this.Item(data);
+        //視窗提示
+        if (window.confirm("是否確定要刪除?")) {
+            this.Item(data);
 
-        let args = {
-            Account: data
-        };
+            let args = {
+                Account: data
+            };
 
-        @*$.post('@Url.Action("DeleteMember")', args, data => { });*@
+            @*$.post('@Url.Action("DeleteMember")', args, data => { });*@
 
-        //Ajax
-        $.ajax({
-            url: '@Url.Action("DeleteMember")',
-            data: args,
-            method: "POST",
-            async: true,
-            success: function (response) {
-                toastr.clear();
-                if (response) {
-                    toastr.success("刪除成功");
-                } else {
-                    toastr.error("刪除失敗");
+            //Ajax
+            $.ajax({
+                url: '@Url.Action("DeleteMember")',
+                data: args,
+                method: "POST",
+                async: true,
+                success: function (response) {
+                    toastr.clear();
+                    if (response) {
+                        toastr.success("刪除成功");
+                        window.location.reload();
+                    } else {
+                        toastr.error("刪除失敗");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.clear();
                 }
-            },
-            error: function (xhr, status, error) {
-                toastr.clear();
-            }
-        });
-
-        window.location.reload();
+            });
+        }
     }
     </script>
 </body>
