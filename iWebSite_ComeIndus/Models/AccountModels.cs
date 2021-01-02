@@ -37,9 +37,6 @@ namespace iWebSite_ComeIndus.Models
         //生日
         public DateTime? Birthday { get; set; }
 
-        //大頭照路徑
-        public string PhotoURL { get; set; }
-
         //註冊驗證判別
         public string MailCheck { get; set; }
 

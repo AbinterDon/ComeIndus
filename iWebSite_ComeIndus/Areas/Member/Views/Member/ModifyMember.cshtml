@@ -177,6 +177,7 @@
             birthday = document.getElementById(Birthday).value;
             gender = document.getElementById(Gender).value;
 
+            //身分為NULL
             if (StatusNo == null) {
                 Status = null;
             }
@@ -184,13 +185,8 @@
                 Status = $("input[name=" + StatusNo + "]:checked").val();
             }
 
-            if (account.length == 0 || username.length == 0 || gender.length == 0) {
-                alert("會員資料尚未填寫完畢");
-                return false;
-            } else if (account == Username) {
-                alert("會員暱稱不得與帳號相同");
-                return false;
-            }else {
+            //送出時進行檢查
+            if(AccountCheck() & UsernameCheck() & GenderCheck() & BirthdayCheck()) {
                 let args = {
                     Account: account,
                     Actualname: actualname,
@@ -221,6 +217,9 @@
                     }
                 });
                 //document.location.href = "/Member/Member/ShowMember";
+            }else {
+                alert("會員資料不符合規定。");
+                return false;
             }
         }
 

@@ -124,7 +124,6 @@ namespace iWebSite_ComeIndus.Controllers
                     "[Actualname]," +
                     "[Gender]," +
                     "[Birthday]," +
-                    "[PhotoURL]," +
                     "[MailCheck]," +
                     "[PwdChangeCheck]," +
                     "[CreateTime]," +
@@ -149,7 +148,6 @@ namespace iWebSite_ComeIndus.Controllers
                     SqlVal2(Model.Actualname),
                     SqlVal2(Model.Gender),
                     SqlVal2(Model.Birthday),
-                    SqlVal2(Model.PhotoURL),
                     SqlVal2(Model.MailCheck),
                     SqlVal2(Model.PwdChangeCheck),
                     DBC.ChangeTimeZone(),
