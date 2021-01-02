@@ -278,21 +278,25 @@
         $.post('@Url.Action("UpdateUnivDepartment")', args, data => {});
 
         //window.location.reload();
-        window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry
+        window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
     }
 
+    //刪除
     function deleteDept(data) {
-        this.IsEdit(false);
-        this.Item(data);
+        //視窗提示
+        if (window.confirm("是否確定要刪除?")) {
+            this.IsEdit(false);
+            this.Item(data);
 
-        let args = {
-            DeptNo: data
-        };
+            let args = {
+                DeptNo: data
+            };
 
-        $.post('@Url.Action("DeleteUnivDepartment")', args, data => {});
+            $.post('@Url.Action("DeleteUnivDepartment")', args, data => {});
 
-        //window.location.reload();
-        window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry
+            //window.location.reload();
+            window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+        }
     }
 
     function insertDept(butObj) {
