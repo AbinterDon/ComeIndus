@@ -293,50 +293,38 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         /// <summary>
         /// 更新
         /// </summary>
-        /// <param name="NewsNo"></param>
-        /// <param name="NewsTypeNo"></param>
-        /// <param name="NewsTitle"></param>
-        /// <param name="NewsContent"></param>
+        /// <param name="Model"></param>
         /// <returns></returns>
-        public ActionResult UpdateNews(string NewsNo, string NewsTypeNo, string NewsTitle, string NewsContent)
+        public bool UpdateNews(NewsModel Model)
         {
-            string resMsg = "";
-            //string sqlStr = "UPDATE [dbo].[News] " +
-            //    "SET [NewsTypeNo] = '" + NewsTypeNo + "', " +
-            //    "[NewsTitle] = N'" + NewsTitle + "', " +
-            //    "[NewsContent] = N'" + NewsContent.Replace("\n", "<br>") + "', " +
-            //    "[ModifyTime] = " + DBC.ChangeTimeZone() +
-            //    "[ModifyUser] = " + DBC.ChangeTimeZone() +
-            //    "WHERE [NewsNo] = '" + NewsNo + "'";
-
-            string sqlStr = string.Format("UPDATE [dbo].[News]" +
-                "SET [NewsTypeNo] = {0}," +
-                "[NewsTitle] = {1}," +
-                "[NewsContent] = {2}," +
-                "[ModifyTime] = {3}," +
-                "[ModifyUser] = {4}" +
-                "WHERE [NewsNo] = {5}",
-                SqlVal2(NewsTypeNo), 
-                SqlVal2(NewsTitle),
-                SqlVal2(NewsContent.Replace("\n", "<br>")),
-                DBC.ChangeTimeZone(),
-                SqlVal2(Request.Cookies["account"]),
-                SqlVal2(NewsNo));
+            string sqlStr = string.Format(
+                @"UPDATE [dbo].[News] " +
+                    "SET [NewsTypeNo] = {0}, " +
+                    "[NewsTitle] = {1}, " +
+                    "[NewsContent] = {2}, " +
+                    "[ModifyTime] = {3}, " +
+                    "[ModifyUser] = {4} " +
+                    "WHERE [NewsNo] = {5}",
+                    SqlVal2(Model.NewsTypeNo), 
+                    SqlVal2(Model.NewsTitle),
+                    SqlVal2(Model.NewsContent.Replace("\n", "<br>")),
+                    DBC.ChangeTimeZone(),
+                    SqlVal2(Request.Cookies["account"]),
+                    SqlVal2(Model.NewsNo));
 
             var check = _DB_Execute(sqlStr);
 
             //修改是否成功
             if (check == 1)
             {
-                resMsg = "success";
+                //成功
+                return true;
             }
             else
             {
-                resMsg = "fail";
+                //失敗
+                return false;
             }
-
-            ViewData["result"] = resMsg;
-            return View();
         }
 
         /// <summary>
@@ -344,26 +332,26 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         /// </summary>
         /// <param name="NewsNo"></param>
         /// <returns></returns>
-        public ActionResult DeleteNews(string NewsNo)
+        public bool DeleteNews(string NewsNo)
         {
-            string resMsg = "";
-            string sqlStr = "DELETE [dbo].[News] " +
-                "WHERE [NewsNo] = '" + NewsNo + "'";
+            string sqlStr = string.Format(
+                @"DELETE [dbo].[News] " +
+                    "WHERE [NewsNo] = {0}",
+                 SqlVal2(NewsNo));
 
             var check = _DB_Execute(sqlStr);
 
             //刪除是否成功
             if (check == 1)
             {
-                resMsg = "success";
+                //成功
+                return true;
             }
             else
             {
-                resMsg = "fail";
+                //失敗
+                return false;
             }
-
-            ViewData["result"] = resMsg;
-            return View();
         }
 
         /// <summary>
@@ -374,9 +362,10 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         private bool UpdateNewsHits(string NewsNo)
         {
             //NewsTable
-            string updateSqlStr = "UPDATE [dbo].[News] " +
-                "SET [NewsHits] = [NewsHits] + 1 " +
-                "WHERE [NewsNo] = " + SqlVal2(NewsNo);
+            string updateSqlStr = string.Format(
+                @"UPDATE [dbo].[News] " +
+                    "SET [NewsHits] = [NewsHits] + 1 " +
+                    "WHERE [NewsNo] = " + SqlVal2(NewsNo));
 
             var check = _DB_Execute(updateSqlStr);
 
