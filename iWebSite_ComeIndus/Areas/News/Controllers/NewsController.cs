@@ -230,11 +230,18 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
             else
             {
                 //SQL 順便做有效時間塞選
-                var sqlStr = string.Format("" +
-                        "SELECT {0} NewsNo, [dbo].[News].NewsTypeNo, TypeName, NewsTitle, NewsContent, NewsHits, Convert(varchar(10), NewsStart,111) as NewsStart , Convert(varchar(10), NewsEnd,111) as NewsEnd " +
-                        "FROM [dbo].[News] INNER JOIN [dbo].[NewsType] on [dbo].[News].NewsTypeNo = [dbo].[NewsType].NewsTypeNo " +
-                        "where NewsEnd >= (SELECT convert(varchar, {1}, 111)) " +
-                        "ORDER BY NewsStart DESC", GetCount, DBC.ChangeTimeZone()
+                var sqlStr = string.Format("SELECT {0} " +
+                        "NewsNo," +
+                        "NType.NewsTypeNo," +
+                        "TypeName," +
+                        "NewsTitle," +
+                        "NewsContent," +
+                        "NewsHits," +
+                        "Convert(varchar(10), NewsStart, 111) as NewsStart," +
+                        "Convert(varchar(10), NewsEnd, 111) as NewsEnd " +
+                        "FROM [dbo].[News] as News INNER JOIN[dbo].[NewsType] as NType on NType.NewsTypeNo = News.NewsTypeNo " +
+                        "where NewsEnd >= (SELECT convert(varchar, {1}, 111))" +
+                        "ORDER BY NewsStart,News.CreateTime DESC", GetCount, DBC.ChangeTimeZone()
                     );
 
                 //Return

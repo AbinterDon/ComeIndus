@@ -62,7 +62,6 @@
     </style>
 </head>
 
-
 <div class="box">
     <h2>最新消息</h2>
     <div class="formstyle">
@@ -129,15 +128,15 @@
 
 </div>
 
-@{ if (ViewData["checkMsg"].ToString() == "true")
+@{ if (ViewData["checkMsg"] != null && ViewData["checkMsg"].ToString() == "true")
     {
         <script type="text/javascript">
-        var message = @Html.Raw(Json.Serialize(ViewData["result"]));
+            var message = @Html.Raw(Json.Serialize(ViewData["result"]));
             alert(message);
             document.location.href = "/News/News/ShowNews";
         </script>
     }
-    else if (ViewData["checkMsg"].ToString() == "false")
+    else if (ViewData["checkMsg"] != null && ViewData["checkMsg"].ToString() == "false")
     {
         <script type="text/javascript">
             var message = @Html.Raw(Json.Serialize(ViewData["result"]));
@@ -153,8 +152,6 @@
     let start = new Date();
     console.log(typeof (start), "start", start);
 
-
-
     // $(document).ready(function () {
     $('#startDate').datetimepicker({
         format: 'YYYY/MM/DD',
@@ -167,9 +164,7 @@
         locale: moment.locale('zh-cn'),
         minDate: new Date()
     });
-
     // });
-
 
     function getTime() {
         /*
@@ -199,6 +194,7 @@
 
         }
     }
+
     function checkForm() {
         var frm = document.forms["theForm"];
         if (!getTime()) {
@@ -208,9 +204,5 @@
             return true;
         }
     }
-
-
     //var continueCheck = window.setInterval("getTime()");
-
-
 </script>
