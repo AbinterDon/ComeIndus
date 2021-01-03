@@ -204,16 +204,19 @@
         window.location.reload();
     }
 
+    //刪除
     function deleteNews(data) {
-        this.IsEdit(false);
-        this.Item(data);
+        if (window.confirm("請問是否真的要刪除?")) {
+            this.IsEdit(false);
+            this.Item(data);
 
-        let args = {
-            NewsNo: data
-        };
+            let args = {
+                NewsNo: data
+            };
 
-        $.post('@Url.Action("DeleteNews")', args, data => {});
+            $.post('@Url.Action("DeleteNews")', args, data => {});
 
-        window.location.reload();
+            window.location.reload();
+        }
     }
 </script>
