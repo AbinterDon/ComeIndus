@@ -109,16 +109,16 @@
                                     <input type="radio" name="StatusNo1" id="StatusNo11" value="1" checked="checked">
                                     <label for="StatusNo11">系統管理員&nbsp;&nbsp;&nbsp;</label>
 
-                                    <input type="radio" name="StatusNo1" id="StatusNo12" value="0">
-                                    <label for="StatusNo00">停用</label>
+                                    <input type="radio" name="StatusNo1" id="StatusNo12" value="2">
+                                    <label for="StatusNo12">停用</label>
                                     <!-- /ko -->
 
                                     <!-- ko if: @row["StatusNo"] == 2 -->
                                     <input type="radio" name="StatusNo2" id="StatusNo20" value="0">
-                                    <label for="StatusNo10">一般使用者&nbsp;&nbsp;&nbsp;</label>
+                                    <label for="StatusNo20">一般使用者&nbsp;&nbsp;&nbsp;</label>
 
                                     <input type="radio" name="StatusNo2" id="StatusNo21" value="1">
-                                    <label for="StatusNo11">系統管理員&nbsp;&nbsp;&nbsp;</label>
+                                    <label for="StatusNo21">系統管理員&nbsp;&nbsp;&nbsp;</label>
 
                                     <input type="radio" name="StatusNo2" id="StatusNo22" value="2" checked="checked">
                                     <label for="StatusNo22">停用</label>
@@ -195,8 +195,6 @@
                     Gender: gender,
                     StatusNo: Status
                 };
-
-                //$.post('@Url.Action("UpdateMember")', args, data => { });
 
                 //Ajax
                 $.ajax({

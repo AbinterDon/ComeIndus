@@ -210,8 +210,9 @@ namespace iWebSite_ComeIndus.Areas.Member.Controllers
             if(!string.IsNullOrEmpty(Account) && getUserStatusNo(Account) != "1")
             {
                 string resMsg = "";
-                string sqlStr = "DELETE [dbo].[Member] " +
-                    "WHERE [Account] = '" + Account + "'";
+                string sqlStr = string.Format(
+                    @"DELETE [dbo].[Member] " +
+                        "WHERE Account = {0}", SqlVal2(Account));
 
                 var ExecuteCheck = _DB_Execute(sqlStr);
 
