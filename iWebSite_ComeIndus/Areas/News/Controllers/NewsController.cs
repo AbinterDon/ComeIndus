@@ -301,12 +301,27 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         public ActionResult UpdateNews(string NewsNo, string NewsTypeNo, string NewsTitle, string NewsContent)
         {
             string resMsg = "";
-            string sqlStr = "UPDATE [dbo].[News] " +
-                "SET [NewsTypeNo] = '" + NewsTypeNo + "', " +
-                "[NewsTitle] = N'" + NewsTitle + "', " +
-                "[NewsContent] = N'" + NewsContent.Replace("\n", "<br>") + "', " +
-                "[ModifyTime] = " + DBC.ChangeTimeZone() +
-                "WHERE [NewsNo] = '" + NewsNo + "'";
+            //string sqlStr = "UPDATE [dbo].[News] " +
+            //    "SET [NewsTypeNo] = '" + NewsTypeNo + "', " +
+            //    "[NewsTitle] = N'" + NewsTitle + "', " +
+            //    "[NewsContent] = N'" + NewsContent.Replace("\n", "<br>") + "', " +
+            //    "[ModifyTime] = " + DBC.ChangeTimeZone() +
+            //    "[ModifyUser] = " + DBC.ChangeTimeZone() +
+            //    "WHERE [NewsNo] = '" + NewsNo + "'";
+
+            string sqlStr = string.Format("UPDATE [dbo].[News]" +
+                "SET [NewsTypeNo] = {0}," +
+                "[NewsTitle] = {1}," +
+                "[NewsContent] = {2}," +
+                "[ModifyTime] = {3}," +
+                "[ModifyUser] = {4}" +
+                "WHERE [NewsNo] = {5}",
+                SqlVal2(NewsTypeNo), 
+                SqlVal2(NewsTitle),
+                SqlVal2(NewsContent.Replace("\n", "<br>")),
+                DBC.ChangeTimeZone(),
+                SqlVal2(Request.Cookies["account"]),
+                SqlVal2(NewsNo));
 
             var check = _DB_Execute(sqlStr);
 
