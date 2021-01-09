@@ -12,7 +12,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Models
         public string DeptName { get; set; }
         public string DeptDescription { get; set; }
         public string CreateTime { get; set; }
-        public string ModifyTime { get; set; }
+        public string CreateUser { get; set; }
     }
 
     public class MgtDeptModel

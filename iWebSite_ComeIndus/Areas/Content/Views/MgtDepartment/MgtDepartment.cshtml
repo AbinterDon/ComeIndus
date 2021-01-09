@@ -145,7 +145,7 @@
 
     <div class="container" id="DeptInfo" style="margin-top:100px">
         <div class="select">
-            <select onchange="showDeptList(this)" name="slct" id="slct">
+            <select onchange="showDeptList(this)" name="slct" id="countryList">
                 @foreach (MgtDeptModel mgtDept in Model)
                 {
                     <option value="@mgtDept.CountryNo">@mgtDept.CountryName</option>
@@ -153,18 +153,44 @@
             </select>
         </div>
 
+       
+            <select class="allDepts" style="display:none">
+               
+                @{ 
+                    HashSet<string> depts = new HashSet<string>();
+                    @foreach (MgtDeptModel mgtDept in Model)
+                    {
+                        @foreach (DeptModel dept in mgtDept.Depts)
+                        {
+                            if (!depts.Contains(dept.DeptNo)) 
+                            {
+                                <option value="@dept.DeptNo">@dept.DeptName</option>
+                                depts.Add(dept.DeptNo);
+                            }
+                        }
+                    }
+                }
+            </select>
+  
+
         @foreach (MgtDeptModel mgtDept in Model)
         {
-            <div class="deptList" section="@mgtDept.CountryNo">
+            <div class="deptList" section="@mgtDept.CountryNo" style="display:none">
                 <h2>@mgtDept.CountryName</h2>
                 <h3>科系/學群列表</h3>
+
                 <div>
                     <form>
-                        <label style="color:white">科系</label>
-                        <input size="20" class="insert-DeptName" countryNo="@mgtDept.CountryNo">&nbsp;&nbsp;
-                        <label style="color:white">描述</label>
-                        <input size="60" class="insert-DeptDescription" countryNo="@mgtDept.CountryNo">&nbsp;&nbsp;
+                        <label style="color:white">新增科系</label>
+                        <span class="deptDropdown"></span>&nbsp;&nbsp;
                         <button class="btn" type="button" onclick="insertDept(this)" countryNo="@mgtDept.CountryNo">新增</button>
+                        <br>
+                        <!--
+                        <br>
+                        <br>
+                        <input size="20" class="insert-DeptName" countryNo="@mgtDept.CountryNo" placeholder="在此輸入新科系">&nbsp;&nbsp;
+                        <input size="60" class="insert-DeptDescription" countryNo="@mgtDept.CountryNo" placeholder="科系描述">&nbsp;&nbsp;
+                        -->
                     </form>
                     <span style="font-size: 18px; color:red" id="insert-result"></span>
                 </div>
@@ -176,7 +202,7 @@
                             <th>名稱</th>
                             <th>描述</th>
                             <th>建立時間</th>
-                            <th>上次修改時間</th>
+                            <th>建立者</th>
                             <th width="15%"></th>
                         </tr>
                     </thead>
@@ -190,11 +216,11 @@
                                 <td>@dept.DeptName</td>
                                 <td>@dept.DeptDescription</td>
                                 <td>@dept.CreateTime</td>
-                                <td>@dept.ModifyTime</td>
+                                <td>@dept.CreateUser</td>
                                 <td>
                                     <button class="btn" type="button" onclick="editDept(@dept.DeptNo)">修改</button>
                                     <span>&nbsp;&nbsp;</span>
-                                    <button class="btn" type="button" onclick="deleteDept(@dept.DeptNo)">刪除</button>
+                                    <button class="btn" type="button" onclick="deleteDept(@mgtDept.CountryNo, @dept.DeptNo)">刪除</button>
                                 </td>
                                 <!-- /ko -->
                             </tr>
@@ -208,7 +234,7 @@
                                     <input type="text" name="DeptDescription" value="@dept.DeptDescription" id="DeptDescription">
                                 </td>
                                 <td>@dept.CreateTime</td>
-                                <td>@dept.ModifyTime</td>
+                                <td>@dept.CreateUser</td>
                                 <td>
                                     <button class="btn" type="button" onclick="saveDept(@dept.DeptNo, 'DeptName', 'DeptDescription')">確認</button>
                                     <span>&nbsp;&nbsp;</span>
@@ -236,20 +262,24 @@
     }
 
     $(function () {
-        $(".deptList").hide();
+        $(".deptDropdown").html($(".allDepts"));
+        $(".allDepts").show();
+
         if (currentCountry == null) {
+            currentCountry = $("#countryList").eq(0).val();
             $(".deptList").eq(0).show();
         } else {
             $(".deptList[section=" + currentCountry + "]").show();
             $("select option[value=" + currentCountry + "]").attr("selected", "selected")
         }
-
+        
     });
 
     function showDeptList(obj) {
         currentCountry = obj.value;
         $(".deptList").hide();
         $(".deptList[section=" + currentCountry + "]").show();
+        $(".insert-DeptName, .insert-DeptDescription").show();
     }
 
     function editDept(data) {
@@ -282,14 +312,16 @@
     }
 
     //刪除
-    function deleteDept(data) {
+    function deleteDept(CountryNo, DeptNo) {
         //視窗提示
         if (window.confirm("是否確定要刪除?")) {
             this.IsEdit(false);
-            this.Item(data);
+            //this.Item(data);
+            this.Item(DeptNo);
 
             let args = {
-                DeptNo: data
+                CountryNo: CountryNo,
+                DeptNo: DeptNo
             };
 
             $.post('@Url.Action("DeleteUnivDepartment")', args, data => {});
@@ -300,11 +332,12 @@
     }
 
     function insertDept(butObj) {
-        var countryNo = butObj.getAttribute("countryNo")
+        var countryNo = butObj.getAttribute("countryNo");
         let data = {
             CountryNo: countryNo,
-            DeptName: $(".insert-DeptName[countryNo=" + countryNo + "]").val(),
-            DeptDescription: $(".insert-DeptDescription[countryNo=" + countryNo + "]").val()
+            DeptNo: $("div[section=" + countryNo + "] .allDepts").val(),
+            //DeptName: $(".insert-DeptName[countryNo=" + countryNo + "]").val(),
+            //DeptDescription: $(".insert-DeptDescription[countryNo=" + countryNo + "]").val()
         }
 
         $.post('@Url.Action("InsertUnivDepartment")', data, function (result) {
@@ -314,4 +347,6 @@
 
         });
     }
+
+    
 </script>
