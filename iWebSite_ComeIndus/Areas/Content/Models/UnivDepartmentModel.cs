@@ -21,6 +21,4 @@ namespace iWebSite_ComeIndus.Areas.Content.Models
         public string CountryName { get; set; }
         public List<DeptModel> Depts { get; set; }
     }
-
-   
 }

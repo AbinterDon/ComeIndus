@@ -1,0 +1,352 @@
+﻿@using iWebSite_ComeIndus.Areas.Content.Models;
+@{
+    ViewData["Title"] = "ComeIndus - 國家科系管理";
+}
+<style>
+    * {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    header {
+        min-height: 700px;
+        min-width: 1000px;
+        display: flex;
+        justify-content: center
+    }
+
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        appearance: none;
+        outline: 0;
+        box-shadow: none;
+        border: 0 !important;
+        background: #f8f8f8;
+        background-image: none;
+    }
+        /* Remove IE arrow */
+        select::-ms-expand {
+            display: none;
+        }
+    /* Custom Select */
+    .select {
+        position: relative;
+        display: flex;
+        width: 20em;
+        height: 3em;
+        line-height: 3;
+        background: #2c3e50;
+        overflow: hidden;
+        border-radius: .25em;
+    }
+
+    select {
+        flex: 1;
+        padding: 0 .5em;
+        color: #1D3255;
+        cursor: pointer;
+    }
+    /* Arrow */
+    .select::after {
+        content: '\25BC';
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0 1em;
+        background: #3BB0A2;
+        cursor: pointer;
+        pointer-events: none;
+        -webkit-transition: .25s all ease;
+        -o-transition: .25s all ease;
+        transition: .25s all ease;
+    }
+    /* Transition */
+    .select:hover::after {
+        color: #f39c12;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: white;
+        padding: 40px 0px 20px 0px;
+    }
+
+    h3 {
+        text-align: center;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: white;
+        padding: 10px 0px 20px 0px;
+    }
+
+
+    th, td {
+        padding: 20px;
+    }
+    /*Table Styles*/
+
+    .table-wrapper {
+        margin: 10px 70px 70px;
+        box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+    }
+
+    .fl-table {
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        border: none;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        background-color: white;
+        margin-bottom: 30px;
+        margin-top: 20px;
+    }
+
+        .fl-table td, .fl-table th {
+            text-align: center;
+            padding: 8px;
+        }
+
+        .fl-table td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 12px;
+        }
+
+        .fl-table thead th {
+            color: #ffffff;
+            background: #3BB0A2;
+        }
+
+            .fl-table thead th:nth-child(odd) {
+                color: #ffffff;
+                background: #324960;
+            }
+
+        .fl-table tr:nth-child(even) {
+            background: #F8F8F8;
+        }
+</style>
+
+<head>
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+</head>
+
+<header>
+
+    <div class="container" id="DeptInfo" style="margin-top:100px">
+        <div class="select">
+            <select onchange="showDeptList(this)" name="slct" id="countryList">
+                @foreach (MgtDeptModel mgtDept in Model)
+                {
+                    <option value="@mgtDept.CountryNo">@mgtDept.CountryName</option>
+                }
+            </select>
+        </div>
+
+       
+            <select class="allDepts" style="display:none">
+               
+                @{ 
+                    HashSet<string> depts = new HashSet<string>();
+                    @foreach (MgtDeptModel mgtDept in Model)
+                    {
+                        @foreach (DeptModel dept in mgtDept.Depts)
+                        {
+                            if (!depts.Contains(dept.DeptNo)) 
+                            {
+                                <option value="@dept.DeptNo">@dept.DeptName</option>
+                                depts.Add(dept.DeptNo);
+                            }
+                        }
+                    }
+                }
+            </select>
+  
+
+        @foreach (MgtDeptModel mgtDept in Model)
+        {
+            <div class="deptList" section="@mgtDept.CountryNo" style="display:none">
+                <h2>@mgtDept.CountryName</h2>
+                <h3>科系/學群列表</h3>
+
+                <div>
+                    <form>
+                        <label style="color:white">新增科系</label>
+                        <span class="deptDropdown"></span>&nbsp;&nbsp;
+                        <button class="btn" type="button" onclick="insertDept(this)" countryNo="@mgtDept.CountryNo">新增</button>
+                        <br>
+                        <!--
+                        <br>
+                        <br>
+                        <input size="20" class="insert-DeptName" countryNo="@mgtDept.CountryNo" placeholder="在此輸入新科系">&nbsp;&nbsp;
+                        <input size="60" class="insert-DeptDescription" countryNo="@mgtDept.CountryNo" placeholder="科系描述">&nbsp;&nbsp;
+                        -->
+                    </form>
+                    <span style="font-size: 18px; color:red" id="insert-result"></span>
+                </div>
+
+                <table class="fl-table">
+                    <thead>
+                        <tr>
+                            <th>編號</th>
+                            <th>名稱</th>
+                            <th>描述</th>
+                            <th>建立時間</th>
+                            <th>建立者</th>
+                            <th width="15%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (DeptModel dept in mgtDept.Depts)
+                        {
+                            <!--先全部顯示，之後再調整要顯示的欄位-->
+                            <tr>
+                                <!-- ko ifnot: IsEdit() && Item() == @dept.DeptNo -->
+                                <td>@dept.DeptNo</td>
+                                <td>@dept.DeptName</td>
+                                <td>@dept.DeptDescription</td>
+                                <td>@dept.CreateTime</td>
+                                <td>@dept.CreateUser</td>
+                                <td>
+                                    <button class="btn" type="button" onclick="editDept(@dept.DeptNo)">修改</button>
+                                    <span>&nbsp;&nbsp;</span>
+                                    <button class="btn" type="button" onclick="deleteDept(@mgtDept.CountryNo, @dept.DeptNo)">刪除</button>
+                                </td>
+                                <!-- /ko -->
+                            </tr>
+                            <tr>
+                                <!-- ko if: IsEdit() && Item() == @dept.DeptNo -->
+                                <td>@dept.DeptNo</td>
+                                <td>
+                                    <input type="text" name="DeptName" value="@dept.DeptName" id="DeptName">
+                                </td>
+                                <td>
+                                    <input type="text" name="DeptDescription" value="@dept.DeptDescription" id="DeptDescription">
+                                </td>
+                                <td>@dept.CreateTime</td>
+                                <td>@dept.CreateUser</td>
+                                <td>
+                                    <button class="btn" type="button" onclick="saveDept(@dept.DeptNo, 'DeptName', 'DeptDescription')">確認</button>
+                                    <span>&nbsp;&nbsp;</span>
+                                    <button class="btn" type="button" onclick="cancel(@dept.DeptNo)">取消</button>
+                                </td>
+                                <!-- /ko -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <span style="font-size: 30px;">@ViewData["result"]</span>
+</header>
+
+<script type="text/javascript">
+    this.IsEdit = ko.observable(false);
+    this.Item = ko.observable(0);
+    ko.applyBindings($("#DeptInfo").get(0));
+
+    var currentCountry = null;
+    if (window.location.href.includes("?country=")) {
+        currentCountry = window.location.href.split('?')[1].split('country=')[1];
+    }
+
+    $(function () {
+        $(".deptDropdown").html($(".allDepts"));
+        $(".allDepts").show();
+
+        if (currentCountry == null) {
+            currentCountry = $("#countryList").eq(0).val();
+            $(".deptList").eq(0).show();
+        } else {
+            $(".deptList[section=" + currentCountry + "]").show();
+            $("select option[value=" + currentCountry + "]").attr("selected", "selected")
+        }
+        
+    });
+
+    function showDeptList(obj) {
+        currentCountry = obj.value;
+        $(".deptList").hide();
+        $(".deptList[section=" + currentCountry + "]").show();
+        $(".insert-DeptName, .insert-DeptDescription").show();
+    }
+
+    function editDept(data) {
+        this.IsEdit(true);
+        this.Item(data);
+    }
+
+    function cancel(data) {
+        this.IsEdit(false);
+        this.Item(data);
+    }
+
+    function saveDept(data, DeptName, DeptDescription) {
+        deptName = document.getElementById(DeptName).value;
+        deptDescription = document.getElementById(DeptDescription).value;
+
+        this.IsEdit(false);
+        this.Item(data);
+
+        let args = {
+            DeptNo: data,
+            DeptName: deptName,
+            DeptDescription: deptDescription
+        };
+
+        $.post('@Url.Action("UpdateUnivDepartment")', args, data => {});
+
+        //window.location.reload();
+        window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+    }
+
+    //刪除
+    function deleteDept(CountryNo, DeptNo) {
+        //視窗提示
+        if (window.confirm("是否確定要刪除?")) {
+            this.IsEdit(false);
+            //this.Item(data);
+            this.Item(DeptNo);
+
+            let args = {
+                CountryNo: CountryNo,
+                DeptNo: DeptNo
+            };
+
+            $.post('@Url.Action("DeleteUnivDepartment")', args, data => {});
+
+            //window.location.reload();
+            window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+        }
+    }
+
+    function insertDept(butObj) {
+        var countryNo = butObj.getAttribute("countryNo");
+        let data = {
+            CountryNo: countryNo,
+            DeptNo: $("div[section=" + countryNo + "] .allDepts").val(),
+            //DeptName: $(".insert-DeptName[countryNo=" + countryNo + "]").val(),
+            //DeptDescription: $(".insert-DeptDescription[countryNo=" + countryNo + "]").val()
+        }
+
+        $.post('@Url.Action("InsertUnivDepartment")', data, function (result) {
+            //window.location.reload();
+            window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry
+            alert(result);
+
+        });
+    }
+
+    
+</script>

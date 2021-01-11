@@ -1,4 +1,5 @@
 ﻿@using iWebSite_ComeIndus.Areas.Content.Models;
+@Model
 @{
     ViewData["Title"] = "ComeIndus - 科系管理";
 }
@@ -137,116 +138,75 @@
 </style>
 
 <head>
-    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 </head>
 
 <header>
-
     <div class="container" id="DeptInfo" style="margin-top:100px">
-        <div class="select">
-            <select onchange="showDeptList(this)" name="slct" id="countryList">
-                @foreach (MgtDeptModel mgtDept in Model)
-                {
-                    <option value="@mgtDept.CountryNo">@mgtDept.CountryName</option>
-                }
-            </select>
-        </div>
+        <div class="deptList">
+            <h3>科系/學群列表</h3>
 
-       
-            <select class="allDepts" style="display:none">
-               
-                @{ 
-                    HashSet<string> depts = new HashSet<string>();
-                    @foreach (MgtDeptModel mgtDept in Model)
-                    {
-                        @foreach (DeptModel dept in mgtDept.Depts)
-                        {
-                            if (!depts.Contains(dept.DeptNo)) 
-                            {
-                                <option value="@dept.DeptNo">@dept.DeptName</option>
-                                depts.Add(dept.DeptNo);
-                            }
-                        }
-                    }
-                }
-            </select>
-  
-
-        @foreach (MgtDeptModel mgtDept in Model)
-        {
-            <div class="deptList" section="@mgtDept.CountryNo" style="display:none">
-                <h2>@mgtDept.CountryName</h2>
-                <h3>科系/學群列表</h3>
-
-                <div>
-                    <form>
-                        <label style="color:white">新增科系</label>
-                        <span class="deptDropdown"></span>&nbsp;&nbsp;
-                        <button class="btn" type="button" onclick="insertDept(this)" countryNo="@mgtDept.CountryNo">新增</button>
-                        <br>
-                        <!--
-                        <br>
-                        <br>
-                        <input size="20" class="insert-DeptName" countryNo="@mgtDept.CountryNo" placeholder="在此輸入新科系">&nbsp;&nbsp;
-                        <input size="60" class="insert-DeptDescription" countryNo="@mgtDept.CountryNo" placeholder="科系描述">&nbsp;&nbsp;
-                        -->
-                    </form>
-                    <span style="font-size: 18px; color:red" id="insert-result"></span>
-                </div>
-
-                <table class="fl-table">
-                    <thead>
-                        <tr>
-                            <th>編號</th>
-                            <th>名稱</th>
-                            <th>描述</th>
-                            <th>建立時間</th>
-                            <th>建立者</th>
-                            <th width="15%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (DeptModel dept in mgtDept.Depts)
-                        {
-                            <!--先全部顯示，之後再調整要顯示的欄位-->
-                            <tr>
-                                <!-- ko ifnot: IsEdit() && Item() == @dept.DeptNo -->
-                                <td>@dept.DeptNo</td>
-                                <td>@dept.DeptName</td>
-                                <td>@dept.DeptDescription</td>
-                                <td>@dept.CreateTime</td>
-                                <td>@dept.CreateUser</td>
-                                <td>
-                                    <button class="btn" type="button" onclick="editDept(@dept.DeptNo)">修改</button>
-                                    <span>&nbsp;&nbsp;</span>
-                                    <button class="btn" type="button" onclick="deleteDept(@mgtDept.CountryNo, @dept.DeptNo)">刪除</button>
-                                </td>
-                                <!-- /ko -->
-                            </tr>
-                            <tr>
-                                <!-- ko if: IsEdit() && Item() == @dept.DeptNo -->
-                                <td>@dept.DeptNo</td>
-                                <td>
-                                    <input type="text" name="DeptName" value="@dept.DeptName" id="DeptName">
-                                </td>
-                                <td>
-                                    <input type="text" name="DeptDescription" value="@dept.DeptDescription" id="DeptDescription">
-                                </td>
-                                <td>@dept.CreateTime</td>
-                                <td>@dept.CreateUser</td>
-                                <td>
-                                    <button class="btn" type="button" onclick="saveDept(@dept.DeptNo, 'DeptName', 'DeptDescription')">確認</button>
-                                    <span>&nbsp;&nbsp;</span>
-                                    <button class="btn" type="button" onclick="cancel(@dept.DeptNo)">取消</button>
-                                </td>
-                                <!-- /ko -->
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <div>
+                <form>
+                    <label style="color:white">新增科系 - </label>&nbsp;&nbsp;
+                    <input id="InsertDeptName" size="20" class="insert-DeptName" placeholder="新科系名稱">&nbsp;&nbsp;
+                    <input id="InserDeptDescription" size="60" class="insert-DeptDescription" placeholder="新科系描述">&nbsp;&nbsp;
+                    <button class="btn" type="button" onclick="insertDept(this)">新增</button>
+                </form>
+                <span style="font-size: 18px; color:red" id="insert-result"></span>
             </div>
-        }
+
+            <table class="fl-table">
+                <thead>
+                    <tr>
+                        <th>編號</th>
+                        <th>名稱</th>
+                        <th>描述</th>
+                        <th>建立時間</th>
+                        <th>建立者</th>
+                        <th width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DeptModel Dept in Model)
+                    {
+                        <!--先全部顯示，之後再調整要顯示的欄位-->
+                        <tr>
+                            <!-- ko ifnot: IsEdit() && Item() == @Dept.DeptNo -->
+                            <td>@Dept.DeptNo</td>
+                            <td>@Dept.DeptName</td>
+                            <td>@Dept.DeptDescription</td>
+                            <td>@Dept.CreateTime</td>
+                            <td>@Dept.CreateUser</td>
+                            <td>
+                                <button class="btn" type="button" onclick="editDept(@Dept.DeptNo)">修改</button>
+                                <span>&nbsp;&nbsp;</span>
+                                <button class="btn" type="button" onclick="deleteDept(@Dept.DeptNo)">刪除</button>
+                            </td>
+                            <!-- /ko -->
+                        </tr>
+                        <tr>
+                            <!-- ko if: IsEdit() && Item() == @Dept.DeptNo -->
+                            <td>@Dept.DeptNo</td>
+                            <td>
+                                <input type="text" name="DeptName" value="@Dept.DeptName" id="DeptName">
+                            </td>
+                            <td>
+                                <input type="text" name="DeptDescription" value="@Dept.DeptDescription" id="DeptDescription">
+                            </td>
+                            <td>@Dept.CreateTime</td>
+                            <td>@Dept.CreateUser</td>
+                            <td>
+                                <button class="btn" type="button" onclick="saveDept(@Dept.DeptNo, 'DeptName', 'DeptDescription')">確認</button>
+                                <span>&nbsp;&nbsp;</span>
+                                <button class="btn" type="button" onclick="cancel(@Dept.DeptNo)">取消</button>
+                            </td>
+                            <!-- /ko -->
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
     <span style="font-size: 30px;">@ViewData["result"]</span>
 </header>
@@ -256,45 +216,24 @@
     this.Item = ko.observable(0);
     ko.applyBindings($("#DeptInfo").get(0));
 
-    var currentCountry = null;
-    if (window.location.href.includes("?country=")) {
-        currentCountry = window.location.href.split('?')[1].split('country=')[1];
-    }
-
-    $(function () {
-        $(".deptDropdown").html($(".allDepts"));
-        $(".allDepts").show();
-
-        if (currentCountry == null) {
-            currentCountry = $("#countryList").eq(0).val();
-            $(".deptList").eq(0).show();
-        } else {
-            $(".deptList[section=" + currentCountry + "]").show();
-            $("select option[value=" + currentCountry + "]").attr("selected", "selected")
-        }
-        
-    });
-
-    function showDeptList(obj) {
-        currentCountry = obj.value;
-        $(".deptList").hide();
-        $(".deptList[section=" + currentCountry + "]").show();
-        $(".insert-DeptName, .insert-DeptDescription").show();
-    }
-
+    //修改
     function editDept(data) {
         this.IsEdit(true);
         this.Item(data);
     }
 
+    //取消
     function cancel(data) {
         this.IsEdit(false);
         this.Item(data);
     }
 
-    function saveDept(data, DeptName, DeptDescription) {
-        deptName = document.getElementById(DeptName).value;
-        deptDescription = document.getElementById(DeptDescription).value;
+    //確定修改
+    function saveDept(data) {
+        deptName = $("#DeptName").val();
+        deptDescription = $("#DeptDescription").val();
+
+        console.log(deptName);
 
         this.IsEdit(false);
         this.Item(data);
@@ -305,14 +244,14 @@
             DeptDescription: deptDescription
         };
 
-        $.post('@Url.Action("UpdateUnivDepartment")', args, data => {});
-
-        //window.location.reload();
-        window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+        $.post('@Url.Action("UpdateUnivDepartment")', args, function (result) {
+            alert(result);
+            window.location.reload();
+        });
     }
 
     //刪除
-    function deleteDept(CountryNo, DeptNo) {
+    function deleteDept(DeptNo) {
         //視窗提示
         if (window.confirm("是否確定要刪除?")) {
             this.IsEdit(false);
@@ -320,33 +259,26 @@
             this.Item(DeptNo);
 
             let args = {
-                CountryNo: CountryNo,
                 DeptNo: DeptNo
             };
 
-            $.post('@Url.Action("DeleteUnivDepartment")', args, data => {});
-
-            //window.location.reload();
-            window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+            $.post('@Url.Action("DeleteUnivDepartment")', args, function (result) {
+                alert(result);
+                window.location.reload();
+            });
         }
     }
 
+    //新增
     function insertDept(butObj) {
-        var countryNo = butObj.getAttribute("countryNo");
         let data = {
-            CountryNo: countryNo,
-            DeptNo: $("div[section=" + countryNo + "] .allDepts").val(),
-            //DeptName: $(".insert-DeptName[countryNo=" + countryNo + "]").val(),
-            //DeptDescription: $(".insert-DeptDescription[countryNo=" + countryNo + "]").val()
+            DeptName: $("#InsertDeptName").val(),
+            DeptDescription: $("#InsertDeptDescription").val()
         }
 
         $.post('@Url.Action("InsertUnivDepartment")', data, function (result) {
-            //window.location.reload();
-            window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry
             alert(result);
-
+            window.location.reload();
         });
     }
-
-    
 </script>

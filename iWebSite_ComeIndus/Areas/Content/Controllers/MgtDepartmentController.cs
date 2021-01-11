@@ -17,70 +17,75 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             return ShowUnivDepartment();
         }
 
-        private bool InsertCountryDept(string CountryNo, string DeptNo)
-        {
-            // 新增國家與科系的關聯
-            var sqlStr = string.Format("INSERT INTO [dbo].[CountryDepartment] (" +
-                "[CountryNo], " +
-                "[DeptNo], " +
-                "[CreateTime], " +
-                "[ModifyTime], " +
-                "[CreateUser] " +
-                ") " +
-                "VALUES " +
-                "({0}, " +
-                " {1}, " +
-                " {2}, " +
-                " {3}, " +
-                " {4})",
-                CountryNo, DeptNo, DBC.ChangeTimeZone(), DBC.ChangeTimeZone(), SqlVal2(Request.Cookies["account"]));
-
-            var check = _DB_Execute(sqlStr);
-
-            //新增是否成功
-            if (check == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-
-        [HttpPost]
-        public string InsertUnivDepartment(string CountryNo, string DeptNo, string DeptName, string DeptDescription)
+        /// <summary>
+        /// 顯示國家科系
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShowUnivDepartment()
         {
             // admin check
             if (getUserStatusNo() != "1")
             {
-                return "fail";
+                return Redirect("~/Home/Error");
             }
 
-            string resMsg = "";
+            List<DeptModel> Models = new List<DeptModel>();
 
-            /*
-            if(DeptNo == "0") //輸入新科系
-            {    
-                if (DeptName == null || DeptName.Length > 50)
+            var sqlStr = string.Format("Select DeptNo, DeptName, DeptDescription, CreateTime, CreateUser From Department");
+            var DeptData = _DB_GetData(sqlStr);
+            foreach (DataRow DeptRow in DeptData.Rows)
+            {
+                Models.Add(new DeptModel()
                 {
-                    return "未輸入科系或長度超過限制!!";
-                }
-                // 長度限制
-                else if (DeptDescription != null && DeptDescription.Length > 200)
-                {
-                    return "敘述超出長度限制!!";
-                }
+                    DeptNo = DeptRow.ItemArray.GetValue(0).ToString(),
+                    DeptName = DeptRow.ItemArray.GetValue(1).ToString(),
+                    DeptDescription = DeptRow.ItemArray.GetValue(2).ToString(),
+                    CreateTime = DeptRow.ItemArray.GetValue(3).ToString(),
+                    CreateUser = DeptRow.ItemArray.GetValue(4).ToString()
+                });
+            }
 
+            return View("MgtDepartment", Models);
+        }
+
+        /// <summary>
+        /// 新增科系
+        /// </summary>
+        /// <param name="CountryNo"></param>
+        /// <param name="DeptNo"></param>
+        /// <param name="DeptName"></param>
+        /// <param name="DeptDescription"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public string InsertUnivDepartment(string DeptName, string DeptDescription)
+        {
+            // admin check
+            if (getUserStatusNo() != "1")
+            {
+                return "權限錯誤！";
+            }
+
+            //Return Msg
+            string resMsg = "新增成功！";
+
+            if (DeptName == null || DeptName.Length > 50)
+            {
+                resMsg = "未輸入科系或長度超過限制!!";
+            }
+            else if (DeptDescription != null && DeptDescription.Length > 200)//長度限制
+            {
+                resMsg = "敘述超出長度限制!!";
+            }
+            else
+            {
                 //檢查科系名稱是否已經存在
                 var sqlStr = string.Format("SELECT DeptNo From [dbo].[Department] WHERE DeptName={0}", SqlVal2(DeptName));
                 var data = _DB_GetData(sqlStr);
 
                 if (data.Rows.Count > 0)
                 {
-                    // 科系名稱已存在
-                    DeptNo = data.Rows[0].ItemArray.GetValue(0).ToString();
+                    //科系名稱已存在
+                    resMsg = "新增失敗，該科系已存在！";
                 }
                 else
                 {
@@ -93,7 +98,6 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                         "[ModifyTime]," +
                         "[CreateUser] " +
                         ") " +
-                        "Output inserted.DeptNo " +
                         "VALUES(" +
                         "{0}," +
                         "{1}," +
@@ -107,142 +111,91 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                         SqlVal2(Request.Cookies["account"]) + ")"
                         );
 
-                    var output = _DB_GetData(sqlStr);
-                    // 取出自動生成的PK
-                    if (output.Rows.Count == 1)
+                    //執行是否成功
+                    if (_DB_Execute(sqlStr) != 1)
                     {
-                        DeptNo = output.Rows[0].ItemArray.GetValue(0).ToString();
+                        resMsg = "新增失敗，若持續發生此問題，請聯絡我們。";
                     }
-                    else
-                    {
-                        return "fail!!";
-                    }
-
                 }
             }
-            */
-            var check = InsertCountryDept(CountryNo, DeptNo);
-            if (check)
+
+            //Return
+            return resMsg;
+        }
+
+        /// <summary>
+        /// 修改科系
+        /// </summary>
+        /// <param name="DeptNo"></param>
+        /// <param name="DeptName"></param>
+        /// <param name="DeptDescription"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public string UpdateUnivDepartment(string DeptNo, string DeptName, string DeptDescription)
+        {
+            //Return Msg
+            string resMsg = "修改成功！";
+
+            // admin check
+            if (getUserStatusNo() != "1")
             {
-                resMsg = "success!!";
+                resMsg = "修改失敗，權限錯誤！";
             }
             else
             {
-                resMsg = "fail!!";
-            }
-
-            return resMsg;
-           
-        }
-
-        public ActionResult ShowUnivDepartment() 
-        {
-            // admin check
-            if (getUserStatusNo() != "1")
-            {
-                return Redirect("~/Home/Error");
-            }
-
-            List<MgtDeptModel> Models = new List<MgtDeptModel>();
-            
-            // country
-            var sqlStr = string.Format("Select CountryNo, CountryName From Countries");
-            var countryData = _DB_GetData(sqlStr);
-
-            foreach (DataRow countryRow in countryData.Rows)
-            {
-                MgtDeptModel model = new MgtDeptModel();
-                model.CountryNo = countryRow.ItemArray.GetValue(0).ToString();
-                model.CountryName = countryRow.ItemArray.GetValue(1).ToString();
-                model.Depts = new List<DeptModel>();
-
-                sqlStr = string.Format("SELECT dept.DeptNo, DeptName, DeptDescription, countryDept.CreateTime, countryDept.CreateUser, CountryNo " +
-                    "FROM[dbo].[Department] as dept " +
-                    "inner join( " +
-                    "select DeptNo, CountryNo, CreateTime, CreateUser from[dbo].[CountryDepartment]) as countryDept " +
-                    "on dept.DeptNo = countryDept.DeptNo " +
-                    "where CountryNo = {0}", model.CountryNo);
-
-                var data = _DB_GetData(sqlStr);
-                foreach (DataRow row in data.Rows)
-                {
-                    model.Depts.Add(new DeptModel()
-                    {
-                        DeptNo = row.ItemArray.GetValue(0).ToString(),
-                        DeptName = row.ItemArray.GetValue(1).ToString(),
-                        DeptDescription = row.ItemArray.GetValue(2).ToString(),
-                        CreateTime = row.ItemArray.GetValue(3).ToString(),
-                        CreateUser = row.ItemArray.GetValue(4).ToString()
-                    });
-                }
-
-                Models.Add(model);
-            }
-
-                return View("MgtDepartment", Models);
-        }
-
-        public ActionResult UpdateUnivDepartment(string DeptNo, string DeptName, string DeptDescription)
-        {
-            // admin check
-            if (getUserStatusNo() != "1")
-            {
-                return null;
-            }
-
-            string resMsg = "";
-            string sqlStr = "UPDATE [dbo].[Department] " +
+                string sqlStr = "UPDATE [dbo].[Department] " +
                 "SET [DeptName] = N'" + DeptName + "', " +
                 "[DeptDescription] = N'" + DeptDescription + "', " +
                 "[ModifyTime] = " + DBC.ChangeTimeZone() + ", " +
                 "[ModifyUser] = " + SqlVal2(Request.Cookies["account"]) +
                 "WHERE [DeptNo] = '" + DeptNo + "'";
 
-            var check = _DB_Execute(sqlStr);
+                var check = _DB_Execute(sqlStr);
 
-            //修改是否成功
-            if (check == 1)
-            {
-                resMsg = "success";
-            }
-            else
-            {
-                resMsg = "fail";
+                //修改是否成功
+                if (check != 1)
+                {
+                    resMsg = "修改失敗，若持續發生此問題，請與我們聯繫。";
+                }
             }
 
-            ViewData["result"] = resMsg;
-            return View();
+            //Return Msg
+            return resMsg;
         }
 
-        public ActionResult DeleteUnivDepartment(string CountryNo, string DeptNo)
+        /// <summary>
+        /// 刪除國家科系
+        /// </summary>
+        /// <param name="CountryNo"></param>
+        /// <param name="DeptNo"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public string DeleteUnivDepartment(string DeptNo)
         {
+            //Return Msg
+            string resMsg = "刪除成功！";
+
             // admin check
             if (getUserStatusNo() != "1")
             {
-                return null;
-            }
-
-            string resMsg = "";
-            //string sqlStr = "DELETE [dbo].[Department] " +
-            //    "WHERE [DeptNo] = '" + DeptNo + "'";
-
-            string sqlStr = string.Format("DELETE FROM [dbo].[CountryDepartment] WHERE CountryNo={0} AND DeptNo={1}", 
-                SqlVal2(CountryNo), SqlVal2(DeptNo));
-            
-            var check = _DB_Execute(sqlStr);
-
-            //刪除是否成功
-            if (check == 1)
-            {
-                resMsg = "success";
+                resMsg = "刪除失敗，權限錯誤！";
             }
             else
             {
-                resMsg = "fail";
+                string sqlStr = string.Format("DELETE [dbo].[Department] " +
+                "WHERE [DeptNo] = {0}", SqlVal2(DeptNo));
+
+                var check = _DB_Execute(sqlStr);
+
+                //刪除是否成功
+                if (check != 1)
+                {
+                    resMsg = "刪除失敗，若持續發生此問題，請與我們聯繫。";
+                }
             }
 
-            ViewData["result"] = resMsg;
-            return View();
+            //Return Msg
+            return resMsg;
         }
     }
 }

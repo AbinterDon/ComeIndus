@@ -39,9 +39,33 @@
             font-weight: bold;
         }
 
+        .top-left-split-1 {
+            position: absolute;
+            left: 110px;
+            top: 50px;
+            color: #1D3255;
+            font-weight: bold;
+        }
+
+        .top-left-center {
+            position: absolute;
+            left: 120px;
+            top: 50px;
+            color: #1D3255;
+            font-weight: bold;
+        }
+
+        .top-left-split-2 {
+            position: absolute;
+            left: 195px;
+            top: 50px;
+            color: #1D3255;
+            font-weight: bold;
+        }
+
         .top-left-dwon {
             position: absolute;
-            left: 100px;
+            left: 205px;
             top: 50px;
             color: #1D3255;
             font-weight: bold;
@@ -54,12 +78,16 @@
     @if (ViewData["StatusNo"] != null && ViewData["StatusNo"].ToString() == "1")
     {
         <div class="button">
-            <a class="button btn btn-link btn-lg top-left" href="/content/MgtDepartment/">科系管理</a>
+            <a class="button btn btn-link btn-lg top-left" href="/content/MgtCountryDept/">國家科系管理</a>
         </div>
+        <span class="button btn btn-lg top-left-split-1">/</span>
+        <div class="button">
+            <a class="button btn btn-link btn-lg top-left-center" href="/content/MgtDepartment/">科系管理</a>
+        </div>
+        <span class="button btn btn-lg top-left-split-2">/</span>
         <div class="button">
             <a class="button btn btn-link btn-lg top-left-dwon" href="/content/MgtGraduation">畢業人數管理</a>
         </div>
-
     }
     <div class="button">
         <a class="button btn btn-link btn-lg top" href="/Content/UnivGraduation/diffyear">前往同國比較>></a>
