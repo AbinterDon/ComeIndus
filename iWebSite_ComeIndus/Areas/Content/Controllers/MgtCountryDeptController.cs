@@ -207,7 +207,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         /// <param name="DeptName"></param>
         /// <param name="DeptDescription"></param>
         /// <returns></returns>
-        public ActionResult UpdateUnivDepartment(string DeptNo, string DeptName, string DeptDescription)
+        public string UpdateUnivDepartment(string DeptNo, string DeptName, string DeptDescription)
         {
             // admin check
             if (getUserStatusNo() != "1")
@@ -235,8 +235,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
                 resMsg = "fail";
             }
 
-            ViewData["result"] = resMsg;
-            return View();
+            return resMsg;
         }
 
         /// <summary>
