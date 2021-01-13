@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace iWebSite_ComeIndus.Areas.Content.Models
 {
+    public class DeptIDModel
+    {
+        public string DeptNo { get; set; }
+        public string DeptName { get; set; }
+    }
     public class DeptModel
     {
         public string DeptNo { get; set; }

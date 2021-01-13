@@ -128,6 +128,28 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         }
 
         /// <summary>
+        /// 取得所有科系
+        /// </summary>
+        /// <returns></returns>
+        public List<DeptIDModel> GetDeptList()
+        {
+            List<DeptIDModel> depts = new List<DeptIDModel>();
+
+            var sqlStr = string.Format("Select DeptNo, DeptName From [dbo].[Department]");
+            var data = _DB_GetData(sqlStr);
+
+            foreach (DataRow row in data.Rows)
+            {
+                depts.Add(new DeptIDModel(){
+                    DeptNo = row.ItemArray.GetValue(0).ToString(),
+                    DeptName = row.ItemArray.GetValue(1).ToString()
+                });
+            }
+
+            return depts;
+        }
+
+        /// <summary>
         /// 顯示國家科系
         /// </summary>
         /// <returns></returns>
@@ -141,7 +163,7 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
 
             List<MgtDeptModel> Models = new List<MgtDeptModel>();
             
-            // country
+            // 國家與科系的關聯資料
             var sqlStr = string.Format("Select CountryNo, CountryName From Countries");
             var countryData = _DB_GetData(sqlStr);
 

@@ -157,6 +157,7 @@
             <select class="allDepts" style="display:none">
                
                 @{ 
+                    /*
                     HashSet<string> depts = new HashSet<string>();
                     @foreach (MgtDeptModel mgtDept in Model)
                     {
@@ -169,6 +170,7 @@
                             }
                         }
                     }
+                    */
                 }
             </select>
   
@@ -263,6 +265,7 @@
 
     $(function () {
         $(".deptDropdown").html($(".allDepts"));
+        getDeptList()
         $(".allDepts").show();
 
         if (currentCountry == null) {
@@ -274,6 +277,32 @@
         }
 
     });
+
+    function getDeptList() {
+        $.ajax({
+            type: "GET",
+            url: "/Content/MgtCountryDept/GetDeptList",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                for (index in data) {
+                    let item = data[index];
+                    $('.allDepts').append($('<option>', {
+                        value: item["deptNo"],
+                        text: item["deptName"]
+                    }));
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
 
     function showDeptList(obj) {
         currentCountry = obj.value;
