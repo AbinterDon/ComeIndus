@@ -25,26 +25,59 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         /// <returns></returns>
         private bool InsertCountryDept(string CountryNo, string DeptNo)
         {
-            // 新增國家與科系的關聯
-            var sqlStr = string.Format("INSERT INTO [dbo].[CountryDepartment] (" +
-                "[CountryNo], " +
-                "[DeptNo], " +
-                "[CreateTime], " +
-                "[ModifyTime], " +
-                "[CreateUser] " +
-                ") " +
-                "VALUES " +
-                "({0}, " +
-                " {1}, " +
-                " {2}, " +
-                " {3}, " +
-                " {4})",
-                CountryNo, DeptNo, DBC.ChangeTimeZone(), DBC.ChangeTimeZone(), SqlVal2(Request.Cookies["account"]));
+            //檢查是否有重複的了
+            if(CheckInsertCountryDept(CountryNo, DeptNo))
+            {
+                return false;
+            }
+            else
+            {
+                // 新增國家與科系的關聯
+                var sqlStr = string.Format("INSERT INTO [dbo].[CountryDepartment] (" +
+                    "[CountryNo], " +
+                    "[DeptNo], " +
+                    "[CreateTime], " +
+                    "[ModifyTime], " +
+                    "[CreateUser] " +
+                    ") " +
+                    "VALUES " +
+                    "({0}, " +
+                    " {1}, " +
+                    " {2}, " +
+                    " {3}, " +
+                    " {4})",
+                    CountryNo, DeptNo, DBC.ChangeTimeZone(), DBC.ChangeTimeZone(), SqlVal2(Request.Cookies["account"]));
 
-            var check = _DB_Execute(sqlStr);
+                var check = _DB_Execute(sqlStr);
+
+                //新增是否成功
+                if (check == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 檢查是否有重複的
+        /// </summary>
+        /// <param name="CountryNo"></param>
+        /// <param name="DeptNo"></param>
+        /// <returns></returns>
+        private bool CheckInsertCountryDept(string CountryNo, string DeptNo)
+        {
+            // 新增國家與科系的關聯
+            var sqlStr = string.Format("Select 1 from [dbo].[CountryDepartment] where CountryNo = {0} and DeptNo ={1}",
+                SqlVal2(CountryNo), SqlVal2(DeptNo));
+
+            var check = _DB_GetData(sqlStr);
 
             //新增是否成功
-            if (check == 1)
+            if (check.Rows.Count != 0)
             {
                 return true;
             }
@@ -52,7 +85,6 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             {
                 return false;
             }
-
         }
 
         /// <summary>
@@ -69,84 +101,30 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             // admin check
             if (getUserStatusNo() != "1")
             {
-                return "fail";
+                return "新增失敗，權限錯誤。";
             }
 
             string resMsg = "";
 
-            /*
-            if(DeptNo == "0") //輸入新科系
-            {    
-                if (DeptName == null || DeptName.Length > 50)
-                {
-                    return "未輸入科系或長度超過限制!!";
-                }
-                // 長度限制
-                else if (DeptDescription != null && DeptDescription.Length > 200)
-                {
-                    return "敘述超出長度限制!!";
-                }
-
-                //檢查科系名稱是否已經存在
-                var sqlStr = string.Format("SELECT DeptNo From [dbo].[Department] WHERE DeptName={0}", SqlVal2(DeptName));
-                var data = _DB_GetData(sqlStr);
-
-                if (data.Rows.Count > 0)
-                {
-                    // 科系名稱已存在
-                    DeptNo = data.Rows[0].ItemArray.GetValue(0).ToString();
-                }
-                else
-                {
-                    //SQL Insert
-                    sqlStr = string.Format(
-                        @"INSERT INTO [dbo].[Department](" +
-                        "[DeptName]," +
-                        "[DeptDescription]," +
-                        "[CreateTime]," +
-                        "[ModifyTime]," +
-                        "[CreateUser] " +
-                        ") " +
-                        "Output inserted.DeptNo " +
-                        "VALUES(" +
-                        "{0}," +
-                        "{1}," +
-                        "{2}," +
-                        "{3}," +
-                        "{4}",
-                        SqlVal2(DeptName),
-                        SqlVal2(DeptDescription),
-                        DBC.ChangeTimeZone(),
-                        DBC.ChangeTimeZone(),
-                        SqlVal2(Request.Cookies["account"]) + ")"
-                        );
-
-                    var output = _DB_GetData(sqlStr);
-                    // 取出自動生成的PK
-                    if (output.Rows.Count == 1)
-                    {
-                        DeptNo = output.Rows[0].ItemArray.GetValue(0).ToString();
-                    }
-                    else
-                    {
-                        return "fail!!";
-                    }
-
-                }
-            }
-            */
-            var check = InsertCountryDept(CountryNo, DeptNo);
-            if (check)
+            //檢查是否有重複的了
+            if (CheckInsertCountryDept(CountryNo, DeptNo))
             {
-                resMsg = "success!!";
+                resMsg = "新增失敗，該筆資料已經存在。";
             }
             else
             {
-                resMsg = "fail!!";
-            }
+                var check = InsertCountryDept(CountryNo, DeptNo);
 
+                if (check)
+                {
+                    resMsg = "新增成功!!";
+                }
+                else
+                {
+                    resMsg = "新增失敗，可能已經存在。";
+                }
+            }
             return resMsg;
-           
         }
 
         /// <summary>
@@ -245,35 +223,66 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
         /// <param name="CountryNo"></param>
         /// <param name="DeptNo"></param>
         /// <returns></returns>
-        public ActionResult DeleteUnivDepartment(string CountryNo, string DeptNo)
+        public string DeleteUnivDepartment(string CountryNo, string DeptNo)
         {
             // admin check
             if (getUserStatusNo() != "1")
             {
-                return null;
+                return "刪除失敗，權限錯誤。";
             }
 
             string resMsg = "";
-            //string sqlStr = "DELETE [dbo].[Department] " +
-            //    "WHERE [DeptNo] = '" + DeptNo + "'";
 
-            string sqlStr = string.Format("DELETE FROM [dbo].[CountryDepartment] WHERE CountryNo={0} AND DeptNo={1}", 
-                SqlVal2(CountryNo), SqlVal2(DeptNo));
-            
-            var check = _DB_Execute(sqlStr);
-
-            //刪除是否成功
-            if (check == 1)
+            if (CheckDeleteCountryDept(CountryNo, DeptNo))
             {
-                resMsg = "success";
+                resMsg = "刪除失敗，此國家科系已綁定於畢業人數。";
             }
             else
             {
-                resMsg = "fail";
+                string sqlStr = string.Format("DELETE FROM [dbo].[CountryDepartment] WHERE CountryNo={0} AND DeptNo={1}",
+                SqlVal2(CountryNo), SqlVal2(DeptNo));
+
+                var check = _DB_Execute(sqlStr);
+
+                //刪除是否成功
+                if (check == 1)
+                {
+                    resMsg = "刪除成功";
+                }
+                else
+                {
+                    resMsg = "刪除失敗，若持續發生此問題，請聯絡我們。";
+                }
             }
 
-            ViewData["result"] = resMsg;
-            return View();
+            return resMsg;
+        }
+
+        /// <summary>
+        /// 刪除前檢查是否有外來鍵到別人那
+        /// </summary>
+        /// <param name="CountryNo"></param>
+        /// <param name="DeptNo"></param>
+        /// <returns></returns>
+        private bool CheckDeleteCountryDept(string CountryNo, string DeptNo)
+        {
+            // 新增國家與科系的關聯
+            var sqlStr = string.Format(@"
+                select 1 from dbo.Graduation where CountryDeptNo = 
+                (Select TOP(1) [CountryDeptNo] from [dbo].[CountryDepartment] where CountryNo = {0} and DeptNo ={1})",
+                SqlVal2(CountryNo), SqlVal2(DeptNo));
+
+            var check = _DB_GetData(sqlStr);
+
+            //新增是否成功
+            if (check.Rows.Count != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

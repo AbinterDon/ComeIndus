@@ -272,7 +272,7 @@
             $(".deptList[section=" + currentCountry + "]").show();
             $("select option[value=" + currentCountry + "]").attr("selected", "selected")
         }
-        
+
     });
 
     function showDeptList(obj) {
@@ -305,10 +305,13 @@
             DeptDescription: deptDescription
         };
 
-        $.post('@Url.Action("UpdateUnivDepartment")', args, data => {});
+        $.post('@Url.Action("UpdateUnivDepartment")', args, function (result) {
+                alert(result);
+                window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+            });
 
         //window.location.reload();
-        window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+        //window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
     }
 
     //刪除
@@ -324,10 +327,13 @@
                 DeptNo: DeptNo
             };
 
-            $.post('@Url.Action("DeleteUnivDepartment")', args, data => {});
+            $.post('@Url.Action("DeleteUnivDepartment")', args, function (result) {
+                alert(result);
+                window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+            });
 
             //window.location.reload();
-            window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
+            //window.location.href = window.location.href.split('?')[0] + "?country=" + currentCountry;
         }
     }
 
@@ -348,5 +354,5 @@
         });
     }
 
-    
+
 </script>
