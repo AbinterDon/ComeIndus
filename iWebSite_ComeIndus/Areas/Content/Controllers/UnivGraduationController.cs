@@ -138,15 +138,13 @@ namespace iWebSite_ComeIndus.Areas.Content.Controllers
             {
                 string countryNo = row.ItemArray.GetValue(0).ToString();
                 
-                if(graduationData.ContainsKey(countryNo))
-                {
-                    graduationData[countryNo].DeptName.Add(row.ItemArray.GetValue(1).ToString());
-                    graduationData[countryNo].GraduationNumber.Add((int)row.ItemArray.GetValue(2));
-                }
-                else
+                if(!graduationData.ContainsKey(countryNo))
                 {
                     graduationData[countryNo] = new CountryDeptModel();
                 }
+               
+                graduationData[countryNo].DeptName.Add(row.ItemArray.GetValue(1).ToString());
+                graduationData[countryNo].GraduationNumber.Add((int)row.ItemArray.GetValue(2));
             }
 
             return graduationData; 
