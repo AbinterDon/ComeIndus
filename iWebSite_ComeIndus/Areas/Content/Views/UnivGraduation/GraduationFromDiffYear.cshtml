@@ -100,13 +100,13 @@
 
             <!--select裡的屬性須留著-->
 
-            <select id="select1" class="sty taiyears" country="台灣" returnTo="chartdiv1" onchange="getData(this)">
+            <select id="select1" class="sty taiyears" country="8" returnTo="chartdiv1" onchange="getData(this)">
                 @foreach (var year in Model)
                 {
                     <option value="@year.Year">@year.Year 年</option>
                 }
             </select>
-            <select id="select2" class="taiyears" country="台灣" returnTo="chartdiv2" onchange="getData(this)">
+            <select id="select2" class="taiyears" country="8" returnTo="chartdiv2" onchange="getData(this)">
                 @foreach (var year in Model)
                 {
                     <option value="@year.Year">@year.Year 年</option>
@@ -130,13 +130,13 @@
             <h2>Singapore</h2>
         </div>
         <div class="years">
-            <select id="select3" class="sty sinyears" country="新加坡" returnTo="chartdiv3" onchange="getData(this)">
+            <select id="select3" class="sty sinyears" country="7" returnTo="chartdiv3" onchange="getData(this)">
                 @foreach (var year in Model)
                 {
                     <option value="@year.Year">@year.Year 年</option>
                 }
             </select>
-            <select id="select4" class="sinyears" country="新加坡" returnTo="chartdiv4" onchange="getData(this)">
+            <select id="select4" class="sinyears" country="7" returnTo="chartdiv4" onchange="getData(this)">
                 @foreach (var year in Model)
                 {
                     <option value="@year.Year">@year.Year 年</option>
@@ -161,13 +161,13 @@
             <h2>China</h2>
         </div>
         <div class="years">
-            <select id="select5" class="sty chiyears" country="中國" returnTo="chartdiv5" onchange="getData(this)">
+            <select id="select5" class="sty chiyears" country="1" returnTo="chartdiv5" onchange="getData(this)">
                 @foreach (var year in Model)
                 {
                     <option value="@year.Year">@year.Year 年</option>
                 }
             </select>
-            <select id="select6" class="chiyears" country="中國" returnTo="chartdiv6" onchange="getData(this)">
+            <select id="select6" class="chiyears" country="1" returnTo="chartdiv6" onchange="getData(this)">
                 @foreach (var year in Model)
                 {
                     <option value="@year.Year">@year.Year 年</option>

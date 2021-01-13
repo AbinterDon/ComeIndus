@@ -153,31 +153,44 @@
 
             },
             success: function (data) {
-                console.log(data);
-
-                taiobj = data["台灣"]
-                var deptName = taiobj.deptName
-                var gradNum = taiobj.graduationNumber
-                var inum = []
-                deptName.forEach((v, i) => inum.push({ "deptName": deptName[i], "studentNum": gradNum[i] }));
-                inum = inum.sort((a, b) => b.studentNum - a.studentNum);
-                drawChart(inum, "chartdiv1")
-
-                sinobj = data["新加坡"]
-                var sinDeptName = sinobj.deptName
-                var singGadNum = sinobj.graduationNumber
-                var inum2 = []
-                sinDeptName.forEach((v, i) => inum2.push({ "deptName": sinDeptName[i], "studentNum": singGadNum[i] }));
-                inum2 = inum2.sort((a, b) => b.studentNum - a.studentNum);
-                drawChart(inum2, "chartdiv2")
-
-                chiobj = data["中國"]
-                var chiDeptName = chiobj.deptName
-                var chigGadNum = chiobj.graduationNumber
-                var inum3 = []
-                chiDeptName.forEach((v, i) => inum3.push({ "deptName": chiDeptName[i], "studentNum": chigGadNum[i] }));
-                inum3 = inum3.sort((a, b) => b.studentNum - a.studentNum);
-                drawChart(inum3, "chartdiv3")
+               
+                var country = ["8", "7", "1"];
+                for (i in country) {
+                    if (country[i] in data) {
+                        
+                    } else {
+                        data[country[i]] = {
+                            deptName: [],
+                            graduationNumber: []
+                        }
+                    }
+                }
+                
+                
+                    taiobj = data["8"]
+                    var deptName = taiobj.deptName
+                    var gradNum = taiobj.graduationNumber
+                    var inum = []
+                    deptName.forEach((v, i) => inum.push({ "deptName": deptName[i], "studentNum": gradNum[i] }));
+                    inum = inum.sort((a, b) => b.studentNum - a.studentNum);
+                    drawChart(inum, "chartdiv1")
+                
+                    sinobj = data["7"]
+                    var sinDeptName = sinobj.deptName
+                    var singGadNum = sinobj.graduationNumber
+                    var inum2 = []
+                    sinDeptName.forEach((v, i) => inum2.push({ "deptName": sinDeptName[i], "studentNum": singGadNum[i] }));
+                    inum2 = inum2.sort((a, b) => b.studentNum - a.studentNum);
+                    drawChart(inum2, "chartdiv2")
+               
+                    chiobj = data["1"]
+                    var chiDeptName = chiobj.deptName
+                    var chigGadNum = chiobj.graduationNumber
+                    var inum3 = []
+                    chiDeptName.forEach((v, i) => inum3.push({ "deptName": chiDeptName[i], "studentNum": chigGadNum[i] }));
+                    inum3 = inum3.sort((a, b) => b.studentNum - a.studentNum);
+                    drawChart(inum3, "chartdiv3")
+               
 
             },
             error: function (e) {
