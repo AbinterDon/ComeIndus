@@ -361,6 +361,8 @@ namespace iWebSite_ComeIndus.Areas.News.Controllers
         /// <returns></returns>
         private bool UpdateNewsHits(string NewsNo)
         {
+            if (Request.Cookies["account"] == null) return true;
+
             //NewsTable
             string updateSqlStr = string.Format(
                 @"UPDATE [dbo].[News] " +
