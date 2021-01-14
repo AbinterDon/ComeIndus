@@ -140,8 +140,7 @@ namespace iWebSite_ComeIndus.Controllers
                     "{7}," +
                     "{8}," +
                     "{9}," +
-                    "{10}," +
-                    "{11}",
+                    "{10}" ,
                     SqlVal2(Model.Account),
                     SqlVal2(SHA256_Encryption(Model.Password)),
                     SqlVal2(Model.Username),
