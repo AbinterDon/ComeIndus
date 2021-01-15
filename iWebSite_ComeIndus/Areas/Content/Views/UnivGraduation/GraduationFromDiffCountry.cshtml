@@ -113,7 +113,7 @@
             <div class="chartdiv" id="chartdiv2"></div>
             <div class="chartdiv" id="chartdiv3"></div>
         </div>
-        @if (ViewData["StatusNo"] != null && ViewData["StatusNo"].ToString() == "1")
+        @if (ViewData["StatusNo"] != null && (ViewData["StatusNo"].ToString() == "1" || ViewData["StatusNo"].ToString() == "0"))
         {
             <button class="btn btn-light btn-lg down" onclick="download()">下載</button>
         }
